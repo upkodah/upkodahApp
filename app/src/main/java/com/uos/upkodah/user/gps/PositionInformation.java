@@ -9,6 +9,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.uos.upkodah.rest.GPSToAddressRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PositionInformation {
     private double longitude;
     private double latitude;
@@ -33,7 +36,14 @@ public class PositionInformation {
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                textView.setText(response);
+                // 결과는 JSON이므로, 적절히 변환한다.
+                try {
+                    JSONObject jobj = new JSONObject(response).getJSONArray("documents").getJSONObject(0).getJSONObject("address");
+
+                    textView.setText(jobj.get("address_name").toString());
+                } catch (JSONException e) {
+                    textView.setText(response);
+                }
             }
         };
 

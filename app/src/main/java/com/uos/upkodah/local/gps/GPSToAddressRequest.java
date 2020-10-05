@@ -1,4 +1,4 @@
-package com.uos.upkodah.rest;
+package com.uos.upkodah.local.gps;
 
 import androidx.annotation.Nullable;
 

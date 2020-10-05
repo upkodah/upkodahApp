@@ -1,6 +1,6 @@
 package com.uos.upkodah.user.input;
 
-import com.uos.upkodah.user.gps.PositionInformation;
+import com.uos.upkodah.local.gps.PositionInformation;
 
 public interface UserSearchInput {
     public PositionInformation getPositionInformation();

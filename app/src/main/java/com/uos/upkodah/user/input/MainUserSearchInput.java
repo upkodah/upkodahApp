@@ -6,8 +6,7 @@ import android.widget.TimePicker;
 
 import androidx.lifecycle.ViewModel;
 
-import com.uos.upkodah.extern.TextViewDisplayingHandler;
-import com.uos.upkodah.user.gps.PositionInformation;
+import com.uos.upkodah.local.gps.PositionInformation;
 
 public class MainUserSearchInput extends ViewModel implements UserSearchInput {
     private int limitTimeMin = 30;
@@ -52,7 +51,6 @@ public class MainUserSearchInput extends ViewModel implements UserSearchInput {
 
     public void setPosition(PositionInformation position) {
         this.position = position;
-        position.requestPostalAddress(postalAddress);
     }
     public void setKeyword(String keyword) {
         this.keyword = keyword;

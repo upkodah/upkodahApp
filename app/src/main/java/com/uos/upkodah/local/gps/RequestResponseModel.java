@@ -1,4 +1,4 @@
-package com.uos.upkodah.extern;
+package com.uos.upkodah.local.gps;
 
 import android.os.Bundle;
 import android.os.Handler;

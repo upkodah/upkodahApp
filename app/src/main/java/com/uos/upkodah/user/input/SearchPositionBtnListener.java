@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.uos.upkodah.user.gps.GPSPermissionManager;
+import com.uos.upkodah.local.gps.GPSPermissionManager;
 
 public abstract class SearchPositionBtnListener implements View.OnClickListener{
     // 이 버튼을 누르기 전에는 반드시 권한을 확인해야합니다.

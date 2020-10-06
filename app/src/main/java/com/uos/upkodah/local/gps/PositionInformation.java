@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PositionInformation implements Parcelable {
+    public final static String EXTRA = "PositionInformation";
+
     protected double longitude;
     protected double latitude;
     protected String postalAddress;

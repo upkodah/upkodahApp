@@ -1,6 +1,7 @@
 package com.uos.upkodah;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -9,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.uos.upkodah.user.input.MainUserSearchInput;
+import com.uos.upkodah.user.input.SearchLocationBtnListener;
 import com.uos.upkodah.user.input.UserSearchAction;
-import com.uos.upkodah.user.input.test.TempSearchPositionBtnListener;
+import com.uos.upkodah.user.input.test.TempSearchLocationBtnListener;
 import com.uos.upkodah.user.input.test.TempUserSearchAction;
 
 public class UkdMainActivity extends AppCompatActivity{
@@ -33,7 +35,9 @@ public class UkdMainActivity extends AppCompatActivity{
 
         // 위치찾기 버튼 리스너 설정
         Button searchPosBtn = (Button) findViewById(R.id.searchPosBtn);
-        searchPosBtn.setOnClickListener(new TempSearchPositionBtnListener(this, ukdMainViewModel));
+        SearchLocationBtnListener searchLocationBtnListener = new SearchLocationBtnListener(this);
+        searchLocationBtnListener.setPositionInformation(ukdMainViewModel.getPositionInformation());
+        searchPosBtn.setOnClickListener(new SearchLocationBtnListener(this));
 
 
         // 버튼리스너 설정

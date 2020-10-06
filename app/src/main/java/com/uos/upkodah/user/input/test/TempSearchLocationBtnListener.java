@@ -8,12 +8,12 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.gps.PositionInformation;
 import com.uos.upkodah.user.input.MainUserSearchInput;
-import com.uos.upkodah.user.input.SearchPositionBtnListener;
+import com.uos.upkodah.user.input.SearchLocationBtnListener;
 
-public class TempSearchPositionBtnListener extends SearchPositionBtnListener {
+public class TempSearchLocationBtnListener extends SearchLocationBtnListener {
     private MainUserSearchInput positionInput;
 
-    public TempSearchPositionBtnListener(FragmentActivity activity, MainUserSearchInput positionInput) {
+    public TempSearchLocationBtnListener(FragmentActivity activity, MainUserSearchInput positionInput) {
         super(activity);
         this.positionInput = positionInput;
     }

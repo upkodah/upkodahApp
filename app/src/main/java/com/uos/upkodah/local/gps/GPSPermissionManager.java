@@ -10,6 +10,8 @@ import android.location.LocationManager;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.uos.upkodah.local.position.PositionInformation;
+
 public class GPSPermissionManager {
     private final static String[] permissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,

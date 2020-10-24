@@ -1,13 +1,13 @@
 package com.uos.upkodah.user.input;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.uos.upkodah.local.SelectingLocationActivity;
-import com.uos.upkodah.local.gps.GPSPermissionManager;
-import com.uos.upkodah.local.gps.PositionInformation;
+import com.uos.upkodah.local.position.PositionInformation;
 
 public class SearchLocationBtnListener implements View.OnClickListener{
     // 이 버튼을 누르기 전에는 반드시 권한을 확인해야합니다.
@@ -18,13 +18,15 @@ public class SearchLocationBtnListener implements View.OnClickListener{
 
     @Override
     public void onClick(View view){
-        GPSPermissionManager gps = GPSPermissionManager.getInstance(activity);
-        if(gps==null){
-            GPSPermissionManager.requestPermission(activity);
-        }
-        else{
-            bringLocation();
-        }
+//        GPSPermissionManager gps = GPSPermissionManager.getInstance(activity);
+//        if(gps==null){
+//            GPSPermissionManager.requestPermission(activity);
+//        }
+//        else{
+//            bringLocation();
+//        }
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("kakaomap://open?page=placeSearch"));
+        activity.startActivityForResult(intent, 1);
     }
 
     private PositionInformation positionInformation;

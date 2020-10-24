@@ -43,5 +43,8 @@ public class UkdMainActivity extends AppCompatActivity{
         // 버튼리스너 설정
         Button searchEstateBtn = (Button) findViewById(R.id.searchEstateBtn);
         searchEstateBtn.setOnClickListener(ukdMainViewModel.getButtonListener(userSearchAction));
+
     }
+
+
 }

@@ -1,17 +1,17 @@
-package com.uos.upkodah.local.gps;
+package com.uos.upkodah.local.position;
 
 
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.uos.upkodah.local.gps.GPSPermissionManager;
+import com.uos.upkodah.local.gps.GPSToAddressRequest;
+import com.uos.upkodah.local.map.MapDrawable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PositionInformation implements Parcelable {
+public class PositionInformation implements Parcelable, MapDrawable {
     public final static String EXTRA = "PositionInformation";
 
     protected double longitude;

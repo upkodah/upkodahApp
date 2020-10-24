@@ -5,8 +5,7 @@ import android.widget.EditText;
 import androidx.fragment.app.FragmentActivity;
 
 import com.uos.upkodah.R;
-import com.uos.upkodah.local.gps.GPSPermissionManager;
-import com.uos.upkodah.local.gps.PositionInformation;
+import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.input.MainUserSearchInput;
 import com.uos.upkodah.user.input.SearchLocationBtnListener;
 

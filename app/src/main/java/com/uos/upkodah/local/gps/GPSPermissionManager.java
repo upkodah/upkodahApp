@@ -5,12 +5,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.uos.upkodah.local.position.PositionInformation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GPSPermissionManager {
     private final static String[] permissions = new String[]{
@@ -38,15 +43,26 @@ public class GPSPermissionManager {
     }
 
     @SuppressLint("MissingPermission")
-    public PositionInformation getCurrentPosition(Context context){
+    public void requestCurrentPosition(Context context, LocationListener listener){
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        List<String> providers = manager.getAllProviders();
 
-        if(location==null) {
-            // GPS 직접수신에 실패한 경우 Wifi로 위치정보를 확인하고, 그래도 실패하면 Default 반환
-            location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if(location == null) return new PositionInformation(0,0);
+        boolean isProvided = false;
+        String bestProvider = "";
+        for(String provider : providers){
+            if(manager.isProviderEnabled(provider)){
+                isProvided = true;
+
+                bestProvider = provider;
+                if(bestProvider.equals(LocationManager.GPS_PROVIDER)) break;
+            }
         }
-        return new PositionInformation(location.getLongitude(), location.getLatitude());
+
+        // 어떤 Provider도 제공받지 못하면 오류 메시지 출력
+        if(!isProvided || bestProvider.isEmpty())
+            Toast.makeText(context, "GPS 연결을 확인하세요",Toast.LENGTH_SHORT).show();
+        else{
+            manager.requestLocationUpdates(bestProvider, 0,0,listener);
+        }
     }
 }

@@ -17,6 +17,9 @@ public class UkdMainActivity extends AppCompatActivity{
 
         // 뷰모델 설정
         ukdMainViewModel = ViewModelProviders.of(this).get(UkdMainViewModel.class);
+
+        // 다이얼로그 초기화
+        ukdMainViewModel.initDialog(this);
     }
 
 

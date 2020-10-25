@@ -3,11 +3,10 @@ package com.uos.upkodah.viewmodel;
 import android.content.DialogInterface;
 import android.view.View;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
+import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.input.UserInputData;
@@ -22,6 +21,10 @@ public class UkdMainViewModel extends ViewModel {
         this.userInputData = userInputData;
     }
 
+    /**
+     * 자기 자신의 위치를 가져오는 버튼을 누를 때
+     * @param view
+     */
     public void onClickBringMyPosition(View view){
         PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
             @Override
@@ -36,7 +39,10 @@ public class UkdMainViewModel extends ViewModel {
     }
 
     private SelectLimitTimeDialog selectLimitTimeDialog;
-    public void setSelectLimitTimeDialog(FragmentActivity activity) {
+    private SelectEstateTypeDialog selectEstateTypeDialog;
+
+    // Dialog 초기화
+    public void initDialog(FragmentActivity activity) {
         this.selectLimitTimeDialog = new SelectLimitTimeDialog(activity, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -46,8 +52,30 @@ public class UkdMainViewModel extends ViewModel {
                 dialogInterface.dismiss();
             }
         });
+
+        this.selectEstateTypeDialog = new SelectEstateTypeDialog(activity, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                userInputData.setEstateType(SelectEstateTypeDialog.indexToResult(i));
+
+                dialogInterface.dismiss();
+            }
+        });
     }
+
+    /**
+     * 제한 시간을 설정하는 텍스트 박스를 눌렀을 때
+     * @param view
+     */
     public void onClickSetTimeLimit(View view){
         selectLimitTimeDialog.show("setLimitTime");
+    }
+
+    /**
+     * 매물 타입을 설정하는 텍스트 박스를 눌렀을 때
+     * @param view
+     */
+    public void onClickSetEstateType(View view){
+        selectEstateTypeDialog.show("setEstateType");
     }
 }

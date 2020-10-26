@@ -41,6 +41,9 @@ public class GPSPermissionManager {
     public static void requestPermission(FragmentActivity activity){
         if(!isPermitted(activity)) activity.requestPermissions(permissions,0);
     }
+    public static String[] getPermissions(){
+        return permissions;
+    }
 
     @SuppressLint("MissingPermission")
     public void requestCurrentPosition(Context context, LocationListener listener){
@@ -64,5 +67,11 @@ public class GPSPermissionManager {
         else{
             manager.requestLocationUpdates(bestProvider, 0,0,listener);
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void removeGPSRequest(Context context, LocationListener listener){
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        manager.removeUpdates(listener);
     }
 }

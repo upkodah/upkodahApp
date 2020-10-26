@@ -4,9 +4,6 @@ import android.widget.EditText;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.uos.upkodah.R;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.user.input.SearchLocationBtnListener;
 
 //public class TempSearchLocationBtnListener extends SearchLocationBtnListener {
 //    private MainUserSearchInput positionInput;

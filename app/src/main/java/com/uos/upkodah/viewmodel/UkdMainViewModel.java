@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
+import com.uos.upkodah.dialog.permission.PermissionRequiringOnClickListener;
+import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.input.UserInputData;
 
@@ -25,22 +27,37 @@ public class UkdMainViewModel extends ViewModel {
      * 자기 자신의 위치를 가져오는 버튼을 누를 때
      * @param view
      */
+    private View.OnClickListener getMyLocationListener;
     public void onClickBringMyPosition(View view){
-        PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
+        getMyLocationListener.onClick(view);
+    }
+    public void initListener(FragmentActivity activity){
+        getMyLocationListener = new View.OnClickListener() {
             @Override
-            public void onChange(PositionInformation position) {
-                // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
-                userInputData.alertPositionChange();
-                userInputData.setPosition(position);
+            public void onClick(View view) {
+                // GPS 요청으로 positionInformation을 새로 설정한다.
+                if(userInputData.getPosition() == null){
+                    PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
+                        @Override
+                        public void onChange(PositionInformation position) {
+                            // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
+                            userInputData.alertPositionChange();
+                        }
+                    };
+                    PositionInformation positionInformation = new PositionInformation(view.getContext(), listener);
+                    userInputData.setPosition(positionInformation);
+                }
+                else{
+                    userInputData.getPosition().requestGPS(view.getContext());
+                }
             }
         };
-        // GPS 요청으로 positionInformation을 새로 설정한다.
-        PositionInformation positionInformation = new PositionInformation(view.getContext(), listener);
+        getMyLocationListener = new PermissionRequiringOnClickListener(getMyLocationListener, activity, GPSPermissionManager.getPermissions());
     }
+
 
     private SelectLimitTimeDialog selectLimitTimeDialog;
     private SelectEstateTypeDialog selectEstateTypeDialog;
-
     // Dialog 초기화
     public void initDialog(FragmentActivity activity) {
         this.selectLimitTimeDialog = new SelectLimitTimeDialog(activity, new DialogInterface.OnClickListener() {

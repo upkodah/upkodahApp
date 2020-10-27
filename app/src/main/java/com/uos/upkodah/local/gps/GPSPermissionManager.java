@@ -60,12 +60,13 @@ public class GPSPermissionManager {
                 if(bestProvider.equals(LocationManager.GPS_PROVIDER)) break;
             }
         }
+        System.out.println(bestProvider+"로 제공합니다");
 
         // 어떤 Provider도 제공받지 못하면 오류 메시지 출력
         if(!isProvided || bestProvider.isEmpty())
             Toast.makeText(context, "GPS 연결을 확인하세요",Toast.LENGTH_SHORT).show();
         else{
-            manager.requestLocationUpdates(bestProvider, 0,0,listener);
+            manager.requestLocationUpdates(bestProvider, 5000,5,listener);
         }
     }
 

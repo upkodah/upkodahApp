@@ -1,6 +1,5 @@
-package com.uos.upkodah.splashUtil;
+package com.uos.upkodah.util;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 

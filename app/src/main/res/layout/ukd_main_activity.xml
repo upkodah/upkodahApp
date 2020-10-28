@@ -38,8 +38,8 @@
             android:foregroundTint="#FFFFFF"
             android:orientation="vertical"
             android:overScrollMode="ifContentScrolls"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:showDividers="middle"
             android:verticalScrollbarPosition="defaultPosition"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,10 +64,10 @@
                     android:id="@+id/search_destination_txt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:editable="false"
                     android:ems="10"
-                    android:inputType="textPersonName"
                     android:text="@{model.userInputData.position.postalAddress}"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/get_my_location_btn"
                     app:layout_constraintStart_toEndOf="@+id/search_location_icon"
@@ -105,14 +105,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
+                    android:editable="false"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:onClick="@{model.onClickSetTimeLimit}"
                     android:textSize="18sp"
-                    app:setLimitTimeText="@{model.userInputData.limitTimeMin}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/limit_time_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:setLimitTimeText="@{model.userInputData.limitTimeMin}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -136,8 +137,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
+                    android:editable="false"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:onClick="@{model.onClickSetEstateType}"
                     android:text="@{model.userInputData.estateType}"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -167,8 +169,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
+                    android:editable="false"
                     android:ems="10"
-                    android:inputType="textPersonName"
                     android:text="Name"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -183,6 +185,7 @@
                 android:name="com.uos.upkodah.user.fragment.FacilitiesFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 tools:layout="@layout/facilities_frag" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

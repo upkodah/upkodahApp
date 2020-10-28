@@ -22,6 +22,7 @@ public class SelectLimitTimeDialog extends DialogFragment{
      * @param listener : 이 Dialog의 결과를 반영할 View나 기타 위치를 설정하는 리스너 장착
      */
     public SelectLimitTimeDialog(FragmentActivity activity, DialogInterface.OnClickListener listener){
+        this.activity = activity;
         this.listener = listener;
     }
 

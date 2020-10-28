@@ -37,6 +37,7 @@ public class UkdMainViewModel extends ViewModel {
             public void onClick(View view) {
                 // GPS 요청으로 positionInformation을 새로 설정한다.
                 if(userInputData.getPosition() == null){
+                    // PositionInformation이 null이면 새로 만든다.
                     PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
                         @Override
                         public void onChange(PositionInformation position) {
@@ -48,6 +49,7 @@ public class UkdMainViewModel extends ViewModel {
                     userInputData.setPosition(positionInformation);
                 }
                 else{
+                    // null이 아니면 기존 PositionInformation에 GPS 갱신 요청
                     userInputData.getPosition().requestGPS(view.getContext());
                 }
             }

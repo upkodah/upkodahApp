@@ -48,25 +48,17 @@ public class GPSPermissionManager {
     @SuppressLint("MissingPermission")
     public void requestCurrentPosition(Context context, LocationListener listener){
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = manager.getAllProviders();
+        List<String> providers = manager.getProviders(true);
+
+        // provider에는 GPS, Network, Passive가 존재한다.
+        // GPS는 1번, Network는 2번, Passive는 3번이다. 일단 3번은 고려하지 않는다.
 
         boolean isProvided = false;
         String bestProvider = "";
         for(String provider : providers){
             if(manager.isProviderEnabled(provider)){
-                isProvided = true;
-
-                bestProvider = provider;
-                if(bestProvider.equals(LocationManager.GPS_PROVIDER)) break;
+                manager.requestLocationUpdates(provider, 5000,5,listener);
             }
-        }
-        System.out.println(bestProvider+"로 제공합니다");
-
-        // 어떤 Provider도 제공받지 못하면 오류 메시지 출력
-        if(!isProvided || bestProvider.isEmpty())
-            Toast.makeText(context, "GPS 연결을 확인하세요",Toast.LENGTH_SHORT).show();
-        else{
-            manager.requestLocationUpdates(bestProvider, 5000,5,listener);
         }
     }
 

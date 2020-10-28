@@ -171,12 +171,17 @@ class SetCoordListener implements Response.Listener<String>{
     @Override
     public void onResponse(String response) {
         // 이 부분에서 응답을 보고 주소를 설정한다.
-        CoordToAddrParser parser = new CoordToAddrParser(response);
-        this.positionInformation.postalAddress = parser.getPostalAddress();
-        this.positionInformation.region = parser.getRegions();
+        CoordToAddrParser parser = null;
+        parser = CoordToAddrParser.getInstance(response);
 
-        // 리스너를 호출하여 변경을 알린다.
-        if(positionInformation!=null) positionInformation.changeListener.onChange(positionInformation);
+        // parser가 null을 반환하면 유효하지 않은 것이므로 생략해야 함
+        if(parser != null){
+            this.positionInformation.postalAddress = parser.getPostalAddress();
+            this.positionInformation.region = parser.getRegions();
+
+            // 리스너를 호출하여 변경을 알린다.
+            if(positionInformation!=null) positionInformation.changeListener.onChange(positionInformation);
+        }
     }
 }
 class SetPostalAddressListener implements Response.Listener<String>{
@@ -210,18 +215,29 @@ class SetGPSInformationListener implements LocationListener{
         this.context = context;
         this.positionInformation = positionInformation;
     }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        // 위치를 잘 받았으니, 수신 취소
+        GPSPermissionManager.getInstance(context).removeGPSRequest(context, this);
+
         // 이 부분에서 응답을 보고 위도 및 경도를 설정한다.
         this.positionInformation.setCoord(context, location.getLongitude(), location.getLatitude());
         System.out.println("lon="+this.positionInformation.longitude+", lat="+this.positionInformation.latitude);
-
-        // 위치를 잘 받았으니, 수신 취소
-        GPSPermissionManager.getInstance(context).removeGPSRequest(context, this);
 
         // 리스너를 호출하여 변경을 알린다.
         if(positionInformation!=null) positionInformation
                 .changeListener
                 .onChange(positionInformation);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
     }
 }

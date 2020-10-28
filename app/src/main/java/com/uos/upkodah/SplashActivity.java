@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.AppLaunchChecker;
 
-import com.uos.upkodah.splashUtil.WaitAndStart;
+import com.uos.upkodah.util.WaitAndStart;
 
 public class SplashActivity extends AppCompatActivity {
 

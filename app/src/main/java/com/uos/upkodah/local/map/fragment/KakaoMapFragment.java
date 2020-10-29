@@ -23,7 +23,7 @@ public class KakaoMapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         MapView mapView = new MapView(getActivity());
-        ViewGroup mapViewContainer = (ViewGroup) inflater.inflate(R.layout.map_frag, container, false);
+        ViewGroup mapViewContainer = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
 
         mapViewContainer.addView(mapView);
 

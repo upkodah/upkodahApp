@@ -62,11 +62,5 @@ public abstract class WaitAndStart extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
-}
-
-class WaitAndStartHandler extends Handler{
-
 }

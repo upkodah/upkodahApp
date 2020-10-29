@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">UpKoDah</string>
+    <string name="extra_position_information">POSITION_EXTRA</string>
+    <string name="extra_region_information">REGION_EXTRA</string>
+    <string name="extra_estate_info">ESTATE_EXTRA</string>
+
+
+    <string name="fragment_limit_time">LIMIT_TIME</string>
+    <string name="fragment_estate_type">ESTATE_TYPE</string>
+    <string name="fragment_trade_type">TRADE_TYPE</string>
 </resources>

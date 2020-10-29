@@ -16,8 +16,7 @@ public class SelectEstateTypeDialog extends DialogFragment {
     /**
      * @param listener : 이 Dialog의 결과를 반영할 View나 기타 위치를 설정하는 리스너 장착
      */
-    public SelectEstateTypeDialog(FragmentActivity activity, DialogInterface.OnClickListener listener){
-        this.activity = activity;
+    public SelectEstateTypeDialog(DialogInterface.OnClickListener listener){
         this.listener = listener;
     }
 
@@ -32,7 +31,7 @@ public class SelectEstateTypeDialog extends DialogFragment {
     }
 
     public void show(String tag){
-        this.show(activity.getSupportFragmentManager(), tag);
+        this.show(getActivity().getSupportFragmentManager(), tag);
     }
     public static String indexToResult(int i){
         return new String[]{"A","B","C"}[i];

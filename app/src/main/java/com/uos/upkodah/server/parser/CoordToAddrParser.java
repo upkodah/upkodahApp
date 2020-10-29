@@ -22,12 +22,7 @@ public class CoordToAddrParser {
 
     private String addressName;
     private List<String> regions = new ArrayList<>();
-    private String roadName;
-    private String undergroundYN;
-    private String mainBuildingNo;
-    private String subBuildingNo;
     private String buildingName;
-    private String zoneNo;
 
     protected CoordToAddrParser(String response) throws JSONException{
         // 먼저, 응답을 JSONObject로 변환, 저장한다.
@@ -59,9 +54,47 @@ public class CoordToAddrParser {
         documents = jobj.getJSONArray("documents").getJSONObject(0);
         System.out.println("COORD_TO_ARRAY : documents 획득 성공");
 
-        roadAddr = documents.getJSONObject("road_address");
-        lotNumAddr = documents.getJSONObject("address");
+        roadAddr = documents.isNull("road_address") ? null : documents.getJSONObject("road_address");
+        lotNumAddr = documents.isNull("address") ? null : documents.getJSONObject("address");
+//        System.out.println(documents.isNull("road_address"));
+//        roadAddr = documents.getJSONObject("road_address");
+//        lotNumAddr = documents.getJSONObject("address");
         System.out.println("COORD_TO_ARRAY : 주소지 정보 획득 성공");
+
+        if(roadAddr!=null){
+            System.out.println("도로명주소로 검색");
+            addressName = roadAddr.getString("address_name");
+            for(int i=1;i<=3;i++){
+                String valName = "region_"+i+"depth_name";
+                String region = roadAddr.getString(valName);
+                if(region.isEmpty()) continue;
+
+                regions.add(region);
+            }
+            System.out.println("COORD_TO_ARRAY : 주소명 및 지역 분류 성공");
+
+            buildingName = roadAddr.getString("building_name");
+
+            System.out.println("검색된 주소 : "+addressName);
+        }
+        else{
+            System.out.println("지번주소로 검색");
+            addressName = lotNumAddr.getString("address_name");
+            for(int i=1;i<=3;i++){
+                String valName = "region_"+i+"depth_name";
+                String region = lotNumAddr.getString(valName);
+                if(region.isEmpty()) continue;
+
+                regions.add(region);
+            }
+            System.out.println("COORD_TO_ARRAY : 주소명 및 지역 분류 성공");
+
+//            buildingName = lotNumAddr.getString("building_name");
+
+            System.out.println("검색된 주소 : "+addressName);
+        }
+
+        // 현재 간헐적으로 도로명주소가 출력되지 않는 문제 발생
 
         /*
          도로명주소 처리 부분
@@ -74,24 +107,7 @@ public class CoordToAddrParser {
          building_name : 건물 이름
          zone_no : 우편번호 5자리
          */
-        addressName = roadAddr.getString("address_name");
-        for(int i=1;i<=3;i++){
-            String valName = "region_"+i+"depth_name";
-            String region = roadAddr.getString(valName);
-            if(region.isEmpty()) continue;
 
-            regions.add(region);
-        }
-        System.out.println("COORD_TO_ARRAY : 주소명 및 지역 분류 성공");
-
-        roadName = roadAddr.getString("road_name");
-        undergroundYN = roadAddr.getString("underground_yn");
-        mainBuildingNo = roadAddr.getString("main_building_no");
-        subBuildingNo = roadAddr.getString("sub_building_no");
-        buildingName = roadAddr.getString("building_name");
-        zoneNo = roadAddr.getString("zone_no");
-
-        System.out.println("검색된 주소 : "+addressName);
     }
     public static CoordToAddrParser getInstance(String reponse){
         try {

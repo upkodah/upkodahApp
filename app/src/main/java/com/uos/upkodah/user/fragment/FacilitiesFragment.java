@@ -15,6 +15,7 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.util.DisplayDensityCalculator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 해당 클래스는 편의시설 아이콘 목록을 표출시키는 Fragment
@@ -27,7 +28,7 @@ public class FacilitiesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        LinearLayout filterList = (LinearLayout) inflater.inflate(R.layout.facilities_frag, container, false);
+        LinearLayout filterList = (LinearLayout) inflater.inflate(R.layout.fragment_facilities, container, false);
 
         // 버튼 사이즈 계산
         btnWidth = DisplayDensityCalculator.toPx(getContext(), 50);
@@ -78,5 +79,9 @@ public class FacilitiesFragment extends Fragment {
         button.setScaleType(ImageView.ScaleType.FIT_XY);
 
         buttonList.add(button);
+    }
+
+    public List<ImageButton> getButtonList(){
+        return buttonList;
     }
 }

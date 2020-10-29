@@ -7,24 +7,39 @@ import android.location.LocationListener;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.map.MapDrawable;
+import com.uos.upkodah.local.map.UkdMapMarker;
 import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.AddrToCoordParser;
 import com.uos.upkodah.server.parser.CoordToAddrParser;
 
+import net.daum.mf.map.api.MapView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
 public class PositionInformation implements Parcelable, MapDrawable {
     public final static String EXTRA = "PositionInformation";
+    public final static int REGION_DEPTH_1 = 0;
+    public final static int REGION_DEPTH_2 = 1;
+    public final static int REGION_DEPTH_3 = 2;
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(value = { REGION_DEPTH_1,REGION_DEPTH_2,REGION_DEPTH_3 })
+    @interface RegionDepth{}
 
     double longitude;
     double latitude;
@@ -47,6 +62,14 @@ public class PositionInformation implements Parcelable, MapDrawable {
         return this.postalAddress;
     }
     public void setPostalAddress(String address){ this.postalAddress = address; }
+    public String getRegion(@RegionDepth int depth){ return region.get(depth); }
+    public List<String> getRegions(){
+        return region;
+    }
+    public void setRegion(List<String> regions){
+        region = new ArrayList<>();
+        region.addAll(regions);
+    }
 
     public PositionInformation(double longitude, double latitude, String address, List<String> region){
         this.longitude = longitude;
@@ -71,6 +94,12 @@ public class PositionInformation implements Parcelable, MapDrawable {
         this.region = new ArrayList<>();
     }
 
+    @Override
+    public void drawInto(MapView mapView) {
+        UkdMapMarker.getBuilder(this).build().drawInto(mapView);
+    }
+
+
     /*
      PositionInformation은 GPS요청, API 요청에 의해 외부 쓰레드에 의해 임의의 시점에 상태가 변경된다.
      만약 해당 객체가 변경될 때 실행되어야 할 동작이 있다면, 리스너를 설정해야 한다.
@@ -91,6 +120,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
         LocationListener listener = new SetGPSInformationListener(context, this);
         GPSPermissionManager.getInstance(context).requestCurrentPosition(context, listener);
     }
+
 
 
     /*

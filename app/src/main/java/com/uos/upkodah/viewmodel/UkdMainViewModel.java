@@ -11,90 +11,93 @@ import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.dialog.permission.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.user.fragment.data.SearchBarData;
+import com.uos.upkodah.user.fragment.data.SearchOptionData;
+import com.uos.upkodah.user.input.InputData;
+import com.uos.upkodah.user.input.LimitTimeStringConverter;
 import com.uos.upkodah.user.input.UserInputData;
 
-public class UkdMainViewModel extends ViewModel {
-    private UserInputData userInputData = UserInputData.getInstanceForDataBinding();
+public class UkdMainViewModel extends ViewModel implements InputData {
+    public SearchBarData searchBarData = new SearchBarData();
 
-    public UserInputData getUserInputData() {
-        return userInputData;
-    }
-    public void setUserInputData(UserInputData userInputData) {
-        this.userInputData = userInputData;
-    }
+    public InputData getUserInputData(){
+        UserInputData result = new UserInputData();
+        result.setPosition(positionInformation);
+        result.setLimitTimeMin(getLimitTimeMin());
+        result.setEstateType(getEstateType());
+        result.setTradeType(getTradeType());
 
-    /**
-     * 자기 자신의 위치를 가져오는 버튼을 누를 때
-     * @param view
-     */
-    private View.OnClickListener getMyLocationListener;
-    public void onClickBringMyPosition(View view){
-        getMyLocationListener.onClick(view);
-    }
-    public void initListener(FragmentActivity activity){
-        getMyLocationListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // GPS 요청으로 positionInformation을 새로 설정한다.
-                if(userInputData.getPosition() == null){
-                    // PositionInformation이 null이면 새로 만든다.
-                    PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
-                        @Override
-                        public void onChange(PositionInformation position) {
-                            // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
-                            userInputData.alertPositionChange();
-                        }
-                    };
-                    PositionInformation positionInformation = new PositionInformation(view.getContext(), listener);
-                    userInputData.setPosition(positionInformation);
-                }
-                else{
-                    // null이 아니면 기존 PositionInformation에 GPS 갱신 요청
-                    userInputData.getPosition().requestGPS(view.getContext());
-                }
-            }
-        };
-        getMyLocationListener = new PermissionRequiringOnClickListener(getMyLocationListener, activity, GPSPermissionManager.getPermissions());
+        return result;
     }
 
-
-    private SelectLimitTimeDialog selectLimitTimeDialog;
-    private SelectEstateTypeDialog selectEstateTypeDialog;
-    // Dialog 초기화
-    public void initDialog(FragmentActivity activity) {
-        this.selectLimitTimeDialog = new SelectLimitTimeDialog(activity, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                int result = SelectLimitTimeDialog.indexToResult(i);
-                userInputData.setLimitTimeMin(result);
-
-                dialogInterface.dismiss();
-            }
-        });
-
-        this.selectEstateTypeDialog = new SelectEstateTypeDialog(activity, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                userInputData.setEstateType(SelectEstateTypeDialog.indexToResult(i));
-
-                dialogInterface.dismiss();
-            }
-        });
+    private PositionInformation positionInformation;
+    @Override
+    public PositionInformation getPosition() {
+        return positionInformation;
+    }
+    @Override
+    public void setPosition(PositionInformation position) {
+        this.positionInformation = position;
+        alertPositionChange();
+    }
+    public void alertPositionChange(){
+        searchBarData.setSearchText(positionInformation.getPostalAddress());
     }
 
-    /**
-     * 제한 시간을 설정하는 텍스트 박스를 눌렀을 때
-     * @param view
-     */
-    public void onClickSetTimeLimit(View view){
-        selectLimitTimeDialog.show("setLimitTime");
+    public SearchOptionData limitTimeData = new SearchOptionData();
+    @Override
+    public int getLimitTimeMin() {
+        return LimitTimeStringConverter.toMinute(limitTimeData.getOptionText());
+    }
+    @Override
+    public void setLimitTimeMin(int minute) {
+        limitTimeData.setOptionText(new LimitTimeStringConverter(minute).toString());
     }
 
-    /**
-     * 매물 타입을 설정하는 텍스트 박스를 눌렀을 때
-     * @param view
-     */
-    public void onClickSetEstateType(View view){
-        selectEstateTypeDialog.show("setEstateType");
+    public SearchOptionData estateData = new SearchOptionData();;
+    @Override
+    public String getEstateType() {
+        return estateData.getOptionText();
+    }
+    @Override
+    public void setEstateType(String estateType) {
+        estateData.setOptionText(estateType);
+    }
+
+    public SearchOptionData tradeTypeData = new SearchOptionData();
+    @Override
+    public String getTradeType() {
+        return tradeTypeData.getOptionText();
+    }
+    @Override
+    public void setTradeType(String tradeType) {
+        tradeTypeData.setOptionText(tradeType);
+    }
+
+    @Override
+    public int[] getFacilities() {
+        return new int[0];
+    }
+    @Override
+    public void setFacilities(int index, int data) {
+
+    }
+
+
+    public void setGetMyLocationBtnListener(View.OnClickListener getMyLocationBtnListener) {
+        this.getMyLocationBtnListener = getMyLocationBtnListener;
+    }
+    private View.OnClickListener getMyLocationBtnListener;
+
+    public void setGetLocationBtnListener(View.OnClickListener getLocationBtnListener) {
+        this.getLocationBtnListener = getLocationBtnListener;
+    }
+    private View.OnClickListener getLocationBtnListener;
+
+    public void onClickGetMyLocationBtn(View vieW){
+        getMyLocationBtnListener.onClick(vieW);
+    }
+    public void onClickGetLocatoinBtn(View view){
+        getLocationBtnListener.onClick(view);
     }
 }

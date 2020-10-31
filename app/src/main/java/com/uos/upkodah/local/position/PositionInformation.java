@@ -19,6 +19,7 @@ import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.AddrToCoordParser;
 import com.uos.upkodah.server.parser.CoordToAddrParser;
 
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapView;
 
 import org.json.JSONException;
@@ -71,7 +72,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
         region.addAll(regions);
     }
 
-    public PositionInformation(double longitude, double latitude, String address, List<String> region){
+    public PositionInformation(double longitude, double latitude, @Nullable String address, @Nullable List<String> region){
         this.longitude = longitude;
         this.latitude = latitude;
         this.postalAddress = address;
@@ -95,8 +96,8 @@ public class PositionInformation implements Parcelable, MapDrawable {
     }
 
     @Override
-    public void drawInto(MapView mapView) {
-        UkdMapMarker.getBuilder(this).build().drawInto(mapView);
+    public MapPOIItem getMarker() {
+        return UkdMapMarker.getBuilder(this).build().getMarker();
     }
 
 
@@ -143,7 +144,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
 
         Response.Listener<String> listener = new SetCoordListener(this);
         KakaoAPIRequest request = KakaoAPIRequest.getCoordToAddrRequest(longitude,latitude,listener,null);
-        KakaoAPIRequest.request(context, request);
+        request.request(context);
     }
 
     /**
@@ -156,7 +157,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
 
         Response.Listener<String> listener = new SetPostalAddressListener(this);
         KakaoAPIRequest request = KakaoAPIRequest.getSearchAddrRequest(address,listener,null);
-        KakaoAPIRequest.request(context, request);
+        request.request(context);
     }
 
 

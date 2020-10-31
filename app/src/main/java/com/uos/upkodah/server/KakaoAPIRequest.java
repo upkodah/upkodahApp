@@ -35,10 +35,10 @@ public class KakaoAPIRequest extends StringRequest {
         return headers;
     }
     public static RequestQueue requestQueue = null;
-    public synchronized static void request(Context context, KakaoAPIRequest request){
+    public synchronized void request(Context context){
         if(requestQueue==null) requestQueue = Volley.newRequestQueue(context);
 
-        requestQueue.add(request);
+        requestQueue.add(this);
     }
 
     public static KakaoAPIRequest getSearchAddrRequest(@NonNull String query, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){

@@ -1,15 +1,9 @@
 package com.uos.upkodah.viewmodel;
 
-import android.content.DialogInterface;
 import android.view.View;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 
-import com.uos.upkodah.dialog.SelectEstateTypeDialog;
-import com.uos.upkodah.dialog.SelectLimitTimeDialog;
-import com.uos.upkodah.dialog.permission.PermissionRequiringOnClickListener;
-import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
 import com.uos.upkodah.user.fragment.data.SearchOptionData;

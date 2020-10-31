@@ -18,6 +18,8 @@ import com.uos.upkodah.R;
  * 해당 다이얼로그는 어떤 작업을 하는 동안 단순히 작업중인 상태를 보여주는 다이얼로그입니다.
  */
 public class LoadingDialog extends DialogFragment {
+    private Dialog currentDialog;
+
 
     @NonNull
     @Override
@@ -33,14 +35,13 @@ public class LoadingDialog extends DialogFragment {
 
         setCancelable(false);
 
-        Dialog result = builder.create();
-        result.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        currentDialog = builder.create();
+        currentDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        return result;
+        return currentDialog;
     }
 
-    @Override
-    public void onAttachFragment(Fragment f){
-
+    public void cancel(){
+        currentDialog.cancel();
     }
 }

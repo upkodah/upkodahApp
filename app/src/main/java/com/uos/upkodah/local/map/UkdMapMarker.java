@@ -27,8 +27,8 @@ public class UkdMapMarker implements MapDrawable{
     }
 
     @Override
-    public void drawInto(MapView mapView) {
-        mapView.addPOIItem(this.marker);
+    public MapPOIItem getMarker() {
+        return this.marker;
     }
 
     public class Builder{

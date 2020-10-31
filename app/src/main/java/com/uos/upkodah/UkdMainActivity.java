@@ -27,6 +27,7 @@ import com.uos.upkodah.user.fragment.SearchOptionFragment;
 import com.uos.upkodah.user.input.InputData;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UkdMainActivity extends AppCompatActivity{
@@ -132,12 +133,10 @@ public class UkdMainActivity extends AppCompatActivity{
 
                             // 오류가 없다면 새 액티비티를 실행한다.
                             if(parser != null){
-                                List<PositionInformation> positions = parser.getPositionList();
-                                PositionInformation[] positionsArray = new PositionInformation[positions.size()];
-                                positions.toArray(positionsArray);
+                                ArrayList<PositionInformation> positions = parser.getPositionList();
 
                                 Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-                                intent.putExtra("estates",positionsArray);
+                                intent.putParcelableArrayListExtra(getString(R.string.extra_position_information), positions);
 
                                 Toast.makeText(UkdMainActivity.this, positions.size()+"", Toast.LENGTH_SHORT).show();
                                 loadingDialog.cancel();

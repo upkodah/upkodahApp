@@ -11,24 +11,17 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
-public class UkdMapMarker implements MapDrawable{
-    private MapPOIItem marker = new MapPOIItem();
-
+public class UkdMapMarker extends MapPOIItem{
     protected UkdMapMarker(PositionInformation positionInformation){
         // 기본적으로 좌표와 기본핀 이미지를 설정하고, 이름은 주소 전체로 합니다.
-        marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-        marker.setMapPoint(MapPoint.mapPointWithGeoCoord(positionInformation.getLatitude(), positionInformation.getLongitude()));
-        marker.setItemName(positionInformation.getPostalAddress());
+        setMarkerType(MapPOIItem.MarkerType.BluePin);
+        setMapPoint(MapPoint.mapPointWithGeoCoord(positionInformation.getLatitude(), positionInformation.getLongitude()));
+        setItemName(positionInformation.getPostalAddress());
     }
 
     public static UkdMapMarker.Builder getBuilder(PositionInformation positionInformation){
         UkdMapMarker mapMarker = new UkdMapMarker(positionInformation);
         return mapMarker.new Builder();
-    }
-
-    @Override
-    public MapPOIItem getMarker() {
-        return this.marker;
     }
 
     public class Builder{
@@ -37,11 +30,11 @@ public class UkdMapMarker implements MapDrawable{
          * @param bitmap
          * @return
          */
-        public Builder setMarkerImage(Bitmap bitmap){
-            UkdMapMarker.this.marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-            UkdMapMarker.this.marker.setCustomImageBitmap(bitmap);
-            UkdMapMarker.this.marker.setCustomImageAutoscale(false);
-            UkdMapMarker.this.marker.setCustomImageAnchor(0.5f, 1.0f);
+        public UkdMapMarker.Builder setMarkerImage(Bitmap bitmap){
+            UkdMapMarker.this.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+            UkdMapMarker.this.setCustomImageBitmap(bitmap);
+            UkdMapMarker.this.setCustomImageAutoscale(false);
+            UkdMapMarker.this.setCustomImageAnchor(0.5f, 1.0f);
 
             return this;
         }
@@ -51,8 +44,8 @@ public class UkdMapMarker implements MapDrawable{
          * @param name
          * @return
          */
-        public Builder setName(String name){
-            UkdMapMarker.this.marker.setItemName(name);
+        public UkdMapMarker.Builder setName(String name){
+            UkdMapMarker.this.setItemName(name);
 
             return this;
         }

@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchKeyworkParser extends KakaoAPIParser {
-    public List<PositionInformation> getPositionList() {
+    public ArrayList<PositionInformation> getPositionList() {
         return positionList;
     }
-    private List<PositionInformation> positionList;
+    private ArrayList<PositionInformation> positionList;
 
     protected SearchKeyworkParser(String response) throws JSONException{
         super(response);

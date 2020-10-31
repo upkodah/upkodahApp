@@ -97,7 +97,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
 
     @Override
     public MapPOIItem getMarker() {
-        return UkdMapMarker.getBuilder(this).build().getMarker();
+        return UkdMapMarker.getBuilder(this).build();
     }
 
 

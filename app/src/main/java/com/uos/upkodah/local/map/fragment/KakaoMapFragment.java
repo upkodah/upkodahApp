@@ -38,7 +38,7 @@ public class KakaoMapFragment extends Fragment {
     /**
      * 모든 마커를 없애고 초기화합니다.
      */
-    public void setPositions(@Nullable List<PositionInformation> positionList){
+    public void setPositions(@Nullable List<? extends PositionInformation> positionList){
         mapView.removeAllPOIItems();
 
         if(positionList != null){

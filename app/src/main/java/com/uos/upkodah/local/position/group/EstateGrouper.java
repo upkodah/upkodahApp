@@ -1,6 +1,7 @@
 package com.uos.upkodah.local.position.group;
 
 import com.uos.upkodah.local.position.EstateInformation;
+import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
 
 import java.util.ArrayList;
@@ -48,13 +49,13 @@ public class EstateGrouper {
         // 내부 원소를 전부 빼고 정렬시킨다.
         for(RegionInformation regionInformation : regionInformationList){
             // 재귀호출하여 바로 하위 Estate들을 정리시켜 지역정보를 전부 가져온다.
-            List<RegionInformation> tmpList = classifyEstate(regionInformation.getEstates(), regionInformation.getRegions());
+            List<? extends PositionInformation> tmpList = classifyEstate(regionInformation.getEstates(), regionInformation.getRegions());
 
             // 해당 지역 내 Estate들을 전부 비운다.
             regionInformation.clearEstates();
 
             // 정리된 것을 다시 넣는다.
-            for(EstateInformation estate : tmpList){
+            for(PositionInformation estate : tmpList){
                 regionInformation.addEstate(estate);
             }
         }

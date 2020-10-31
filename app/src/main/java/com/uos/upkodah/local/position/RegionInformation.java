@@ -4,12 +4,13 @@ import androidx.annotation.IntDef;
 
 import com.uos.upkodah.local.map.UkdMapMarker;
 
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegionInformation extends EstateInformation{
+public class RegionInformation extends PositionInformation{
     // 전체 매물 리스트를 말한다.
     private List<EstateInformation> estates;
 
@@ -34,13 +35,10 @@ public class RegionInformation extends EstateInformation{
         return estates;
     }
 
-    /**
-     * 지역은 그리는 방법이 약간 달라 다시 그립니다.
-     * @param mapView
-     */
+
     @Override
-    public void drawInto(MapView mapView){
-        UkdMapMarker.getBuilder(this);
+    public MapPOIItem getMarker(){
+        return UkdMapMarker.getBuilder(this).build();
     }
 
     // Region은 위치를 얻는 방법도 평균치 계산에 의존합니다.

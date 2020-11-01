@@ -27,11 +27,11 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
-            android:scaleType="fitXY"
             android:onClick="@{data.onSearchBtnClick}"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

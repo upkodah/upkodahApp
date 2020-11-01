@@ -50,6 +50,8 @@ public class UkdMainActivity extends AppCompatActivity{
 
         // 리스너 설정
         ukdMainViewModel.setGetMyLocationBtnListener(new View.OnClickListener() {
+            // 내 위치 가져오기 버튼을 누르면 자기 위치를 가져온다.
+
             @Override
             public void onClick(View view) {
                 // GPS 요청으로 positionInformation을 새로 설정한다.
@@ -68,6 +70,14 @@ public class UkdMainActivity extends AppCompatActivity{
                 }
                 // 갱신 요청
                 positionInformation.requestGPS(view.getContext());
+            }
+        });
+        ukdMainViewModel.setGetLocationBtnListener(new View.OnClickListener() {
+            // 목적지 검색하기 버튼을 누르면 목적지 검색 다이얼로그를 띄운다.
+
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -91,6 +101,7 @@ public class UkdMainActivity extends AppCompatActivity{
                     }
                 });
                 searchOptionFragment.setData(ukdMainViewModel.limitTimeData);
+                searchOptionFragment.setImage(R.drawable.limit_time);
             }
             if(tag.equals(getString(R.string.fragment_estate_type))){
                 ukdMainViewModel.estateData.setOptionEditListener(new View.OnClickListener() {
@@ -100,9 +111,11 @@ public class UkdMainActivity extends AppCompatActivity{
                     }
                 });
                 searchOptionFragment.setData(ukdMainViewModel.estateData);
+                searchOptionFragment.setImage(R.drawable.estate_type);
             }
             if(tag.equals(getString(R.string.fragment_trade_type))){
                 searchOptionFragment.setData(ukdMainViewModel.tradeTypeData);
+                searchOptionFragment.setImage(R.drawable.trade_type);
             }
         }
         if(fragment instanceof SearchBarFragment){

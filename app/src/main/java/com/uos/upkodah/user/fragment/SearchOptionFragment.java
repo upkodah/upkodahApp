@@ -1,5 +1,6 @@
 package com.uos.upkodah.user.fragment;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.uos.upkodah.user.fragment.data.SearchOptionData;
 public class SearchOptionFragment extends Fragment {
     private FragmentSearchOptionBinding binding;
     private SearchOptionData data;
+    private Drawable iconImage = null;
 
     @Nullable
     @Override
@@ -34,6 +36,12 @@ public class SearchOptionFragment extends Fragment {
         editText.setInputType(InputType.TYPE_NULL);
         editText.setFocusable(false);
 
+        // 아이콘이 설정되어 있으면, 해당 아이콘으로 변경한다.
+        if(iconImage != null){
+            ImageView imageView = (ImageView) view.findViewById(R.id.search_option_icon);
+            imageView.setImageDrawable(iconImage);
+        }
+
         return view;
     }
 
@@ -41,7 +49,6 @@ public class SearchOptionFragment extends Fragment {
         this.data = data;
     }
     public void setImage(@DrawableRes int id){
-        ImageView imageView = (ImageView) binding.getRoot().findViewById(R.id.search_option_icon);
-        imageView.setImageDrawable(getResources().getDrawable(id, null));
+        iconImage = getResources().getDrawable(id, null);
     }
 }

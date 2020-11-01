@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
 
-public class KeywordLocationListViewHolder extends RecyclerView.ViewHolder {
+public class LocationListViewHolder extends RecyclerView.ViewHolder {
     private TextView address;
     private TextView name;
 
-    public KeywordLocationListViewHolder(@NonNull View itemView) {
+    public LocationListViewHolder(@NonNull View itemView) {
         super(itemView);
 
         address = itemView.findViewById(R.id.location_address);

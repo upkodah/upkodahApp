@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
@@ -22,10 +24,16 @@ import com.uos.upkodah.R;
  */
 public class SelectionListFragment extends Fragment {
     private SelectionListAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        View mainView = inflater.inflate(R.layout.fragment_list, container, false);
+        recyclerView = mainView.findViewById(R.id.item_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        applyAdapter();
+
+        return mainView;
     }
 
     public interface ViewHolderManager{
@@ -58,6 +66,9 @@ public class SelectionListFragment extends Fragment {
 
     public void setHolderManager(ViewHolderManager manager){
         adapter = new SelectionListAdapter(manager);
+    }
+    public void applyAdapter(){
+        if(adapter!=null) recyclerView.setAdapter(adapter);
     }
 }
 

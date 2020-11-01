@@ -210,6 +210,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="#00FFFFFF"
+                    android:onClick="@{model.onClickGetLocatoinBtn}"
                     android:scaleType="fitXY"
                     android:src="@drawable/select_location"
                     app:layout_constraintBottom_toBottomOf="parent"

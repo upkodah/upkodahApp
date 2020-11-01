@@ -1,7 +1,9 @@
 package com.uos.upkodah;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import com.uos.upkodah.databinding.ActivityUkdMainBinding;
 import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
+import com.uos.upkodah.dialog.SelectLocationDialog;
+import com.uos.upkodah.dialog.permission.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.SearchKeyworkParser;
@@ -49,7 +53,7 @@ public class UkdMainActivity extends AppCompatActivity{
 
 
         // 리스너 설정
-        ukdMainViewModel.setGetMyLocationBtnListener(new View.OnClickListener() {
+        ukdMainViewModel.setGetMyLocationBtnListener(new PermissionRequiringOnClickListener(new View.OnClickListener() {
             // 내 위치 가져오기 버튼을 누르면 자기 위치를 가져온다.
 
             @Override
@@ -71,15 +75,18 @@ public class UkdMainActivity extends AppCompatActivity{
                 // 갱신 요청
                 positionInformation.requestGPS(view.getContext());
             }
-        });
-        ukdMainViewModel.setGetLocationBtnListener(new View.OnClickListener() {
+        }, this, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION));
+
+
+        ukdMainViewModel.setGetLocationBtnListener(new PermissionRequiringOnClickListener(new View.OnClickListener() {
             // 목적지 검색하기 버튼을 누르면 목적지 검색 다이얼로그를 띄운다.
 
             @Override
             public void onClick(View view) {
-
+                // 검색 다이얼로그를 띄운다.
+                new SelectLocationDialog().show(getSupportFragmentManager(), "select_location");
             }
-        });
+        }, this,  Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION));
 
 
         binding.setModel(ukdMainViewModel);

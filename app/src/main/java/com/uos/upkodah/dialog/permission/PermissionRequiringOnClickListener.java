@@ -32,11 +32,10 @@ public class PermissionRequiringOnClickListener implements View.OnClickListener{
     }
 
     private boolean checkAllPermitted(){
-        boolean result = true;
 
         for(String permission : permissions){
-            result &= (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED);
+            if(ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) return false;
         }
-        return result;
+        return true;
     }
 }

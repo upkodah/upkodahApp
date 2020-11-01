@@ -4,6 +4,7 @@ package com.uos.upkodah.local.position;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -45,6 +46,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
     double longitude;
     double latitude;
     String postalAddress;
+    String name;
     List<String> region;
 
     public double getLongitude() {
@@ -71,6 +73,8 @@ public class PositionInformation implements Parcelable, MapDrawable {
         region = new ArrayList<>();
         region.addAll(regions);
     }
+    public String getName(){ return this.name; }
+    public void setName(String name){ this.name = name; }
 
     public PositionInformation(double longitude, double latitude, @Nullable String address, @Nullable List<String> region){
         this.longitude = longitude;
@@ -92,6 +96,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
         this.longitude = 0;
         this.latitude = 0;
         this.postalAddress = "";
+        this.name = "";
         this.region = new ArrayList<>();
     }
 
@@ -260,6 +265,11 @@ class SetGPSInformationListener implements LocationListener{
         if(positionInformation!=null) positionInformation
                 .changeListener
                 .onChange(positionInformation);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
     @Override

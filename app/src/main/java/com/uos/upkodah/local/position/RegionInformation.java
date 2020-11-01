@@ -12,33 +12,33 @@ import java.util.List;
 
 public class RegionInformation extends PositionInformation{
     // 전체 매물 리스트를 말한다.
-    private List<EstateInformation> estates;
+    private List<PositionInformation> positions;
 
     /**
      * 해당 메소드는 Estate들의 수에 따라 반지름 크기를 결정한다.
      * @return
      */
     public float getMarkerRadius(){
-        return estates.size() / 10;
+        return positions.size() / 10;
     }
     public RegionInformation(List<String> regions){
         this.region = new ArrayList<>();
         this.region.addAll(regions);
     }
-    public void addEstate(EstateInformation estate){
-        estates.add(estate);
+    public void addPosition(PositionInformation position){
+        positions.add(position);
     }
-    public void clearEstates(){
-        estates = new ArrayList<>();
+    public void clearPositions(){
+        positions = new ArrayList<>();
     }
-    public List<EstateInformation> getEstates(){
-        return estates;
+    public List<PositionInformation> getPositions(){
+        return positions;
     }
 
 
     @Override
-    public MapPOIItem getMarker(){
-        return UkdMapMarker.getBuilder(this).build();
+    public void drawInto(MapView mapView){
+
     }
 
     // Region은 위치를 얻는 방법도 평균치 계산에 의존합니다.
@@ -46,20 +46,20 @@ public class RegionInformation extends PositionInformation{
     public double getLongitude(){
         double result = 0;
 
-        for(EstateInformation e : estates){
+        for(PositionInformation e : positions){
             result += e.getLongitude();
         }
 
-        return result / estates.size();
+        return result / positions.size();
     }
     @Override
     public double getLatitude(){
         double result = 0;
 
-        for(EstateInformation e : estates){
+        for(PositionInformation e : positions){
             result += e.getLatitude();
         }
 
-        return result / estates.size();
+        return result / positions.size();
     }
 }

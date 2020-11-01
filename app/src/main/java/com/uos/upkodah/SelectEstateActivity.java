@@ -35,8 +35,6 @@ public class SelectEstateActivity extends AppCompatActivity {
 
         // 뷰 준비
         ActivitySelectEstateBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_select_estate);
-
-
     }
 
     @Override

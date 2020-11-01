@@ -18,7 +18,6 @@ import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.local.position.group.EstateGrouper;
 import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.FacilitiesFragment;
@@ -28,7 +27,6 @@ import com.uos.upkodah.user.input.InputData;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UkdMainActivity extends AppCompatActivity{
     private UkdMainViewModel ukdMainViewModel;

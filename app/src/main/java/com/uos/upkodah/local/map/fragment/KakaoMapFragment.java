@@ -13,6 +13,7 @@ import com.uos.upkodah.local.position.PositionInformation;
 
 import net.daum.mf.map.api.MapView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,13 +24,17 @@ import java.util.List;
  */
 public class KakaoMapFragment extends Fragment {
     private MapView mapView;
+    private PositionInformation[] positions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mapView = new MapView(getActivity());
         ViewGroup mapViewContainer = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
 
+        mapView = new MapView(getActivity());
         mapViewContainer.addView(mapView);
+        for(PositionInformation p : positions){
+            p.drawInto(mapView);
+        }
 
         return mapViewContainer;
     }
@@ -39,20 +44,18 @@ public class KakaoMapFragment extends Fragment {
      * 모든 마커를 없애고 초기화합니다.
      */
     public void setPositions(@Nullable List<? extends PositionInformation> positionList){
+        positions = new PositionInformation[positionList.size()];
+        positionList.toArray(positions);
+    }
+
+    public void removeAllMarker(){
         mapView.removeAllPOIItems();
-
-        if(positionList != null){
-            for(PositionInformation p : positionList){
-                mapView.addPOIItem(p.getMarker());
-            }
-        }
-
     }
 
     /**
      * 위치와 마커를 추가합니다.
      */
     public void addPosition(PositionInformation positionInformation){
-        mapView.addPOIItem(positionInformation.getMarker());
+        positionInformation.drawInto(mapView);
     }
 }

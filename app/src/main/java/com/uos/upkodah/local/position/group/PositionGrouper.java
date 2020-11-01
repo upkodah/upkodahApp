@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * 해당 클래스는 수신받은 EstateInformation들을 지역별로 분류하는 역할을 수행한다.
  */
-public class EstateGrouper {
+public class PositionGrouper {
     private List<RegionInformation> classifiedRegions;
 
-    public EstateGrouper(List<EstateInformation> estates){
+    public PositionGrouper(List<PositionInformation> estates){
         // 생성자에서 Estate들을 그룹화한다.
         classifiedRegions = classifyEstate(estates, new ArrayList<String>());
     }
@@ -22,12 +22,12 @@ public class EstateGrouper {
     /**
      *
      */
-    public List<RegionInformation> classifyEstate(List<EstateInformation> estates, List<String> regions){
+    public List<RegionInformation> classifyEstate(List<PositionInformation> estates, List<String> regions){
         HashMap<String, RegionInformation> regionInformations = new HashMap<>();
         int depth = 0;
         List<String> subRegions;
 
-        for(EstateInformation estate : estates){
+        for(PositionInformation estate : estates){
             // 서브 지역 초기화
             subRegions = new ArrayList<>(regions);
             String region = estate.getRegion(depth);
@@ -39,7 +39,7 @@ public class EstateGrouper {
             }
 
             // 키와 맞는 RegionInformation에 해당 Estate를 삽입한다.
-            regionInformations.get(region).addEstate(estate);
+            regionInformations.get(region).addPosition(estate);
         }
 
         // 배열화시킨다.
@@ -49,14 +49,14 @@ public class EstateGrouper {
         // 내부 원소를 전부 빼고 정렬시킨다.
         for(RegionInformation regionInformation : regionInformationList){
             // 재귀호출하여 바로 하위 Estate들을 정리시켜 지역정보를 전부 가져온다.
-            List<? extends PositionInformation> tmpList = classifyEstate(regionInformation.getEstates(), regionInformation.getRegions());
+            List<? extends PositionInformation> tmpList = classifyEstate(regionInformation.getPositions(), regionInformation.getRegions());
 
             // 해당 지역 내 Estate들을 전부 비운다.
-            regionInformation.clearEstates();
+            regionInformation.clearPositions();
 
             // 정리된 것을 다시 넣는다.
             for(PositionInformation estate : tmpList){
-                regionInformation.addEstate(estate);
+                regionInformation.addPosition(estate);
             }
         }
 

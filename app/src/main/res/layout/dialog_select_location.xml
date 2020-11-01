@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/location_search_bar"
+            android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            android:id="@+id/location_search_result_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.673"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_search_bar">
+
+            <fragment
+                android:id="@+id/location_search_result_map"
+                android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <fragment
+                android:id="@+id/location_search_result_list"
+                android:name="com.uos.upkodah.list.fragment.SelectionListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

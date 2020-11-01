@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.uos.upkodah.R;
 import com.uos.upkodah.local.position.PositionInformation;
 
+import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
@@ -32,9 +33,22 @@ public class KakaoMapFragment extends Fragment {
 
         mapView = new MapView(getActivity());
         mapViewContainer.addView(mapView);
+
+        // 평균 위도와 경도. 기본값 설정 : 전체 지점들의 평균값으로 결정
+        double avgLongitude = 0;
+        double avgLatitude = 0;
+
         for(PositionInformation p : positions){
+            avgLongitude += p.getLongitude();
+            avgLatitude += p.getLatitude();
             p.drawInto(mapView);
         }
+        avgLongitude /= positions.length;
+        avgLatitude /= positions.length;
+
+        mapView.setZoomLevel(2,true);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(avgLatitude, avgLongitude), true);
+
 
         return mapViewContainer;
     }
@@ -57,5 +71,12 @@ public class KakaoMapFragment extends Fragment {
      */
     public void addPosition(PositionInformation positionInformation){
         positionInformation.drawInto(mapView);
+    }
+
+    /**
+     * 중심좌표를 설정합니다.
+     */
+    public void setCenter(double longitude, double latitude){
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
     }
 }

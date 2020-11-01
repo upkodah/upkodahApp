@@ -8,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.databinding.ActivitySelectRegionBinding;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.EstateInformation;
-import com.uos.upkodah.slide.SliderFragment;
 
 import java.util.List;
 

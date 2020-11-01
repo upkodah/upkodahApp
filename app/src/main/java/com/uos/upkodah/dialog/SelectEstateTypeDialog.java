@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 public class SelectEstateTypeDialog extends DialogFragment {
-    private String[] minuteList = new String[]{"A","B","C"};
+    private static String[] estateList = new String[]{"원룸","투룸","오피스텔"};
     private DialogInterface.OnClickListener listener;
     private FragmentActivity activity;
 
@@ -25,15 +25,12 @@ public class SelectEstateTypeDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("매물 타입 선택")
-                .setItems(minuteList, listener);
+                .setItems(estateList, listener);
 
         return builder.create();
     }
 
-    public void show(String tag){
-        this.show(getActivity().getSupportFragmentManager(), tag);
-    }
     public static String indexToResult(int i){
-        return new String[]{"A","B","C"}[i];
+        return estateList[i];
     }
 }

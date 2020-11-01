@@ -15,9 +15,6 @@ import androidx.fragment.app.Fragment;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.EstateInformation;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.slide.SliderFragment;
-import com.uos.upkodah.slide.ViewSlider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +41,6 @@ public class SelectEstateActivity extends AppCompatActivity {
         if(fragment instanceof KakaoMapFragment){
             KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
             kakaoMapFragment.setPositions(estates);
-        }
-        if(fragment instanceof SliderFragment){
-
         }
     }
 }

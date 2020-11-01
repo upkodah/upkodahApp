@@ -17,6 +17,8 @@ public class UkdMapMarker extends MapPOIItem{
         setMarkerType(MapPOIItem.MarkerType.BluePin);
         setMapPoint(MapPoint.mapPointWithGeoCoord(positionInformation.getLatitude(), positionInformation.getLongitude()));
         setItemName(positionInformation.getPostalAddress());
+        setDraggable(false);
+        this.setShowCalloutBalloonOnTouch(false);
     }
 
     public static UkdMapMarker.Builder getBuilder(PositionInformation positionInformation){

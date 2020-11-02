@@ -20,7 +20,6 @@ import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.dialog.SelectLocationDialog;
-import com.uos.upkodah.dialog.permission.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.SearchKeyworkParser;

@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class KakaoMapFragment extends Fragment {
     private MapView mapView;
-    private PositionInformation[] positions;
+    private PositionInformation[] positions = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -38,13 +38,16 @@ public class KakaoMapFragment extends Fragment {
         double avgLongitude = 0;
         double avgLatitude = 0;
 
-        for(PositionInformation p : positions){
-            avgLongitude += p.getLongitude();
-            avgLatitude += p.getLatitude();
-            p.drawInto(mapView);
+        if(positions != null){
+            for(PositionInformation p : positions){
+                avgLongitude += p.getLongitude();
+                avgLatitude += p.getLatitude();
+                p.drawInto(mapView);
+            }
+            avgLongitude /= positions.length;
+            avgLatitude /= positions.length;
         }
-        avgLongitude /= positions.length;
-        avgLatitude /= positions.length;
+
 
         mapView.setZoomLevel(2,true);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(avgLatitude, avgLongitude), true);

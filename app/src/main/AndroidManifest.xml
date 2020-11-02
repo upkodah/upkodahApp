@@ -28,6 +28,8 @@
 
         </activity>
 
+
+
         <!-- 지도 API를 위한 AppKey-->
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="bf08f1b56f8d605a2100093e2850379f"/>
     </application>

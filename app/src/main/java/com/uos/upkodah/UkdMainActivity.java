@@ -3,7 +3,6 @@ package com.uos.upkodah;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.dialog.SelectLocationDialog;
+import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.KakaoAPIRequest;
 import com.uos.upkodah.server.parser.SearchKeyworkParser;
@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 public class UkdMainActivity extends AppCompatActivity{
     private UkdMainViewModel ukdMainViewModel;
-    private LoadingDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

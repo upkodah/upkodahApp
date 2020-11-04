@@ -1,4 +1,4 @@
-package com.uos.upkodah;
+package com.uos.upkodah.util;
 
 import android.content.pm.PackageManager;
 import android.view.View;
@@ -30,7 +30,6 @@ public class PermissionRequiringOnClickListener implements View.OnClickListener{
     }
 
     private boolean checkAllPermitted(){
-
         for(String permission : permissions){
             if(ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) return false;
         }

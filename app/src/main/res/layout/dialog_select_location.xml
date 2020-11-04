@@ -14,7 +14,7 @@
 
         <fragment
             android:id="@+id/fragment2"
-            android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
+            class="com.uos.upkodah.user.fragment.SearchBarFragment"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:tag="location_search_window"
@@ -22,29 +22,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        <FrameLayout
             android:id="@+id/location_search_result_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.673"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment2">
 
             <fragment
                 android:id="@+id/location_search_result_map"
-                android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <fragment
                 android:id="@+id/location_search_result_list"
-                android:name="com.uos.upkodah.list.fragment.SelectionListFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

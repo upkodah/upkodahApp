@@ -52,6 +52,8 @@ public class KakaoMapFragment extends Fragment {
         mapView.setZoomLevel(2,true);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(avgLatitude, avgLongitude), true);
 
+        mapView.getZoomLevelFloat();
+
 
         return mapViewContainer;
     }

@@ -19,6 +19,11 @@ import com.uos.upkodah.local.position.EstateInformation;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * room 정보는 요청 시 서버에서 가져온다.
+ * 리스트 정보 : lon, lat, arrt, name, monPrice, DpsPrice(보증금), gridId, roomId
+ */
 public class SelectEstateActivity extends AppCompatActivity {
     private List<EstateInformation> estates;
 

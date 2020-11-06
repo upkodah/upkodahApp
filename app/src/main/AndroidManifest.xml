@@ -14,18 +14,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".UkdMainActivity">
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".UkdMainActivity">
         </activity>
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".SelectEstateActivity">
-
+        <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name=".SelectEstateActivity"
+            >
+        </activity>
+        <activity
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:name=".dialog.activity.SelectLocationDialogActivity"
+            >
         </activity>
 
 

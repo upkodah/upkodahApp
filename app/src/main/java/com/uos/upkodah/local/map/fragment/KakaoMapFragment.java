@@ -29,10 +29,15 @@ public class KakaoMapFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        System.out.println("hello");
         ViewGroup mapViewContainer = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapView = new MapView(getActivity());
+        System.out.println("hello2");
+
+        mapView = new MapView(requireActivity());
         mapViewContainer.addView(mapView);
+
+        System.out.println("hello3");
 
         // 평균 위도와 경도. 기본값 설정 : 전체 지점들의 평균값으로 결정
         double avgLongitude = 0;
@@ -51,9 +56,6 @@ public class KakaoMapFragment extends Fragment {
 
         mapView.setZoomLevel(2,true);
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(avgLatitude, avgLongitude), true);
-
-        mapView.getZoomLevelFloat();
-
 
         return mapViewContainer;
     }

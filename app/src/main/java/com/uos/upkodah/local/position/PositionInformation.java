@@ -82,17 +82,7 @@ public class PositionInformation implements Parcelable, MapDrawable {
         this.postalAddress = address;
         this.region = region;
     }
-    public PositionInformation(Context context, @Nullable ChangeListener listener){
-        // 디폴트 생성자를 호출하면 GPS를 자동 호출한다.
-        this();
-        this.changeListener = listener;
-        requestGPS(context);
-    }
-
-    /**
-     * 디폴트 생성자는 내부 연산을 위해서만 사용
-     */
-    protected PositionInformation(){
+    public PositionInformation(){
         this.longitude = 0;
         this.latitude = 0;
         this.postalAddress = "";
@@ -127,8 +117,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
         GPSPermissionManager.getInstance(context).requestCurrentPosition(context, listener);
     }
 
-
-
     /*
      PositionInformation은 좌표와 주소의 일관성 유지를 위해
      좌표를 변경하면 주소 변경을 요청하고 (SearchCoordToAddrRequest)
@@ -136,7 +124,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
 
      만약 리스너가 null이면 실행되지 않는다.
     */
-
     /**
      * 위도와 경도를 입력하면, 주소까지 자동 완성해준다. API 요청이 들어간다.
      * @param context

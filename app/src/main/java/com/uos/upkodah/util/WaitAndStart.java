@@ -36,9 +36,9 @@ public abstract class WaitAndStart extends Thread{
     private boolean requestCompleted = false;
     @Override
     public void run(){
-        // 지정 서버 통신 요청
         // 요청이 필요할 때(false일 때)
         if(!requestCompleted){
+            // 지정 서버 통신 요청
 
         }
 

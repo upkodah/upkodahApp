@@ -1,6 +1,5 @@
 package com.uos.upkodah.user.input;
 
-import androidx.databinding.Bindable;
 import com.uos.upkodah.local.position.PositionInformation;
 
 public class UserInputData implements InputData {

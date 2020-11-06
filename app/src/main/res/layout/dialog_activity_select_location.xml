@@ -9,15 +9,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="360dp"
-        android:layout_height="600dp"
-        android:id="@+id/location_search_dialog">
+        android:layout_height="wrap_content">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
+            android:tag="location_search_window"
             android:id="@+id/fragment2"
-            class="com.uos.upkodah.user.fragment.SearchBarFragment"
+            android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:tag="location_search_window"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,24 +25,21 @@
         <FrameLayout
             android:id="@+id/location_search_result_container"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="500dp"
+            android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment2">
 
-            <fragment
-                android:id="@+id/location_search_result_map"
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment3"
+                android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
+                android:tag="location_search_map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
-            <fragment
-                android:id="@+id/location_search_result_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
-
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

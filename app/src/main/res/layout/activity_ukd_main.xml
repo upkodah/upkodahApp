@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
         <TextView
             android:id="@+id/app_name_txt_view"
@@ -50,11 +51,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <fragment
+                <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/fragment_search_destination"
                     android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:tag="@string/fragment_search_destination"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/get_my_location_btn"
                     app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +87,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_limit_time_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
@@ -93,7 +95,7 @@
                 android:layout_marginStart="30dp"
                 android:tag="@string/fragment_limit_time" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_estate_type_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
@@ -101,7 +103,7 @@
                 android:layout_marginStart="30dp"
                 android:tag="@string/fragment_estate_type" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_trade_type_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
@@ -109,7 +111,7 @@
                 android:layout_marginStart="30dp"
                 android:tag="@string/fragment_trade_type" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/ukd_main_facilities"
                 android:name="com.uos.upkodah.user.fragment.FacilitiesFragment"
                 android:layout_width="match_parent"

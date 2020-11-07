@@ -12,14 +12,14 @@
         android:layout_height="match_parent"
         android:gravity="bottom">
 
-        <fragment
-            android:id="@+id/estate_map"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/frag_estate_map"
             android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <fragment
-            android:id="@+id/estate_list"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/frag_estate_list"
             android:name="com.uos.upkodah.list.fragment.SelectionListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

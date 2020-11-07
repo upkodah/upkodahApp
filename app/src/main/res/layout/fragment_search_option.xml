@@ -25,6 +25,7 @@
             app:srcCompat="@android:drawable/btn_star" />
 
         <EditText
+            style="@style/SearchTextLight"
             android:id="@+id/search_option_txt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

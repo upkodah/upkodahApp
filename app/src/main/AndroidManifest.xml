@@ -34,7 +34,7 @@
             >
         </activity>
         <activity
-            android:theme="@style/Theme.AppCompat.Dialog"
+            android:theme="@style/SelectLocationDialogTheme"
             android:name=".dialog.activity.SelectLocationDialogActivity"
             >
         </activity>

@@ -5,20 +5,13 @@ import android.view.View;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import com.uos.upkodah.user.fragment.SearchBarFragment;
+
 public class SearchBarData extends BaseObservable {
     private String searchText;
 
-
-    private View.OnClickListener searchBtnListener;
-
     public SearchBarData(){
         searchText = "";
-        searchBtnListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 내용 없는 기본 리스너
-            }
-        };
     }
 
     @Bindable
@@ -30,11 +23,14 @@ public class SearchBarData extends BaseObservable {
         this.searchText = searchText;
     }
 
+    private SearchBarFragment.BtnListener searchBarBtnListener = null;
     public void onSearchBtnClick(View view){
-        searchBtnListener.onClick(view);
+        if(searchBarBtnListener != null){
+            searchBarBtnListener.onClickSearchBtn(view, searchText);
+        }
     }
-    public void setSearchBtnListener(View.OnClickListener searchBtnListener) {
-        this.searchBtnListener = searchBtnListener;
+    public void setSearchBtnListener(SearchBarFragment.BtnListener searchBtnListener) {
+        this.searchBarBtnListener = searchBtnListener;
     }
 
 }

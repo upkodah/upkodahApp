@@ -35,7 +35,6 @@ import java.util.List;
 
 
 public class PositionInformation implements Parcelable, MapDrawable {
-    public final static String EXTRA = "PositionInformation";
     public final static int REGION_DEPTH_1 = 0;
     public final static int REGION_DEPTH_2 = 1;
     public final static int REGION_DEPTH_3 = 2;
@@ -52,26 +51,15 @@ public class PositionInformation implements Parcelable, MapDrawable {
     public double getLongitude() {
         return longitude;
     }
-    public void setLongitude(double longitude){
-        this.longitude = longitude;
-    }
     public double getLatitude() {
         return latitude;
-    }
-    public void setLatitude(double latitude){
-        this.latitude = latitude;
     }
     public String getPostalAddress() {
         return this.postalAddress;
     }
-    public void setPostalAddress(String address){ this.postalAddress = address; }
     public String getRegion(@RegionDepth int depth){ return region.get(depth); }
     public List<String> getRegions(){
         return region;
-    }
-    public void setRegion(List<String> regions){
-        region = new ArrayList<>();
-        region.addAll(regions);
     }
     public String getName(){ return this.name; }
     public void setName(String name){ this.name = name; }

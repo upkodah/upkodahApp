@@ -9,14 +9,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
-public class SelectEstateTypeDialog extends DialogFragment {
-    private static String[] estateList = new String[]{"원룸","투룸","오피스텔"};
+public class SelectTradeTypeDialog extends DialogFragment {
+    private static String[] tradeList = new String[]{"전세","월세"};
     private DialogInterface.OnClickListener listener;
 
     /**
      * @param listener : 이 Dialog의 결과를 반영할 View나 기타 위치를 설정하는 리스너 장착
      */
-    public SelectEstateTypeDialog(DialogInterface.OnClickListener listener){
+    public SelectTradeTypeDialog(DialogInterface.OnClickListener listener){
         this.listener = listener;
     }
 
@@ -26,12 +26,12 @@ public class SelectEstateTypeDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("매물 타입 선택")
-                .setItems(estateList, listener);
+                .setItems(tradeList, listener);
 
         return builder.create();
     }
 
     public static String indexToResult(int i){
-        return estateList[i];
+        return tradeList[i];
     }
 }

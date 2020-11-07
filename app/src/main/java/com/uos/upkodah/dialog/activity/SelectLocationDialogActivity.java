@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,18 +17,29 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 
+import com.android.volley.Response;
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.DialogActivitySelectLocationBinding;
+import com.uos.upkodah.dialog.activity.viewmodel.SelectLocationViewModel;
+import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.server.KakaoAPIRequest;
+import com.uos.upkodah.server.parser.KakaoAPIParser;
+import com.uos.upkodah.server.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
 
+import net.daum.mf.map.api.MapPoint;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SelectLocationDialogActivity extends AppCompatActivity {
     private PositionInformation result;
+    private SelectLocationViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,9 +54,13 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             result = new PositionInformation();
         }
 
+        // 뷰 모델 설정
+        // 이 뷰 모델에서는 SearchBarFragment의 Data 클래스를 가지고 있다.
+        viewModel = new ViewModelProvider(this).get(SelectLocationViewModel.class);
+
+
         // 뷰 초기화
         DialogActivitySelectLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.dialog_activity_select_location);
-
     }
 
     @Override
@@ -53,63 +69,56 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
         String tag = fragment.getTag();
 
         if(fragment instanceof SearchBarFragment){
+            SearchBarFragment searchBarFragment = (SearchBarFragment) fragment;
+            searchBarFragment.setData(viewModel.searchBarData);
 
+            viewModel.searchBarData.setSearchBtnListener(new SearchLocationUsingKeywordListener());
         }
         if(fragment instanceof KakaoMapFragment){
-
+            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
+            viewModel.setKakaoMapFragment(kakaoMapFragment);
+        }
+        if(fragment instanceof SelectionListFragment){
+            SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
+            selectionListFragment.setData(viewModel.selectionListData);
         }
     }
-    //    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-//        super.onCreateDialog(savedInstanceState);
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//
-//        System.out.println("카카오맵 준비");
-//
-//
-//        // inflater 가져오기
-//        LayoutInflater inflater = requireActivity().getLayoutInflater();
-//        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.dialog_activity_select_location, null);
-//
-//        builder.setView(view);
-//
-//        return builder.create();
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        // FragmentManager에서 기존 Fragment 삭제
-//        FragmentManager manager = requireActivity().getSupportFragmentManager();
-//
-//        // 먼저, 해당 다이얼로그를 찾는다.
-//        Fragment curFrag = manager.findFragmentByTag(getString(R.string.dialog_select_location_tag));
-//
-//        for(Fragment f : manager.getFragments()){
-//            if(f.getParentFragment() != null)
-//                System.out.println(f.getParentFragment().getTag());
-//        }
-//
-//        ArrayList<Fragment> fragmentList = new ArrayList<>();
-//
-//        Fragment tmp;
-//
-//        FragmentManager childManager;
-//
-//        tmp = manager.findFragmentByTag( "location_search_window");
-//        if(tmp!=null)
-//            fragmentList.add(tmp);
-//
-//        tmp = manager.findFragmentByTag( "location_search_map");
-//        if(tmp!=null)
-//            fragmentList.add(tmp);
-//
-//
-//        FragmentTransaction transaction = manager.beginTransaction();
-//        for(Fragment f : fragmentList){
-//            transaction.remove(f);
-//        }
-//        transaction.commit();
-//    }
+
+    private class SearchLocationUsingKeywordListener implements SearchBarFragment.BtnListener, Response.Listener<String>{
+        @Override
+        public void onClickSearchBtn(View view, String searchText) {
+            // 검색 버튼을 누르면 넘어온 문자열로 키워드 검색을 실시하고
+            // 위치정보 전체를 가져온다.
+            try{
+                MapPoint searchPoint = viewModel.getMapCenter();
+                KakaoAPIRequest kakaoAPIRequest = KakaoAPIRequest.getSearchKeywordRequest(
+                        searchText,
+                        searchPoint.getMapPointGeoCoord().longitude,
+                        searchPoint.getMapPointGeoCoord().latitude,
+                        this,
+                        null
+                );
+                kakaoAPIRequest.request(getApplicationContext());
+            }
+            catch(NullPointerException e){
+                // 아직 뷰 준비가 덜 된 것이므로 재준비 요청
+                Toast.makeText(getApplicationContext(), "잠시 후 시도해보세요", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onResponse(String response) {
+            // 넘어온 문자열 처리 방법 정의
+            // 먼저, 결과물을 분석한다.
+            SearchKeyworkParser parser = SearchKeyworkParser.getInstance(response);
+            if (parser == null) {
+                Toast.makeText(getApplicationContext(), "검색 결과가 없습니다.",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 분석 결과를 ViewModel에 넣어 결과를 보여준다.
+            viewModel.setPositionInformation(parser.getPositionList());
+        }
+    }
 }

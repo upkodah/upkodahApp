@@ -14,20 +14,21 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/search_txt"
+            android:id="@+id/edtxt_search"
+            style="@style/SearchTextLight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="#818181"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@{data.searchText}"
+            android:text="@={data.searchText}"
+            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/btn_do_search"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btn_do_search"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"

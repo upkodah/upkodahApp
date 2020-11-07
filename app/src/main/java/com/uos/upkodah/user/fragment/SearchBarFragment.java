@@ -15,11 +15,10 @@ import androidx.fragment.app.Fragment;
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.FragmentSearchBarBinding;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
-import com.uos.upkodah.user.fragment.data.SearchOptionData;
 
 public class SearchBarFragment extends Fragment {
     private FragmentSearchBarBinding binding;
-    private SearchBarData data;
+    private SearchBarData data = new SearchBarData();
     private boolean editable = true;
 
     @Nullable
@@ -30,7 +29,7 @@ public class SearchBarFragment extends Fragment {
         View view = binding.getRoot();
 
         if(!editable){
-            EditText editText = (EditText) view.findViewById(R.id.search_txt);
+            EditText editText = (EditText) view.findViewById(R.id.edtxt_search);
             editText.setInputType(InputType.TYPE_NULL);
         }
 
@@ -41,5 +40,10 @@ public class SearchBarFragment extends Fragment {
     }
     public void setEditDisable(){
         editable = false;
+
+    }
+
+    public interface BtnListener {
+        public void onClickSearchBtn(View view, String searchText);
     }
 }

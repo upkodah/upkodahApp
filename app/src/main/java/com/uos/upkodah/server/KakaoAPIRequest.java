@@ -47,6 +47,9 @@ public class KakaoAPIRequest extends StringRequest {
     public static KakaoAPIRequest getSearchKeywordRequest(@NonNull String query, double x, double y, int radius, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         return new SearchKeywordRequest(SearchKeywordRequest.getRequestURL(query,x,y,radius),listener,errorListener);
     }
+    public static KakaoAPIRequest getSearchKeywordRequest(@NonNull String query, double x, double y,  Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
+        return new SearchKeywordRequest(SearchKeywordRequest.getRequestURL(query,x,y),listener,errorListener);
+    }
     public static KakaoAPIRequest getCoordToAddrRequest(double longitude, double latitude, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         return new CoordToAddrRequest(CoordToAddrRequest.getRequestURL(longitude, latitude),listener,errorListener);
     }
@@ -94,6 +97,13 @@ class SearchKeywordRequest extends KakaoAPIRequest{
                 +"x="+x+"&"
                 +"y="+y+"&"
                 +"radius="+radius;
+        return requestURL;
+    }
+    protected static String getRequestURL(String query, double x, double y){
+        String requestURL = SEARCH_KEYWORD_URL+"?"
+                +"query="+query+"&"
+                +"x="+x+"&"
+                +"y="+y;
         return requestURL;
     }
     SearchKeywordRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {

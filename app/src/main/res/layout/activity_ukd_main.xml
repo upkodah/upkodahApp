@@ -15,7 +15,8 @@
         android:background="#FFFFFF">
 
         <TextView
-            android:id="@+id/app_name_txt_view"
+            style="@style/TitleText"
+            android:id="@+id/txt_app_name"
             android:layout_width="0dp"
             android:layout_height="76dp"
             android:layout_marginStart="40dp"
@@ -23,13 +24,11 @@
             android:layout_marginEnd="40dp"
             android:gravity="left|center_vertical"
             android:text="UpKoDah"
-            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/total_input_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -45,25 +44,25 @@
             android:verticalScrollbarPosition="defaultPosition"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_name_txt_view">
+            app:layout_constraintTop_toBottomOf="@+id/txt_app_name">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/fragment_search_destination"
+                    android:id="@+id/frag_search_destination"
                     android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:tag="@string/fragment_search_destination"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/get_my_location_btn"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_get_my_location"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/get_my_location_btn"
+                    android:id="@+id/btn_get_my_location"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="#00FFFFFF"
@@ -71,11 +70,11 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/my_location"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/get_location_btn"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_search_destination"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/get_location_btn"
+                    android:id="@+id/btn_search_destination"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="#00FFFFFF"
@@ -88,7 +87,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_limit_time_option"
+                android:id="@+id/frag_limit_time_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -96,7 +95,7 @@
                 android:tag="@string/fragment_limit_time" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_estate_type_option"
+                android:id="@+id/frag_estate_type_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -104,7 +103,7 @@
                 android:tag="@string/fragment_estate_type" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_trade_type_option"
+                android:id="@+id/frag_trade_type_option"
                 android:name="com.uos.upkodah.user.fragment.SearchOptionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -112,7 +111,7 @@
                 android:tag="@string/fragment_trade_type" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/ukd_main_facilities"
+                android:id="@+id/frag_select_facilities"
                 android:name="com.uos.upkodah.user.fragment.FacilitiesFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

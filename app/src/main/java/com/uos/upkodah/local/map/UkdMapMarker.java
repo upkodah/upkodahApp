@@ -2,6 +2,7 @@ package com.uos.upkodah.local.map;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.annotation.DrawableRes;
 
@@ -12,11 +13,15 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 public class UkdMapMarker extends MapPOIItem{
-    protected UkdMapMarker(PositionInformation positionInformation){
+    private PositionInformation position;
+
+    protected UkdMapMarker(PositionInformation position){
+        this.position = position;
+
         // 기본적으로 좌표와 기본핀 이미지를 설정하고, 이름은 주소 전체로 합니다.
         setMarkerType(MapPOIItem.MarkerType.BluePin);
-        setMapPoint(MapPoint.mapPointWithGeoCoord(positionInformation.getLatitude(), positionInformation.getLongitude()));
-        setItemName(positionInformation.getPostalAddress());
+        setMapPoint(MapPoint.mapPointWithGeoCoord(position.getLatitude(), position.getLongitude()));
+        setItemName(position.getPostalAddress());
         setDraggable(false);
         this.setShowCalloutBalloonOnTouch(false);
     }
@@ -54,6 +59,46 @@ public class UkdMapMarker extends MapPOIItem{
 
         public UkdMapMarker build(){
             return UkdMapMarker.this;
+        }
+    }
+
+    public static abstract class Listener<PI extends PositionInformation> implements MapView.POIItemEventListener{
+        public abstract void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation);
+        public abstract void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation);
+
+        @Override
+        public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+            try{
+                onMarkerSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
+            }
+            catch(ClassCastException e){
+                Log.d("CAST_ERR", "POIItemListener에서 캐스팅 에러 발생");
+            }
+        }
+        @Override
+        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, CalloutBalloonButtonType calloutBalloonButtonType) {
+            try{
+                onMarkerSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
+            }
+            catch(ClassCastException e){
+                Log.d("CAST_ERR", "POIItemListener에서 캐스팅 에러 발생");
+            }
+        }
+
+        /**
+         * 빈 메소드
+         */
+        @Override
+        @Deprecated
+        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
+
+        }
+        /**
+         * 빈 메소드
+         */
+        @Override
+        public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+
         }
     }
 }

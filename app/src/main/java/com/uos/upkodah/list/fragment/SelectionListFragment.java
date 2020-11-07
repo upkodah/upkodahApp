@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
+import com.uos.upkodah.databinding.FragmentListBinding;
+import com.uos.upkodah.list.fragment.data.SelectionListData;
 
 /**
  * 사용자에게 선택 리스트를 보여주기 위한 프래그먼트.
@@ -23,20 +25,23 @@ import com.uos.upkodah.R;
  * 필요한 것 : 리스트에 들어갈 레이아웃의 id, 해당 View를 구성할 때 쓰이는 ViewHolder 생성 인터페이스
  */
 public class SelectionListFragment extends Fragment {
-    private SelectionListAdapter adapter;
+    private FragmentListBinding binding;
     private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View mainView = inflater.inflate(R.layout.fragment_list, container, false);
-        recyclerView = mainView.findViewById(R.id.item_list);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
+        binding.setData(new SelectionListData());
+
+        View mainView = binding.getRoot();
+        recyclerView = mainView.findViewById(R.id.list_item);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        applyAdapter();
 
         return mainView;
     }
 
-    public interface ViewHolderManager{
+    // 리스트 안에 들어갈 뷰를 설정하는 방법 정의의
+   public interface ViewHolderManager{
         /**
          * 리스트의 각 아이템이 사용할 레이아웃 ID
          * @return
@@ -64,45 +69,8 @@ public class SelectionListFragment extends Fragment {
         public int getItemCount();
     }
 
-    public void setHolderManager(ViewHolderManager manager){
-        adapter = new SelectionListAdapter(manager);
-    }
-    public void applyAdapter(){
-        if(adapter!=null) recyclerView.setAdapter(adapter);
+    public void setData(SelectionListData data){
+        binding.setData(data);
     }
 }
 
-class SelectionListAdapter extends RecyclerView.Adapter{
-    private SelectionListFragment.ViewHolderManager manager;
-
-    SelectionListAdapter(SelectionListFragment.ViewHolderManager manager){
-        this.manager = manager;
-    }
-
-    /**
-     * 해당 메소드는 RecyclerView의 요청에 따라 삽입될 뷰를 준비하는 메소드다.
-     * 여기에서 Inflater를 이용해 ViewHolder를 생성한다.
-     * @param parent
-     * @param viewType
-     * @return
-     */
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = (View) LayoutInflater.from(parent.getContext()).inflate(manager.getLayoutId(), parent,false);
-
-        RecyclerView.ViewHolder holder = manager.generate(v);
-
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        manager.setViewHolder(holder, position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return manager.getItemCount();
-    }
-}

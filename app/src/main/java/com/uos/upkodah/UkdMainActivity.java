@@ -18,6 +18,7 @@ import com.uos.upkodah.databinding.ActivityUkdMainBinding;
 import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
+import com.uos.upkodah.dialog.activity.SelectLocationDialogActivity;
 import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.KakaoAPIRequest;
@@ -153,9 +154,9 @@ public class UkdMainActivity extends AppCompatActivity{
     }
 
 
-    class EstateSearchBtnListener implements View.OnClickListener{
+    class EstateSearchBtnListener implements SearchBarFragment.BtnListener{
         @Override
-        public void onClick(View view) {
+        public void onClickSearchBtn(View view, String searchText) {
             // 입력값을 받는다.
             final InputData inputData = ukdMainViewModel.getUserInputData();
 
@@ -194,7 +195,9 @@ public class UkdMainActivity extends AppCompatActivity{
         @Override
         public void onClick(View view) {
             // 검색 다이얼로그를 띄운다.
-//            new SelectLocationDialog().show(getSupportFragmentManager(), getString(R.string.dialog_select_location_tag));
+            Intent intent = new Intent(getApplicationContext(), SelectLocationDialogActivity.class);
+            intent.putExtra(getString(R.string.extra_position_information), ukdMainViewModel.getPosition());
+            startActivityForResult(intent, 1);
         }
     }
     class GetMyLocationBtnListener implements View.OnClickListener{

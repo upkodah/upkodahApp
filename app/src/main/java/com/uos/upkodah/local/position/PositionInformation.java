@@ -46,7 +46,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
     double latitude;
     String postalAddress;
     String name;
-    List<String> region;
 
     public double getLongitude() {
         return longitude;
@@ -57,30 +56,27 @@ public class PositionInformation implements Parcelable, MapDrawable {
     public String getPostalAddress() {
         return this.postalAddress;
     }
-    public String getRegion(@RegionDepth int depth){ return region.get(depth); }
-    public List<String> getRegions(){
-        return region;
-    }
     public String getName(){ return this.name; }
     public void setName(String name){ this.name = name; }
 
-    public PositionInformation(double longitude, double latitude, @Nullable String address, @Nullable List<String> region){
+    public PositionInformation(double longitude, double latitude, @Nullable String address){
         this.longitude = longitude;
         this.latitude = latitude;
         this.postalAddress = address;
-        this.region = region;
+        this.name = postalAddress;
     }
     public PositionInformation(){
         this.longitude = 0;
         this.latitude = 0;
         this.postalAddress = "";
         this.name = "";
-        this.region = new ArrayList<>();
     }
 
     @Override
     public void drawInto(MapView mapView) {
-        mapView.addPOIItem(UkdMapMarker.getBuilder(this).build());
+        MapPOIItem marker = UkdMapMarker.getBuilder(this).build();
+        mapView.addPOIItem(marker);
+        mapView.selectPOIItem(marker, false);
     }
 
 
@@ -127,19 +123,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
         request.request(context);
     }
 
-    /**
-     * 주소를 입력하면, 위도와 경도까지 자동 완성해준다. API 요청이 들어간다.
-     * @param context
-     * @param address
-     */
-    public void setPostalAddress(Context context, String address){
-        this.postalAddress = address;
-
-        Response.Listener<String> listener = new SetPostalAddressListener(this);
-        KakaoAPIRequest request = KakaoAPIRequest.getSearchAddrRequest(address,listener,null);
-        request.request(context);
-    }
-
 
     // 여기부터는 Intent에 실어 보내기 위한 Parcelable 처리
     @Override
@@ -151,7 +134,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
         parcel.writeDouble(longitude);
         parcel.writeDouble(latitude);
         parcel.writeString(postalAddress);
-        parcel.writeStringList(region);
     }
     public static final Creator<PositionInformation> CREATOR = new Creator<PositionInformation>() {
         @Override
@@ -160,7 +142,6 @@ public class PositionInformation implements Parcelable, MapDrawable {
             p.longitude = parcel.readDouble();
             p.latitude = parcel.readDouble();
             p.postalAddress = parcel.readString();
-            parcel.readStringList(p.region);
 
             return p;
         }
@@ -188,29 +169,10 @@ class SetCoordListener implements Response.Listener<String>{
         // parser가 null을 반환하면 유효하지 않은 것이므로 생략해야 함
         if(parser != null){
             this.positionInformation.postalAddress = parser.getPostalAddress();
-            this.positionInformation.region = parser.getRegions();
 
             // 리스너를 호출하여 변경을 알린다.
             if(positionInformation!=null) positionInformation.changeListener.onChange(positionInformation);
         }
-    }
-}
-class SetPostalAddressListener implements Response.Listener<String>{
-    private PositionInformation positionInformation;
-
-    SetPostalAddressListener(PositionInformation positionInformation){
-        this.positionInformation = positionInformation;
-    }
-    @Override
-    public void onResponse(String response) {
-        // 이 부분에서 응답을 보고 위도 및 경도를 설정한다.
-        AddrToCoordParser parser = new AddrToCoordParser(response);
-
-        this.positionInformation.longitude = parser.getLongitude();
-        this.positionInformation.latitude = parser.getLatitude();
-
-        // 리스너를 호출하여 변경을 알린다.
-        if(positionInformation!=null) positionInformation.changeListener.onChange(positionInformation);
     }
 }
 
@@ -246,12 +208,10 @@ class SetGPSInformationListener implements LocationListener{
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
-
     @Override
     public void onProviderEnabled(@NonNull String provider) {
 
     }
-
     @Override
     public void onProviderDisabled(@NonNull String provider) {
 

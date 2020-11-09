@@ -22,8 +22,9 @@ public class UkdMapMarker extends MapPOIItem{
         setMarkerType(MapPOIItem.MarkerType.BluePin);
         setMapPoint(MapPoint.mapPointWithGeoCoord(position.getLatitude(), position.getLongitude()));
         setItemName(position.getPostalAddress());
+        setSelectedMarkerType(MarkerType.RedPin);
         setDraggable(false);
-        this.setShowCalloutBalloonOnTouch(false);
+        setShowCalloutBalloonOnTouch(true);
     }
 
     public static UkdMapMarker.Builder getBuilder(PositionInformation positionInformation){
@@ -78,7 +79,7 @@ public class UkdMapMarker extends MapPOIItem{
         @Override
         public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, CalloutBalloonButtonType calloutBalloonButtonType) {
             try{
-                onMarkerSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
+                onMarkerBalloonSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
             }
             catch(ClassCastException e){
                 Log.d("CAST_ERR", "POIItemListener에서 캐스팅 에러 발생");

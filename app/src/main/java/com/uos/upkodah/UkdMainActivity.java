@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -92,7 +93,23 @@ public class UkdMainActivity extends AppCompatActivity{
 
         }
     }
+    // 결과 수신 처리
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == getResources().getInteger(R.integer.request_location)){
+            System.out.println("결과반환성공");
+            if(resultCode == getResources().getInteger(R.integer.response_location)){
+                // 위치 검색 결과 반환
+
+                PositionInformation resultPosition = data.getParcelableExtra(getString(R.string.extra_position_information));
+                System.out.println(resultPosition.getPostalAddress());
+                ukdMainViewModel.setPosition(resultPosition);
+            }
+        }
+    }
 
     // 장착될 Fragment 초기화 메소드
     private void initFragmentLimitTime(SearchOptionFragment searchOptionFragment){
@@ -165,29 +182,32 @@ public class UkdMainActivity extends AppCompatActivity{
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
-            // 요청 생성
-            Response.Listener<String> listener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    // 이 응답에서는 결과물을 Parsing하여 전체 매물을 만들고
-                    SearchKeyworkParser parser = SearchKeyworkParser.getInstance(response);
-
-                    // 오류가 없다면 새 액티비티를 실행한다.
-                    if(parser != null){
-                        ArrayList<PositionInformation> positions = parser.getPositionList();
-
-                        Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-                        intent.putParcelableArrayListExtra(getString(R.string.extra_position_information), positions);
-
-                        Toast.makeText(UkdMainActivity.this, positions.size()+"", Toast.LENGTH_SHORT).show();
-                        loadingDialog.cancel();
-                        startActivity(intent);
-                    }
-                }
-            };
-            KakaoAPIRequest
-                    .getSearchKeywordRequest("카페", inputData.getPosition().getLongitude(), inputData.getPosition().getLatitude(), 1000, listener, null)
-                    .request(getApplicationContext());
+//            // 요청 생성
+//            Response.Listener<String> listener = new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    // 이 응답에서는 결과물을 Parsing하여 전체 매물을 만들고
+//                    SearchKeyworkParser parser = SearchKeyworkParser.getInstance(response);
+//
+//                    // 오류가 없다면 새 액티비티를 실행한다.
+//                    if(parser != null){
+//                        ArrayList<PositionInformation> positions = parser.getPositionList();
+//
+//                        Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
+//                        intent.putParcelableArrayListExtra(getString(R.string.extra_position_information), positions);
+//
+//                        Toast.makeText(UkdMainActivity.this, positions.size()+"", Toast.LENGTH_SHORT).show();
+//                        loadingDialog.cancel();
+//                        startActivity(intent);
+//                    }
+//                }
+//            };
+//            KakaoAPIRequest
+//                    .getSearchKeywordRequest("카페", inputData.getPosition().getLongitude(), inputData.getPosition().getLatitude(), 1000, listener, null)
+//                    .request(getApplicationContext());
+            //loadingDialog.cancel();
+            Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
+            startActivity(intent);
         }
     }
     class SearchLocationBtnListener implements View.OnClickListener{
@@ -197,7 +217,7 @@ public class UkdMainActivity extends AppCompatActivity{
             // 검색 다이얼로그를 띄운다.
             Intent intent = new Intent(getApplicationContext(), SelectLocationDialogActivity.class);
             intent.putExtra(getString(R.string.extra_position_information), ukdMainViewModel.getPosition());
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, getResources().getInteger(R.integer.request_location));
         }
     }
     class GetMyLocationBtnListener implements View.OnClickListener{
@@ -205,21 +225,22 @@ public class UkdMainActivity extends AppCompatActivity{
         public void onClick(View view) {
             // GPS 요청으로 positionInformation을 새로 설정한다.
             PositionInformation positionInformation = ukdMainViewModel.getPosition();
+            // PositionInformation이 null이면 새로 만든다.
+            PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
+                @Override
+                public void onChange(PositionInformation position) {
+                    // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
+                    ukdMainViewModel.alertPositionChange();
+                }
+            };
 
             if(positionInformation== null){
-                // PositionInformation이 null이면 새로 만든다.
-                PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
-                    @Override
-                    public void onChange(PositionInformation position) {
-                        // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
-                        ukdMainViewModel.alertPositionChange();
-                    }
-                };
                 positionInformation = new PositionInformation();
-                positionInformation.setChangeListener(listener);
-                positionInformation.requestGPS(UkdMainActivity.this);
                 ukdMainViewModel.setPosition(positionInformation);
             }
+            // 리스너 설정
+            positionInformation.setChangeListener(listener);
+
             // 갱신 요청
             positionInformation.requestGPS(view.getContext());
         }

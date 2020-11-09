@@ -11,11 +11,14 @@ import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.LocationListViewHolder;
+import com.uos.upkodah.local.map.UkdMapMarker;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
 
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.util.List;
 
@@ -26,22 +29,18 @@ public class SelectLocationViewModel extends ViewModel implements SelectionListF
         // 초기화
         searchBarData = new SearchBarData();
         selectionListData = new SelectionListData();
+        kakaoMapData = new KakaoMapData();
         selectionListData.setAdapter(new SelectionListAdapter(this));
     }
 
     // Fragment용 데이터
     public SearchBarData searchBarData;
     public SelectionListData selectionListData;
-
-    // 맵 정보 접근
-    private KakaoMapFragment kakaoMapFragment = null;
-    public void setKakaoMapFragment(KakaoMapFragment fragment){
-        this.kakaoMapFragment = fragment;
-    }
+    public KakaoMapData kakaoMapData;
 
     @Nullable
     public MapPoint getMapCenter(){
-        return kakaoMapFragment != null? kakaoMapFragment.getCenter() : null;
+        return kakaoMapData != null? kakaoMapData.getCenter() : null;
     }
 
     // 검색 결과 리스트
@@ -54,7 +53,7 @@ public class SelectLocationViewModel extends ViewModel implements SelectionListF
         selectionListData.notifyUpdateListData();
 
         // 맵 초기화
-        kakaoMapFragment.setPositions(positions);
+        kakaoMapData.setMapMarkers(positionList);
     }
 
     @Override

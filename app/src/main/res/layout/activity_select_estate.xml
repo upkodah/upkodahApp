@@ -7,10 +7,16 @@
 
     </data>
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    <androidx.slidingpanelayout.widget.SlidingPaneLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/frag_estate_list"
+            android:name="com.uos.upkodah.list.fragment.SelectionListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/frag_estate_map"
@@ -18,11 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/frag_estate_list"
-            android:name="com.uos.upkodah.list.fragment.SelectionListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    </androidx.slidingpanelayout.widget.SlidingPaneLayout>
 </layout>

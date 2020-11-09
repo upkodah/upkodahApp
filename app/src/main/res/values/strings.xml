@@ -20,4 +20,7 @@
     <string name="dialog_select_limit_time_tag">DI_SEL_LIM_TAG</string>
     <string name="dialog_select_trade_type_tag">DI_SEL_TRAD_TAG</string>
     <string name="dialog_loading_tag">DI_LOAD_TAG</string>
+
+
+
 </resources>

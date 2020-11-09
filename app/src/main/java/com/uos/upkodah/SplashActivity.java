@@ -25,6 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onComplete() {
                 Intent intent = new Intent(SplashActivity.this, UkdMainActivity.class);
                 startActivity(intent);
+                finish();
             }
         }.startTimeCheckingOnly();
     }

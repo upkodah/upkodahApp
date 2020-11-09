@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 액티비티 결과 -->
+    <integer name="request_location">10</integer>
+    <integer name="response_location">11</integer>
+</resources>

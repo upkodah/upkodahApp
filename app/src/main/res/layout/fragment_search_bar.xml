@@ -21,7 +21,6 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@={data.searchText}"
-            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_do_search"

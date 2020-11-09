@@ -27,11 +27,12 @@ import com.uos.upkodah.list.fragment.data.SelectionListData;
 public class SelectionListFragment extends Fragment {
     private FragmentListBinding binding;
     private RecyclerView recyclerView;
+    private SelectionListData data = new SelectionListData();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
-        binding.setData(new SelectionListData());
+        binding.setData(data);
 
         View mainView = binding.getRoot();
         recyclerView = mainView.findViewById(R.id.list_item);
@@ -70,7 +71,7 @@ public class SelectionListFragment extends Fragment {
     }
 
     public void setData(SelectionListData data){
-        binding.setData(data);
+        this.data = data;
     }
 }
 

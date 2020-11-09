@@ -25,6 +25,7 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.DialogActivitySelectLocationBinding;
 import com.uos.upkodah.dialog.activity.viewmodel.SelectLocationViewModel;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
+import com.uos.upkodah.local.map.UkdMapMarker;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.KakaoAPIRequest;
@@ -33,6 +34,7 @@ import com.uos.upkodah.server.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
 
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +78,23 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
         }
         if(fragment instanceof KakaoMapFragment){
             KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
-            viewModel.setKakaoMapFragment(kakaoMapFragment);
+            kakaoMapFragment.setData(viewModel.kakaoMapData);
+
+            // 마커 리스너 장착
+            kakaoMapFragment.setMarkerListener(new UkdMapMarker.Listener() {
+                @Override
+                public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+                }
+
+                @Override
+                public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+                    Intent result = new Intent();
+                    result.putExtra(getString(R.string.extra_position_information), positionInformation);
+                    setResult(getResources().getInteger(R.integer.response_location), result);
+
+                    finish();
+                }
+            });
         }
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;

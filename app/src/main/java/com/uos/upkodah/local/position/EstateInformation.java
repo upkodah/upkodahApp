@@ -6,6 +6,5 @@ public class EstateInformation extends PositionInformation {
         this.longitude = positionInformation.longitude;
         this.latitude = positionInformation.latitude;
         this.postalAddress = positionInformation.postalAddress;
-        this.region.addAll(positionInformation.region);
     }
 }

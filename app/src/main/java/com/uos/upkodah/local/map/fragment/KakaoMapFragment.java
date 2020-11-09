@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.uos.upkodah.R;
+import com.uos.upkodah.databinding.FragmentMapBinding;
 import com.uos.upkodah.local.map.UkdMapMarker;
+import com.uos.upkodah.local.map.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.util.GeoToMeterConverter;
 
@@ -29,62 +32,24 @@ import java.util.List;
  * 클릭하면 지정된 동작을 수행한다.
  */
 public class KakaoMapFragment extends Fragment {
-    private MapView mapView;
     private Listener mapListener = new Listener();
-    private List<? extends PositionInformation> positions = null;
+    private UkdMapMarker.Listener markerListener;
+
+    private KakaoMapData data = new KakaoMapData();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        System.out.println("hello");
-        ViewGroup mapViewContainer = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
+        FragmentMapBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false);
+        View mapViewContainer = binding.getRoot();
+        binding.setData(data);
 
-        System.out.println("hello2");
-
-        mapView = mapViewContainer.findViewById(R.id.map_kakao);
-
-        mapView.setZoomLevel(2,true);
+        MapView mapView = mapViewContainer.findViewById(R.id.map_kakao);
         mapView.setMapViewEventListener(mapListener);
+        mapView.setSelected(true);
 
+        if(markerListener!=null) mapView.setPOIItemEventListener(markerListener);
 
         return mapViewContainer;
-    }
-
-
-    /**
-     * 모든 마커를 없애고 초기화합니다.
-     */
-    public void setPositions(@Nullable List<? extends PositionInformation> positionList){
-        positions = positionList;
-
-        mapView.removeAllPOIItems();
-        for(PositionInformation p : positions){
-            p.drawInto(mapView);
-        }
-        setCenterUsingPositions();
-    }
-
-    public void removeAllMarker(){
-        mapView.removeAllPOIItems();
-    }
-
-    /**
-     * 위치와 마커를 추가합니다.
-     */
-    public void addPosition(PositionInformation positionInformation){
-        positionInformation.drawInto(mapView);
-    }
-
-    /**
-     * 중심좌표를 설정합니다.
-     */
-    public void setCenter(double longitude, double latitude){
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
-    }
-    /**
-     * 중심좌표를 얻습니다.
-     */
-    public MapPoint getCenter(){
-        return mapView.getMapCenterPoint();
     }
 
     /**
@@ -93,87 +58,39 @@ public class KakaoMapFragment extends Fragment {
     public void setZoomListener(@Nullable ZoomListener zoomListener){
         mapListener.zoomListener = zoomListener;
     }
-
     /**
      * 마커 리스너를 설정합니다.
      */
     public void setMarkerListener(@Nullable UkdMapMarker.Listener listener){
-        mapView.setPOIItemEventListener(listener);
+        markerListener = listener;
     }
 
-    /**
-     * 현재 맵 영역의 넓이를 m단위로 읽습니다.
-     */
-    public void printMapWidthMeter(){
-        System.out.println(getMapRect().toString());
-    }
-    public MapRect getMapRect(){
-        return new MapRect(mapView.getMapPointBounds());
+    public void setData(KakaoMapData data) {
+        this.data = data;
     }
 
-    /**
-     * 마커 평균으로 중심 좌표를 설정합니다,
-     */
-    public void setCenterUsingPositions(){
-        // 평균 위도와 경도. 기본값 설정 : 전체 지점들의 평균값으로 결정
-        if(positions != null){
-            double avgLongitude = 0;
-            double avgLatitude = 0;
-            for(PositionInformation p : positions){
-                avgLongitude += p.getLongitude();
-                avgLatitude += p.getLatitude();
-                p.drawInto(mapView);
-            }
-            avgLongitude /= positions.size();
-            avgLatitude /= positions.size();
-
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(avgLatitude, avgLongitude), true);
-        }
-    }
     public interface ZoomListener{
-        public void onZoomChanged(KakaoMapFragment mapFragment, float zoomLevel);
-    }
-    public class MapRect{
-        public double width;
-        public double height;
-
-        public MapRect(MapPointBounds points){
-            MapPoint botlef = points.bottomLeft;
-            MapPoint topRig = points.topRight;
-
-            MapPoint.GeoCoordinate botlefCoord = botlef.getMapPointGeoCoord();
-            MapPoint.GeoCoordinate topRigCoord = topRig.getMapPointGeoCoord();
-
-            width = GeoToMeterConverter.gpsToMeter(
-                    botlefCoord.longitude,topRigCoord.latitude,
-                    topRigCoord.longitude, topRigCoord.latitude);
-            height = GeoToMeterConverter.gpsToMeter(
-                    botlefCoord.longitude, botlefCoord.latitude,
-                    botlefCoord.longitude, topRigCoord.latitude);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "맵 크기 : 가로 "+width+"m, 세로 "+height+"m";
-        }
+        public void onZoomChanged(MapView mapView, float zoomLevel);
     }
     private class Listener implements MapView.MapViewEventListener{
-        private ZoomListener zoomListener = null;
+        private KakaoMapFragment.ZoomListener zoomListener = null;
 
         @Override
         public void onMapViewInitialized(MapView mapView) {
-
+            mapView.setZoomLevel(2,true);
         }
-
         @Override
         public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-            printMapWidthMeter();
+            data.applyCenterData(mapPoint);
         }
 
         @Override
         public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-            if(zoomListener!=null) zoomListener.onZoomChanged(KakaoMapFragment.this, mapView.getZoomLevelFloat());
+            if(zoomListener!=null) zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
+            data.
+                    setMapRect(
+                            mapView);
+            System.out.println(data.getMapRect()+", 줌="+mapView.getZoomLevelFloat());
         }
 
         @Override

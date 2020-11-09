@@ -14,4 +14,14 @@ public class GeoToMeterConverter {
 
         return tmpD * 1000;
     }
+    public static double meterToGPSDif(double meter){
+        double result = 0;
+        double tmpD = meter;
+        double radius = 6378.1370d;
+        double tmpC = tmpD / radius;
+        double tmpA = Math.tan(tmpC/2);
+
+
+        return result;
+    }
 }

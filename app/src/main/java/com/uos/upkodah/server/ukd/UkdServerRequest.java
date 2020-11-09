@@ -1,4 +1,4 @@
-package com.uos.upkodah.server;
+package com.uos.upkodah.server.ukd;
 
 import androidx.annotation.Nullable;
 

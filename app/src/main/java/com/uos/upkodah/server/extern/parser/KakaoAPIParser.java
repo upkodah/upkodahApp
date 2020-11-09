@@ -1,4 +1,4 @@
-package com.uos.upkodah.server.parser;
+package com.uos.upkodah.server.extern.parser;
 
 import org.json.JSONArray;
 import org.json.JSONException;

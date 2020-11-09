@@ -1,11 +1,24 @@
 package com.uos.upkodah.local.position;
 
+import android.graphics.Color;
+
+import androidx.annotation.NonNull;
+
+import com.uos.upkodah.local.map.UkdMapMarker;
+
+import net.daum.mf.map.api.MapCircle;
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CompositePositionInformation<P extends PositionInformation> extends PositionInformation{
     public final static double SCALE = 4;
     protected List<P> subInfo;
+
+    private String parentId;
 
     public CompositePositionInformation(String name, List<P> subInfo){
         super(0,0,"");
@@ -33,12 +46,27 @@ public abstract class CompositePositionInformation<P extends PositionInformation
             resultLat += e.getLatitude();
         }
 
-        super.longitude = resultLon;
-        super.latitude = resultLat;
+        super.longitude = resultLon / subInfo.size();
+        super.latitude = resultLat / subInfo.size();
     }
 
-    public float getMarkerRadius(){
-        return subInfo.size() / 10;
+    public int getMarkerRadius(){
+        if(subInfo.size()>0){
+            int result = 0;
+
+            if(subInfo.get(0) instanceof CompositePositionInformation){
+                for(P c : subInfo){
+                    result += ((CompositePositionInformation) c).getMarkerRadius();
+                }
+            }
+            else{
+                result = subInfo.size() * 10;
+            }
+            return result;
+        }
+        else{
+            return 0;
+        }
     }
     public void clearPositions(){
         subInfo = new ArrayList<>();
@@ -47,5 +75,31 @@ public abstract class CompositePositionInformation<P extends PositionInformation
 
     public List<P> getSubInfoList(){
         return subInfo;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public void drawInto(MapView mapView) {
+        MapPOIItem marker = UkdMapMarker.getBuilder(this).build();
+        marker.setItemName(name);
+        mapView.addPOIItem(marker);
+        mapView.selectPOIItem(marker, false);
+        MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(getLatitude(), getLongitude()), // center
+                getMarkerRadius(), // radius
+                Color.argb(0, 0, 0, 0), // strokeColor
+                Color.argb(128, 0, 0, 255)); // fillColor
+        mapView.addCircle(circle);
     }
 }

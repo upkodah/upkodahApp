@@ -9,27 +9,28 @@ import com.uos.upkodah.user.fragment.data.SearchBarData;
 import com.uos.upkodah.user.fragment.data.SearchOptionData;
 import com.uos.upkodah.user.input.InputData;
 import com.uos.upkodah.user.input.LimitTimeStringConverter;
-import com.uos.upkodah.user.input.UserInputData;
+import com.uos.upkodah.server.ukd.UserDataToTransmit;
 
-public class UkdMainViewModel extends ViewModel implements InputData {
+public class UkdMainViewModel extends ViewModel implements InputData{
+    public UkdMainViewModel(){
+        // 초기화
+        this.setLimitTimeMin(10);
+        this.setEstateType("원룸");
+        this.setTradeType("월세");
+    }
+
+
     public SearchBarData searchBarData = new SearchBarData();
 
-    public InputData getUserInputData(){
-        UserInputData result = new UserInputData();
-        result.setPosition(positionInformation);
-        result.setLimitTimeMin(getLimitTimeMin());
-        result.setEstateType(getEstateType());
-        result.setTradeType(getTradeType());
-
+    public UserDataToTransmit getDataToTransmit(){
+        UserDataToTransmit result = new UserDataToTransmit(this);
         return result;
     }
 
     private PositionInformation positionInformation;
-    @Override
     public PositionInformation getPosition() {
         return positionInformation;
     }
-    @Override
     public void setPosition(PositionInformation position) {
         this.positionInformation = position;
         alertPositionChange();
@@ -39,40 +40,32 @@ public class UkdMainViewModel extends ViewModel implements InputData {
     }
 
     public SearchOptionData limitTimeData = new SearchOptionData();
-    @Override
     public int getLimitTimeMin() {
         return LimitTimeStringConverter.toMinute(limitTimeData.getOptionText());
     }
-    @Override
     public void setLimitTimeMin(int minute) {
         limitTimeData.setOptionText(new LimitTimeStringConverter(minute).toString());
     }
 
     public SearchOptionData estateData = new SearchOptionData();;
-    @Override
     public String getEstateType() {
         return estateData.getOptionText();
     }
-    @Override
     public void setEstateType(String estateType) {
         estateData.setOptionText(estateType);
     }
 
     public SearchOptionData tradeTypeData = new SearchOptionData();
-    @Override
     public String getTradeType() {
         return tradeTypeData.getOptionText();
     }
-    @Override
     public void setTradeType(String tradeType) {
         tradeTypeData.setOptionText(tradeType);
     }
 
-    @Override
     public int[] getFacilities() {
         return new int[0];
     }
-    @Override
     public void setFacilities(int index, int data) {
 
     }

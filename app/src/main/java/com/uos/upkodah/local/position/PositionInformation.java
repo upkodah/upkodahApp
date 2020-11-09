@@ -16,22 +16,14 @@ import com.android.volley.Response;
 import com.uos.upkodah.local.gps.GPSPermissionManager;
 import com.uos.upkodah.local.map.MapDrawable;
 import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.server.KakaoAPIRequest;
-import com.uos.upkodah.server.parser.AddrToCoordParser;
-import com.uos.upkodah.server.parser.CoordToAddrParser;
+import com.uos.upkodah.server.extern.KakaoAPIRequest;
+import com.uos.upkodah.server.extern.parser.CoordToAddrParser;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 
 public class PositionInformation implements Parcelable, MapDrawable {

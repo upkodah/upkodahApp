@@ -21,10 +21,4 @@ public class RegionInformation extends CompositePositionInformation<SubRegionInf
     }
 
 
-    @Override
-    public void drawInto(MapView mapView){
-
-    }
-
-
 }

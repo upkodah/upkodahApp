@@ -1,22 +1,15 @@
 package com.uos.upkodah.dialog.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -28,16 +21,12 @@ import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.local.map.UkdMapMarker;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.server.KakaoAPIRequest;
-import com.uos.upkodah.server.parser.KakaoAPIParser;
-import com.uos.upkodah.server.parser.SearchKeyworkParser;
+import com.uos.upkodah.server.extern.KakaoAPIRequest;
+import com.uos.upkodah.server.extern.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
 
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SelectLocationDialogActivity extends AppCompatActivity {
     private PositionInformation result;

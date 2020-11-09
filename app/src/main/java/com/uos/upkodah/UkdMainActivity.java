@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,23 +13,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.Response;
 import com.uos.upkodah.databinding.ActivityUkdMainBinding;
 import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
+import com.uos.upkodah.dialog.SelectTradeTypeDialog;
 import com.uos.upkodah.dialog.activity.SelectLocationDialogActivity;
+import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.server.KakaoAPIRequest;
-import com.uos.upkodah.server.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.FacilitiesFragment;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
 import com.uos.upkodah.user.fragment.SearchOptionFragment;
-import com.uos.upkodah.user.input.InputData;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
-
-import java.util.ArrayList;
 
 public class UkdMainActivity extends AppCompatActivity{
     private UkdMainViewModel ukdMainViewModel;
@@ -133,6 +128,12 @@ public class UkdMainActivity extends AppCompatActivity{
         searchOptionFragment.setImage(R.drawable.estate_type);
     }
     private void initFragmentTradeType(SearchOptionFragment searchOptionFragment){
+        ukdMainViewModel.tradeTypeData.setOptionEditListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectTradeTypeDialog.show(getSupportFragmentManager(), getString(R.string.dialog_select_trade_type_tag));
+            }
+        });
         searchOptionFragment.setData(ukdMainViewModel.tradeTypeData);
         searchOptionFragment.setImage(R.drawable.trade_type);
     }
@@ -149,6 +150,7 @@ public class UkdMainActivity extends AppCompatActivity{
     // 표시될 다이얼로그 초기화 메소드
     private SelectLimitTimeDialog selectLimitTimeDialog;
     private SelectEstateTypeDialog selectEstateTypeDialog;
+    private SelectTradeTypeDialog selectTradeTypeDialog;
     public void initDialog(){
         this.selectLimitTimeDialog = new SelectLimitTimeDialog(new DialogInterface.OnClickListener() {
             @Override
@@ -168,45 +170,33 @@ public class UkdMainActivity extends AppCompatActivity{
                 dialogInterface.dismiss();
             }
         });
+
+        this.selectTradeTypeDialog = new SelectTradeTypeDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ukdMainViewModel.setTradeType(SelectTradeTypeDialog.indexToResult(i));
+
+                dialogInterface.dismiss();
+            }
+        });
     }
 
 
     class EstateSearchBtnListener implements SearchBarFragment.BtnListener{
         @Override
         public void onClickSearchBtn(View view, String searchText) {
-            // 입력값을 받는다.
-            final InputData inputData = ukdMainViewModel.getUserInputData();
+            // 입력값을 받아 JSON으로 변환한다.
+            final UserDataToTransmit data = ukdMainViewModel.getDataToTransmit();
+            System.out.println(data.toJSON());
 
             // 입력값으로 계산 요청하고, 로딩 다이얼로그 출력
             // 이 다이얼로그는 계산이 끝나면 취소됨
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
-//            // 요청 생성
-//            Response.Listener<String> listener = new Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-//                    // 이 응답에서는 결과물을 Parsing하여 전체 매물을 만들고
-//                    SearchKeyworkParser parser = SearchKeyworkParser.getInstance(response);
-//
-//                    // 오류가 없다면 새 액티비티를 실행한다.
-//                    if(parser != null){
-//                        ArrayList<PositionInformation> positions = parser.getPositionList();
-//
-//                        Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-//                        intent.putParcelableArrayListExtra(getString(R.string.extra_position_information), positions);
-//
-//                        Toast.makeText(UkdMainActivity.this, positions.size()+"", Toast.LENGTH_SHORT).show();
-//                        loadingDialog.cancel();
-//                        startActivity(intent);
-//                    }
-//                }
-//            };
-//            KakaoAPIRequest
-//                    .getSearchKeywordRequest("카페", inputData.getPosition().getLongitude(), inputData.getPosition().getLatitude(), 1000, listener, null)
-//                    .request(getApplicationContext());
-            //loadingDialog.cancel();
+            loadingDialog.cancel();
             Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
+            intent.putExtra(getString(R.string.extra_position_information), ukdMainViewModel.getPosition());
             startActivity(intent);
         }
     }

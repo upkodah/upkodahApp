@@ -1,13 +1,11 @@
-package com.uos.upkodah.server.parser;
+package com.uos.upkodah.server.extern.parser;
 
-import com.uos.upkodah.local.position.EstateInformation;
 import com.uos.upkodah.local.position.PositionInformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchKeyworkParser extends KakaoAPIParser {
     public ArrayList<PositionInformation> getPositionList() {

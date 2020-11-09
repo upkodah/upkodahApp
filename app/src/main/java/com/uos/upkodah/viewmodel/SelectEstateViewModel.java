@@ -102,10 +102,15 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
     private List<RegionInformation> estates;
     public void setEstates(List<RegionInformation> estates) {
         this.estates = estates;
+        if(this.estates!=null){
+            mapData.setMapMarkers(estates);
+        }
+
     }
 
     public List<PositionInformation> getDisplayedEstateList(int depth){
         List<PositionInformation> result = new ArrayList<>();
+        if(estates==null) return result;
 
         switch(depth){
             case 1:

@@ -1,4 +1,4 @@
-package com.uos.upkodah.server.parser;
+package com.uos.upkodah.server.extern.parser;
 
 public class AddrToCoordParser {
     public AddrToCoordParser(String response){

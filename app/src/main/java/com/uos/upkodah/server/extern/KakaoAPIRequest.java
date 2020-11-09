@@ -1,4 +1,4 @@
-package com.uos.upkodah.server;
+package com.uos.upkodah.server.extern;
 
 import android.content.Context;
 
@@ -52,6 +52,9 @@ public class KakaoAPIRequest extends StringRequest {
     }
     public static KakaoAPIRequest getCoordToAddrRequest(double longitude, double latitude, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         return new CoordToAddrRequest(CoordToAddrRequest.getRequestURL(longitude, latitude),listener,errorListener);
+    }
+    public static KakaoAPIRequest getCoordToRegionRequest(double longitude, double latitude, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
+        return new CoordToRegionRequest(CoordToRegionRequest.getRequestURL(longitude, latitude),listener,errorListener);
     }
 }
 
@@ -127,6 +130,26 @@ class CoordToAddrRequest extends KakaoAPIRequest{
         return requestURL;
     }
     CoordToAddrRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+        super(url, listener, errorListener);
+    }
+}
+
+/**
+ * 좌표를 이용해 해당 좌표의 행정구역 정보를 얻어내는 API
+ */
+class CoordToRegionRequest extends KakaoAPIRequest{
+    /*
+    Double:x(필수) =  x 좌표로 경위도인 경우 longitude
+    Double:y(필수) = y 좌표로 경위도인 경우 latitude
+    String:input_coord = x, y 로 입력되는 값에 대한 좌표 체계, 기본 값은 WGS84. 지원 좌표계: WGS84, WCONGNAMUL, CONGNAMUL, WTM, TM
+     */
+    protected static String getRequestURL(double x, double y){
+        String requestURL = COORD_TO_REGIONCODE_URL+"?"
+                +"x="+x+"&"
+                +"y="+y;
+        return requestURL;
+    }
+    CoordToRegionRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
     }
 }

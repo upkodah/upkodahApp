@@ -18,7 +18,9 @@ import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.EstateInformation;
+import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
+import com.uos.upkodah.local.position.temp.TempPositionGenerator;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
 import java.util.ArrayList;
@@ -52,12 +54,35 @@ public class SelectEstateActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent positionDataIntent = getIntent();
+        PositionInformation p = positionDataIntent.getParcelableExtra(getString(R.string.extra_position_information));
+        final TempPositionGenerator g = new TempPositionGenerator(this.getApplicationContext(),p.getLongitude(), p.getLatitude());
+
+        Button b = (Button) findViewById(R.id.btn_temp);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                g.checkEstates();
+                g.checkSubRegions();
+                g.setTotalRegion();
+                g.checkRegions();
+                viewModel.setEstates(g.getTotalRegion());
+            }
+        });
+    }
+
+    @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
         super.onAttachFragment(fragment);
 
         if(fragment instanceof KakaoMapFragment){
             KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
             kakaoMapFragment.setData(viewModel.mapData);
+            kakaoMapFragment.setZoomListener(viewModel.zoomListener);
+            kakaoMapFragment.setMarkerListener(viewModel.markerListener);
         }
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;

@@ -17,6 +17,7 @@ public class KakaoMapBindingAdapter {
     @BindingAdapter("android:mapMarkers")
     public static void setMarkers(MapView view, List<? extends PositionInformation> positions){
         view.removeAllPOIItems();
+        view.removeAllCircles();
         if(positions==null) return;
         for(PositionInformation p : positions){
             p.drawInto(view);

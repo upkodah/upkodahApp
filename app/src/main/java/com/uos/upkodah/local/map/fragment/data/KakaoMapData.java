@@ -26,7 +26,7 @@ public class KakaoMapData extends BaseObservable{
     public List<? extends PositionInformation> getMapMarkers() {
         return mapMarkers;
     }
-    public void setMapMarkers(List<PositionInformation> mapMarkers) {
+    public void setMapMarkers(List<? extends PositionInformation> mapMarkers) {
         this.mapMarkers = new ArrayList<>(mapMarkers);
         notifyPropertyChanged(BR.mapMarkers);
         setCenterUsingPositions();
@@ -100,12 +100,17 @@ public class KakaoMapData extends BaseObservable{
         if(mapMarkers != null){
             double avgLongitude = 0;
             double avgLatitude = 0;
+
+            if(mapMarkers.size()==0) return;
+
             for(PositionInformation p : mapMarkers){
                 avgLongitude += p.getLongitude();
                 avgLatitude += p.getLatitude();
             }
             avgLongitude /= mapMarkers.size();
             avgLatitude /= mapMarkers.size();
+
+            System.out.println(this.centerLongitude+" "+this.centerLatitude);;
 
             setCenterLongitude(avgLongitude);
             setCenterLatitude(avgLatitude);

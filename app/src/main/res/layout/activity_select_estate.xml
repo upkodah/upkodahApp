@@ -7,10 +7,36 @@
 
     </data>
 
-    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/frag_estate_map"
+                android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.fragment.app.FragmentContainerView>
+
+            <Button
+                android:id="@+id/btn_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/frag_estate_list"
@@ -18,13 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/frag_estate_map"
-            android:name="com.uos.upkodah.local.map.fragment.KakaoMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
 
-
-    </androidx.slidingpanelayout.widget.SlidingPaneLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </layout>

@@ -32,7 +32,7 @@ public class TempPositionGenerator {
         this.lat = latitude;
 
         // 먼저, 카카오 키워드 API로 카페 목록을 가져온다.
-        KakaoAPIRequest keywordRequest = KakaoAPIRequest.getSearchKeywordRequest("중국집", lon, lat, new Response.Listener<String>() {
+        KakaoAPIRequest keywordRequest = KakaoAPIRequest.getSearchKeywordRequest("경찰서", lon, lat, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 SearchKeyworkParser parser = SearchKeyworkParser.getInstance(response);

@@ -49,6 +49,8 @@ public class KakaoMapFragment extends Fragment {
 
         if(markerListener!=null) mapView.setPOIItemEventListener(markerListener);
 
+
+
         return mapViewContainer;
     }
 
@@ -77,7 +79,6 @@ public class KakaoMapFragment extends Fragment {
 
         @Override
         public void onMapViewInitialized(MapView mapView) {
-            mapView.setZoomLevel(2,true);
         }
         @Override
         public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
@@ -86,11 +87,8 @@ public class KakaoMapFragment extends Fragment {
 
         @Override
         public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+            data.setMapRect(mapView);
             if(zoomListener!=null) zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
-            data.
-                    setMapRect(
-                            mapView);
-            System.out.println(data.getMapRect()+", 줌="+mapView.getZoomLevelFloat());
         }
 
         @Override

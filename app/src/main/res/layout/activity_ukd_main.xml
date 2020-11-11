@@ -38,8 +38,6 @@
             android:foregroundTint="#FFFFFF"
             android:orientation="vertical"
             android:overScrollMode="ifContentScrolls"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:showDividers="middle"
             android:verticalScrollbarPosition="defaultPosition"
             app:layout_constraintEnd_toEndOf="parent"

@@ -18,6 +18,7 @@ public class SelectionListData extends BaseObservable {
     }
     public void setAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         this.adapter = adapter;
+        notifyUpdateListData();
     }
 
     public void notifyUpdateListData(){
@@ -27,7 +28,11 @@ public class SelectionListData extends BaseObservable {
     @BindingAdapter("android:recyclerAdapter")
     public static void setRecyclerViewAdapter(RecyclerView view, RecyclerView.Adapter adapter){
         if(adapter == null) return;
-        if(view.getAdapter().equals(adapter)){
+        if(view.getAdapter()==null){
+            // 만약 어댑터가 null이면 새로 설정
+            view.setAdapter(adapter);
+        }
+        else if(view.getAdapter().equals(adapter)){
             // 어댑터가 동일하면 어댑터 업데이트만 실시
             adapter.notifyDataSetChanged();
         }

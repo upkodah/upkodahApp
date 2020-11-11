@@ -35,14 +35,21 @@ public class UkdMapMarker extends MapPOIItem{
     public class Builder{
         /**
          * 마커의 이미지를 커스텀 이미지로 전환합니다.
-         * @param bitmap
          * @return
          */
-        public UkdMapMarker.Builder setMarkerImage(Bitmap bitmap){
+        public UkdMapMarker.Builder setMarkerImage(@DrawableRes int id){
             UkdMapMarker.this.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-            UkdMapMarker.this.setCustomImageBitmap(bitmap);
+            UkdMapMarker.this.setSelectedMarkerType(MarkerType.CustomImage);
+            UkdMapMarker.this.setCustomImageResourceId(id);
+            UkdMapMarker.this.setCustomSelectedImageResourceId(id);
             UkdMapMarker.this.setCustomImageAutoscale(false);
             UkdMapMarker.this.setCustomImageAnchor(0.5f, 1.0f);
+
+            return this;
+        }
+
+        public UkdMapMarker.Builder setMarkerPosition(float x, float y){
+            UkdMapMarker.this.setCustomImageAnchor(x,y);
 
             return this;
         }

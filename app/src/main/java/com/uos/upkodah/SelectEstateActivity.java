@@ -57,6 +57,7 @@ public class SelectEstateActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        // 테스트를 위한 임시 코드
         Intent positionDataIntent = getIntent();
         PositionInformation p = positionDataIntent.getParcelableExtra(getString(R.string.extra_position_information));
         final TempPositionGenerator g = new TempPositionGenerator(this.getApplicationContext(),p.getLongitude(), p.getLatitude());

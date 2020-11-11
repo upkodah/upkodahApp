@@ -1,5 +1,6 @@
 package com.uos.upkodah.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.ViewModel;
@@ -45,22 +46,24 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
             @Override
             public void onZoomChanged(MapView mapView, float zoomLevel) {
                 // 줌이 변경되면, 줌에 따라 포함될 수 있는 Grid 크기를 구한다.
-                double width = GridRegionInformation.MEASURE;
-                for(int i=1;i<zoomLevel;i++){
-                    width *= 2;
-                }
+                mapData.setMapRect(mapView);
+                KakaoMapData.MapRect rect = mapData.getMapRect();
+                double width = rect.width;
                 int depth;
 
                 if(width > RegionInformation.MEASURE){
                     // 구 단위로 보여준다.
+                    Log.d("MAP", "REGIONMEASURE : "+RegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
                     depth = 1;
                 }
                 else if(width > SubRegionInformation.MEASURE){
                     // 동 단위로 보여준다.
+                    Log.d("MAP", "SUBMEASURE : "+SubRegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
                     depth = 2;
                 }
                 else{
                     // 그리드 단위로 보여준다
+                    Log.d("MAP", "GRIDMEASURE : "+GridRegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
                     depth = 3;
                 }
 
@@ -75,11 +78,17 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
         markerListener = new UkdMapMarker.Listener() {
             @Override
             public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+
+
+            }
+            @Override
+            public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
                 // 마커가 선택되면 마커의 타입을 먼저 확인한다.
                 if(positionInformation instanceof GridRegionInformation){
                     // 마커가 Grid이면, 리스트에 Estate들을 넣는다.
+                    Log.d("LIST", "리스트 표출 준비");
                     GridRegionInformation gridRegionInformation = (GridRegionInformation) positionInformation;
-                    estatesInCurrentSelectedGrid = gridRegionInformation.getSubInfoList();
+                    estatesInCurrentSelectedGrid = gridRegionInformation.getAllEstates();
                     listData.setAdapter(new SelectionListAdapter(SelectEstateViewModel.this));
                 }
                 else{
@@ -87,13 +96,9 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
                     mapData.setCenterLongitude(positionInformation.getLongitude());
                     mapData.setCenterLatitude(positionInformation.getLatitude());
                     currentDepth++;
-                    setZoomWithDepth();
+                    mapData.setZoomLevelUsingWidth(getWidthUsingDepth(currentDepth));
+                    zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
                 }
-
-            }
-            @Override
-            public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
-
             }
         };
     }
@@ -108,6 +113,25 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
 
     }
 
+    public double getWidthUsingDepth(int depth){
+        switch(depth) {
+            case 1:
+                // 구 단위를 보여줘야할 때
+                return RegionInformation.MEASURE;
+
+            case 2:
+                // 동 단위를 보여줘야할 때
+                return SubRegionInformation.MEASURE;
+
+            case 3:
+                // Grid 단위를 보여줘야할 때
+                return GridRegionInformation.MEASURE;
+
+            default:
+                return 0;
+        }
+    }
+
     public List<PositionInformation> getDisplayedEstateList(int depth){
         List<PositionInformation> result = new ArrayList<>();
         if(estates==null) return result;
@@ -115,11 +139,13 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
         switch(depth){
             case 1:
                 // 구 단위를 보여줘야할 때
+                Log.d("MAP", "구 단위로 보여줍니다.");
                 result.addAll(estates);
                 break;
 
             case 2:
                 // 동 단위를 보여줘야할 때
+                Log.d("MAP", "동 단위로 보여줍니다.");
                 for(RegionInformation p : estates){
                     result.addAll(p.getSubInfoList());
                 }
@@ -127,6 +153,7 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
 
             case 3:
                 // Grid 단위를 보여줘야할 때
+                Log.d("MAP", "Grid 단위로 보여줍니다.");
                 for(RegionInformation p : estates){
                     for(SubRegionInformation p2 : p.getSubInfoList()){
                         result.addAll(p2.getSubInfoList());
@@ -136,6 +163,7 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
 
             case 4:
                 // 매물 단위를 보여줘야할 때
+                Log.d("MAP", "매물 단위로 보여줍니다.");
                 for(RegionInformation p : estates){
                     for(SubRegionInformation p2 : p.getSubInfoList()){
                         for(GridRegionInformation p3 : p2.getSubInfoList()){
@@ -150,27 +178,6 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
         return result;
     }
 
-
-    /**
-     * 줌 수준은 1일 때 너비 400m 정도이며, 이후 줌이 1 올라갈 때마다 2배씩 커진다.
-     * 만약 현재 표시 깊이가 1이면, 줌이 RegionInformation.MEASURE보다 8배커질 때까지 줌을 늘려야 하며
-     * 2이면 RegionInformation.MEASURE, 3이면 SubRegionInformation.MEASURE가 될 때까지 늘려야 한다.
-     */
-    public void setZoomWithDepth(){
-        double baseWidth = GridRegionInformation.MEASURE;
-        int zoomLevel = 1;
-
-        double dif = RegionInformation.MEASURE * CompositePositionInformation.SCALE / baseWidth;
-        for(int i=1;i<currentDepth;i++){
-            dif /= CompositePositionInformation.SCALE;
-        }
-
-        while(zoomLevel >= dif){
-            zoomLevel *= 2;
-        }
-        mapData.setZoomLevel(zoomLevel);
-    }
-
     @Override
     public int getLayoutId() {
         return R.layout.list_item_estate;
@@ -183,11 +190,12 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
 
     @Override
     public void setViewHolder(RecyclerView.ViewHolder viewHolder, int index) {
-
+        Log.d("LIST", "리스트 표출");
+        ((EstateListViewHolder) viewHolder).setEstateInfo(estatesInCurrentSelectedGrid.get(index));
     }
 
     @Override
     public int getItemCount() {
-        return estatesInCurrentSelectedGrid!=null ? 0 : estatesInCurrentSelectedGrid.size();
+        return estatesInCurrentSelectedGrid==null ? 0 : estatesInCurrentSelectedGrid.size();
     }
 }

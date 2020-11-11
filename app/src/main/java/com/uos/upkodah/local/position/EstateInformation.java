@@ -3,9 +3,9 @@ package com.uos.upkodah.local.position;
 import androidx.annotation.NonNull;
 
 public class EstateInformation extends PositionInformation {
-    public final int monPrice = 400;  // 월세
-    public final int dpsPrice = 4000; // 보증금
-    public final double rmSize = 400;   // 방 크기
+    public final int monPrice = 40;  // 월세
+    public final int dpsPrice = 500; // 보증금
+    public final double rmSize = 33;   // 방 크기
     public final int mngFee = 40;  // 관리비
     public final String rmType= "원룸";  // 방 타입
     public final String trdType = "월세"; // 거래 타입
@@ -37,5 +37,17 @@ public class EstateInformation extends PositionInformation {
     @Override
     public String toString() {
         return guId+" "+dongId+" "+postalAddress;
+    }
+
+    public String getDisplayedName(){
+        String result = "["+rmType+"] "+rmSize+"㎡\n"+name;
+
+        return result;
+    }
+    public String getDisplayedAddr(){
+        return postalAddress;
+    }
+    public String getDisplayedTradeInfo(){
+        return trdType+" "+dpsPrice+"/"+monPrice;
     }
 }

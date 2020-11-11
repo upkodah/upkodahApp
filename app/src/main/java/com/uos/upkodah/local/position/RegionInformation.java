@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegionInformation extends CompositePositionInformation<SubRegionInformation>{
-    public static final double MEASURE = GridRegionInformation.MEASURE*CompositePositionInformation.SCALE;
+    public static final double MEASURE = SubRegionInformation.MEASURE*CompositePositionInformation.SCALE;
 
     public RegionInformation(String name, List<SubRegionInformation> subInfo) {
         super(name, subInfo);

@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
+import com.uos.upkodah.R;
 import com.uos.upkodah.local.map.UkdMapMarker;
 
 import net.daum.mf.map.api.MapCircle;
@@ -56,7 +57,7 @@ public abstract class CompositePositionInformation<P extends PositionInformation
 
             if(subInfo.get(0) instanceof CompositePositionInformation){
                 for(P c : subInfo){
-                    result += ((CompositePositionInformation) c).getMarkerRadius();
+                    result += ((CompositePositionInformation) c).getMarkerRadius() * 3;
                 }
             }
             else{
@@ -71,6 +72,20 @@ public abstract class CompositePositionInformation<P extends PositionInformation
     public void clearPositions(){
         subInfo = new ArrayList<>();
         calculateCoord();
+    }
+    public List<EstateInformation> getAllEstates(){
+        if(this instanceof GridRegionInformation){
+            return ((GridRegionInformation) this).getSubInfoList();
+        }
+        else{
+            List<EstateInformation> resultList = new ArrayList<>();
+
+            for(P p : subInfo){
+                resultList.addAll(((CompositePositionInformation) p).getAllEstates());
+            }
+
+            return resultList;
+        }
     }
 
     public List<P> getSubInfoList(){
@@ -92,10 +107,13 @@ public abstract class CompositePositionInformation<P extends PositionInformation
 
     @Override
     public void drawInto(MapView mapView) {
-        MapPOIItem marker = UkdMapMarker.getBuilder(this).build();
+        MapPOIItem marker = UkdMapMarker.getBuilder(this)
+                .setMarkerImage(R.drawable.marker)
+                .setMarkerPosition(0.5f,0.5f)
+                .build();
         marker.setItemName(name);
         mapView.addPOIItem(marker);
-        mapView.selectPOIItem(marker, false);
+
         MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(getLatitude(), getLongitude()), // center
                 getMarkerRadius(), // radius
                 Color.argb(0, 0, 0, 0), // strokeColor

@@ -1,5 +1,7 @@
 package com.uos.upkodah.local.map.fragment.data;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
@@ -21,6 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KakaoMapData extends BaseObservable{
+    private double zeroWidth = 0;
+    public void setZeroWidth(double zeroWidth) {
+        Log.d("MAP", "ZEROWIDTH : "+zeroWidth);
+        this.zeroWidth = zeroWidth;
+    }
+
+
     private List<PositionInformation> mapMarkers = null;
     @Bindable
     public List<? extends PositionInformation> getMapMarkers() {
@@ -46,14 +55,24 @@ public class KakaoMapData extends BaseObservable{
         notifyPropertyChanged(BR.mapMarkers);
     }
 
-    private float zoomLevel;
+    private float zoomLevel = 0;
     @Bindable
     public float getZoomLevel() {
         return zoomLevel;
     }
-
     public void setZoomLevel(float zoomLevel) {
         this.zoomLevel = zoomLevel;
+        notifyPropertyChanged(BR.zoomLevel);
+    }
+    public void setZoomLevelUsingWidth(double width){
+        float result = 0;
+
+
+        if(zeroWidth * Math.pow(4,result) < width){
+            result+=0.1f;
+        }
+        this.zoomLevel = result;
+        Log.d("MAP", "계산된 줌 : "+this.zoomLevel);
         notifyPropertyChanged(BR.zoomLevel);
     }
 
@@ -132,23 +151,32 @@ public class KakaoMapData extends BaseObservable{
     }
 
 
+
+
     public class MapRect{
         public final double width;
         public final double height;
 
         public MapRect(MapPointBounds points){
-            MapPoint botlef = points.bottomLeft;
-            MapPoint topRig = points.topRight;
+            if(points == null){
+                width = 0;
+                height = 0;
+            }
+            else{
+                MapPoint botlef = points.bottomLeft;
+                MapPoint topRig = points.topRight;
 
-            MapPoint.GeoCoordinate botlefCoord = botlef.getMapPointGeoCoord();
-            MapPoint.GeoCoordinate topRigCoord = topRig.getMapPointGeoCoord();
+                MapPoint.GeoCoordinate botlefCoord = botlef.getMapPointGeoCoord();
+                MapPoint.GeoCoordinate topRigCoord = topRig.getMapPointGeoCoord();
 
-            width = GeoToMeterConverter.gpsToMeter(
-                    botlefCoord.longitude,topRigCoord.latitude,
-                    topRigCoord.longitude, topRigCoord.latitude);
-            height = GeoToMeterConverter.gpsToMeter(
-                    botlefCoord.longitude, botlefCoord.latitude,
-                    botlefCoord.longitude, topRigCoord.latitude);
+                width = GeoToMeterConverter.gpsToMeter(
+                        botlefCoord.longitude,topRigCoord.latitude,
+                        topRigCoord.longitude, topRigCoord.latitude);
+                height = GeoToMeterConverter.gpsToMeter(
+                        botlefCoord.longitude, botlefCoord.latitude,
+                        botlefCoord.longitude, topRigCoord.latitude);
+            }
+
         }
 
         @NonNull

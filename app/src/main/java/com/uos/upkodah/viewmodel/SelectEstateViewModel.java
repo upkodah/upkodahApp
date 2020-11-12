@@ -38,6 +38,9 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
     public final UkdMapMarker.Listener markerListener;
 
     private int currentDepth;
+    private final static float LEVEL1 = 4.5f;
+    private final static float LEVEL2 = 3.0f;
+    private final static float LEVEL3 = 1.3f;
 
     public SelectEstateViewModel(){
         currentDepth = 1;
@@ -46,24 +49,21 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
             @Override
             public void onZoomChanged(MapView mapView, float zoomLevel) {
                 // 줌이 변경되면, 줌에 따라 포함될 수 있는 Grid 크기를 구한다.
-                mapData.setMapRect(mapView);
-                KakaoMapData.MapRect rect = mapData.getMapRect();
-                double width = rect.width;
                 int depth;
 
-                if(width > RegionInformation.MEASURE){
+                if(zoomLevel > LEVEL1){
                     // 구 단위로 보여준다.
-                    Log.d("MAP", "REGIONMEASURE : "+RegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
+                    Log.d("MAP", "REGIONMEASURE : "+RegionInformation.MEASURE+",  ZOOM : "+zoomLevel);
                     depth = 1;
                 }
-                else if(width > SubRegionInformation.MEASURE){
+                else if(zoomLevel > LEVEL2){
                     // 동 단위로 보여준다.
-                    Log.d("MAP", "SUBMEASURE : "+SubRegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
+                    Log.d("MAP", "SUBMEASURE : "+SubRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
                     depth = 2;
                 }
                 else{
                     // 그리드 단위로 보여준다
-                    Log.d("MAP", "GRIDMEASURE : "+GridRegionInformation.MEASURE+", WIDTH : "+width+", ZOOM : "+zoomLevel);
+                    Log.d("MAP", "GRIDMEASURE : "+GridRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
                     depth = 3;
                 }
 
@@ -78,29 +78,28 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
         markerListener = new UkdMapMarker.Listener() {
             @Override
             public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
-
-
+                Log.d("LIST", "리스트 표출 준비");
+                CompositePositionInformation compositePositionInformation = (CompositePositionInformation) positionInformation;
+                estatesInCurrentSelectedGrid = compositePositionInformation.getAllEstates();
+                listData.setAdapter(new SelectionListAdapter(SelectEstateViewModel.this));
             }
             @Override
             public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
                 // 마커가 선택되면 마커의 타입을 먼저 확인한다.
                 if(positionInformation instanceof GridRegionInformation){
-                    // 마커가 Grid이면, 리스트에 Estate들을 넣는다.
-                    Log.d("LIST", "리스트 표출 준비");
-                    GridRegionInformation gridRegionInformation = (GridRegionInformation) positionInformation;
-                    estatesInCurrentSelectedGrid = gridRegionInformation.getAllEstates();
-                    listData.setAdapter(new SelectionListAdapter(SelectEstateViewModel.this));
                 }
                 else{
                     //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
                     mapData.setCenterLongitude(positionInformation.getLongitude());
                     mapData.setCenterLatitude(positionInformation.getLatitude());
                     currentDepth++;
-                    mapData.setZoomLevelUsingWidth(getWidthUsingDepth(currentDepth));
+                    mapData.setZoomLevel(getZoomUsingDepth(currentDepth));
                     zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
                 }
             }
         };
+
+        mapData.setZoomLevel(getZoomUsingDepth(currentDepth));
     }
 
     private List<EstateInformation> estatesInCurrentSelectedGrid;
@@ -113,22 +112,22 @@ public class SelectEstateViewModel extends ViewModel implements SelectionListFra
 
     }
 
-    public double getWidthUsingDepth(int depth){
+    public float getZoomUsingDepth(int depth){
         switch(depth) {
             case 1:
                 // 구 단위를 보여줘야할 때
-                return RegionInformation.MEASURE;
+                return LEVEL1+0.3f;
 
             case 2:
                 // 동 단위를 보여줘야할 때
-                return SubRegionInformation.MEASURE;
+                return LEVEL2+0.3f;
 
             case 3:
                 // Grid 단위를 보여줘야할 때
-                return GridRegionInformation.MEASURE;
+                return LEVEL3+0.3f;
 
             default:
-                return 0;
+                return LEVEL1+0.3f;
         }
     }
 

@@ -3,18 +3,13 @@ package com.uos.upkodah.local.map.fragment.data;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.BindingAdapter;
 
 import com.uos.upkodah.BR;
-import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.util.GeoToMeterConverter;
 
-import net.daum.android.map.coord.MapCoord;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapView;

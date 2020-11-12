@@ -1,77 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/facilities_filter_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:divider="@drawable/layout_divider"
-    android:orientation="vertical" >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.uos.upkodah.user.fragment.data.FacilitiesData" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/layout_facil_row_1"
-        android:layout_width="wrap_content"
+        android:id="@+id/facilities_filter_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:divider="@drawable/layout_divider"
+        android:orientation="vertical">
 
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
+        <LinearLayout
+            android:id="@+id/layout_facil_row_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton2"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac1"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton3"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac2"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton4"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac3"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac4"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_facil_row_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac5"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
+
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac6"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
+
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac7"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
+
+            <ImageButton
+                style="@style/BaseFacilitiesBtn"
+                android:id="@+id/btn_fac8"
+                android:layout_weight="1"
+                android:onClick="@{data.onClickFacBtn}"
+                app:srcCompat="@android:drawable/btn_dialog" />
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_facil_row_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton5"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
-
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton6"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
-
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton7"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
-
-        <ImageButton
-            style="@style/BaseFacilitiesBtn"
-            android:id="@+id/imageButton8"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog" />
-    </LinearLayout>
-</LinearLayout>
+</layout>

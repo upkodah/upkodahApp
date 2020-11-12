@@ -38,8 +38,8 @@ public class UkdMapMarker extends MapPOIItem{
          * @return
          */
         public UkdMapMarker.Builder setMarkerImage(@DrawableRes int id){
-            UkdMapMarker.this.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-            UkdMapMarker.this.setSelectedMarkerType(MarkerType.CustomImage);
+            UkdMapMarker.this.setMarkerType(MarkerType.BluePin);
+            UkdMapMarker.this.setSelectedMarkerType(MarkerType.RedPin);
             UkdMapMarker.this.setCustomImageResourceId(id);
             UkdMapMarker.this.setCustomSelectedImageResourceId(id);
             UkdMapMarker.this.setCustomImageAutoscale(false);

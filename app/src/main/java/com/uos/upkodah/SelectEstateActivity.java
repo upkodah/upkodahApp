@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;

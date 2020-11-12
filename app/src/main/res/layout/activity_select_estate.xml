@@ -10,6 +10,7 @@
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/layout_slide_up"
         android:gravity="bottom">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
                 android:id="@+id/btn_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Sample"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

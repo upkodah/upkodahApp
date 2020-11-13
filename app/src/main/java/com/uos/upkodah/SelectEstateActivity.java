@@ -3,6 +3,7 @@ package com.uos.upkodah;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -16,13 +17,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
+import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
+import com.uos.upkodah.list.fragment.data.SelectionListData;
+import com.uos.upkodah.local.map.UkdMapMarker;
 import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.position.CompositePositionInformation;
 import com.uos.upkodah.local.position.EstateInformation;
+import com.uos.upkodah.local.position.GridRegionInformation;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
+import com.uos.upkodah.local.position.SubRegionInformation;
 import com.uos.upkodah.local.position.temp.TempPositionGenerator;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
+
+import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,12 +92,69 @@ public class SelectEstateActivity extends AppCompatActivity {
         if(fragment instanceof KakaoMapFragment){
             KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
             kakaoMapFragment.setData(viewModel.mapData);
+
+            viewModel.zoomListener = new EstateZoomListener();
             kakaoMapFragment.setZoomListener(viewModel.zoomListener);
+
+            viewModel.markerListener = new EstateMarkerListener();
             kakaoMapFragment.setMarkerListener(viewModel.markerListener);
         }
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
             selectionListFragment.setData(viewModel.listData);
+        }
+    }
+
+
+    private class EstateZoomListener implements KakaoMapFragment.ZoomListener{
+        @Override
+        public void onZoomChanged(MapView mapView, float zoomLevel) {
+            // 줌이 변경되면, 줌에 따라 포함될 수 있는 Grid 크기를 구한다.
+            int depth;
+
+            if(zoomLevel > SelectEstateViewModel.LEVEL1){
+                // 구 단위로 보여준다.
+                Log.d("MAP", "REGIONMEASURE : "+RegionInformation.MEASURE+",  ZOOM : "+zoomLevel);
+                depth = 1;
+            }
+            else if(zoomLevel > SelectEstateViewModel.LEVEL2){
+                // 동 단위로 보여준다.
+                Log.d("MAP", "SUBMEASURE : "+ SubRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
+                depth = 2;
+            }
+            else{
+                // 그리드 단위로 보여준다
+                Log.d("MAP", "GRIDMEASURE : "+ GridRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
+                depth = 3;
+            }
+
+            // 마커를 변경한다.
+            if(viewModel.currentDepth != depth){
+                viewModel.mapData.setMapMarkers(viewModel.getDisplayedEstateList(depth));
+                viewModel.currentDepth = depth;
+            }
+        }
+    }
+    private class EstateMarkerListener extends UkdMapMarker.Listener{
+        @Override
+        public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+            Log.d("LIST", "리스트 표출 준비");
+            CompositePositionInformation compositePositionInformation = (CompositePositionInformation) positionInformation;
+            viewModel.setListEstateData(compositePositionInformation.getAllEstates());
+        }
+        @Override
+        public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+            // 마커가 선택되면 마커의 타입을 먼저 확인한다.
+            if(positionInformation instanceof GridRegionInformation){
+            }
+            else{
+                //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
+                viewModel.mapData.setCenterLongitude(positionInformation.getLongitude());
+                viewModel.mapData.setCenterLatitude(positionInformation.getLatitude());
+                viewModel.currentDepth++;
+                viewModel.mapData.setZoomLevel(viewModel.getZoomUsingDepth(viewModel.currentDepth));
+                viewModel.zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
+            }
         }
     }
 }

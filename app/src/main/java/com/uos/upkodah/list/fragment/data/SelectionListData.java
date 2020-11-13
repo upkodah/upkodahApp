@@ -20,7 +20,6 @@ public class SelectionListData extends BaseObservable {
         this.adapter = adapter;
         notifyUpdateListData();
     }
-
     public void notifyUpdateListData(){
         this.notifyPropertyChanged(BR.adapter);
     }

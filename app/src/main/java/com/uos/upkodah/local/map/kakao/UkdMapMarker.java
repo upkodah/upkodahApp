@@ -1,7 +1,5 @@
-package com.uos.upkodah.local.map;
+package com.uos.upkodah.local.map.kakao;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.annotation.DrawableRes;
@@ -13,6 +11,9 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 public class UkdMapMarker extends MapPOIItem{
+    public PositionInformation getPosition() {
+        return position.clone();
+    }
     private PositionInformation position;
 
     protected UkdMapMarker(PositionInformation position){
@@ -70,43 +71,5 @@ public class UkdMapMarker extends MapPOIItem{
         }
     }
 
-    public static abstract class Listener<PI extends PositionInformation> implements MapView.POIItemEventListener{
-        public abstract void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation);
-        public abstract void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation);
 
-        @Override
-        public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-            try{
-                onMarkerSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
-            }
-            catch(ClassCastException e){
-                Log.d("CAST_ERR", "POIItemListener에서 캐스팅 에러 발생");
-            }
-        }
-        @Override
-        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, CalloutBalloonButtonType calloutBalloonButtonType) {
-            try{
-                onMarkerBalloonSelected(mapView, (UkdMapMarker) mapPOIItem, (PI)((UkdMapMarker) mapPOIItem).position);
-            }
-            catch(ClassCastException e){
-                Log.d("CAST_ERR", "POIItemListener에서 캐스팅 에러 발생");
-            }
-        }
-
-        /**
-         * 빈 메소드
-         */
-        @Override
-        @Deprecated
-        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-
-        }
-        /**
-         * 빈 메소드
-         */
-        @Override
-        public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
-
-        }
-    }
 }

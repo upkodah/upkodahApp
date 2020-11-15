@@ -27,12 +27,14 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac1"
+                android:tag="fac_1"
                 android:layout_weight="1"
                 app:srcCompat="@android:drawable/btn_dialog" />
 
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac2"
+                android:tag="fac_2"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -40,6 +42,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac3"
+                android:tag="fac_3"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -47,6 +50,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac4"
+                android:tag="fac_4"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -64,6 +68,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac5"
+                android:tag="fac_5"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -71,6 +76,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac6"
+                android:tag="fac_6"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -78,6 +84,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac7"
+                android:tag="fac_7"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />
@@ -85,6 +92,7 @@
             <ImageButton
                 style="@style/BaseFacilitiesBtn"
                 android:id="@+id/btn_fac8"
+                android:tag="fac_8"
                 android:layout_weight="1"
                 android:onClick="@{data.onClickFacBtn}"
                 app:srcCompat="@android:drawable/btn_dialog" />

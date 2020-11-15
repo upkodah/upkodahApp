@@ -18,8 +18,9 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.DialogActivitySelectLocationBinding;
 import com.uos.upkodah.dialog.activity.viewmodel.SelectLocationViewModel;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
-import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.kakao.UkdMapMarker;
+import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.listener.MarkerListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.SearchKeyworkParser;
@@ -70,15 +71,14 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             kakaoMapFragment.setData(viewModel.kakaoMapData);
 
             // 마커 리스너 장착
-            kakaoMapFragment.setMarkerListener(new UkdMapMarker.Listener() {
+            viewModel.kakaoMapData.setMarkerListener(new MarkerListener() {
                 @Override
-                public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+                public void onMarkerSelected(Object data) {
                 }
-
                 @Override
-                public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+                public void onMarkerBalloonSelected(Object data) {
                     Intent result = new Intent();
-                    result.putExtra(getString(R.string.extra_position_information), positionInformation);
+                    result.putExtra(getString(R.string.extra_position_information), (PositionInformation) data);
                     setResult(getResources().getInteger(R.integer.response_location), result);
 
                     finish();
@@ -97,11 +97,10 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             // 검색 버튼을 누르면 넘어온 문자열로 키워드 검색을 실시하고
             // 위치정보 전체를 가져온다.
             try{
-                MapPoint searchPoint = viewModel.getMapCenter();
                 KakaoAPIRequest kakaoAPIRequest = KakaoAPIRequest.getSearchKeywordRequest(
                         searchText,
-                        searchPoint.getMapPointGeoCoord().longitude,
-                        searchPoint.getMapPointGeoCoord().latitude,
+                        viewModel.kakaoMapData.getCenterLongitude(),
+                        viewModel.kakaoMapData.getCenterLatitude(),
                         this,
                         null
                 );

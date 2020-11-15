@@ -5,7 +5,7 @@ import android.graphics.Color;
 import androidx.annotation.NonNull;
 
 import com.uos.upkodah.R;
-import com.uos.upkodah.local.map.UkdMapMarker;
+import com.uos.upkodah.local.map.kakao.UkdMapMarker;
 
 import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapPOIItem;

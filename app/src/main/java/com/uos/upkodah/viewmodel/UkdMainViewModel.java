@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 
 import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.local.position.UserPositionInformation;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
 import com.uos.upkodah.user.fragment.data.SearchOptionData;
 import com.uos.upkodah.user.input.InputData;
@@ -27,12 +28,12 @@ public class UkdMainViewModel extends ViewModel implements InputData{
         return result;
     }
 
-    private PositionInformation positionInformation;
+    private UserPositionInformation positionInformation;
     public PositionInformation getPosition() {
         return positionInformation;
     }
     public void setPosition(PositionInformation position) {
-        this.positionInformation = position;
+        this.positionInformation = new UserPositionInformation(position);
         alertPositionChange();
     }
     public void alertPositionChange(){

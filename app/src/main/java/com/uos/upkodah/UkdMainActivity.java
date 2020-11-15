@@ -19,6 +19,7 @@ import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.dialog.SelectTradeTypeDialog;
 import com.uos.upkodah.dialog.activity.SelectLocationDialogActivity;
+import com.uos.upkodah.local.position.UserPositionInformation;
 import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.local.position.PositionInformation;
@@ -214,9 +215,9 @@ public class UkdMainActivity extends AppCompatActivity{
         @Override
         public void onClick(View view) {
             // GPS 요청으로 positionInformation을 새로 설정한다.
-            PositionInformation positionInformation = ukdMainViewModel.getPosition();
+            UserPositionInformation posInfo = (UserPositionInformation) ukdMainViewModel.getPosition();
             // PositionInformation이 null이면 새로 만든다.
-            PositionInformation.ChangeListener listener = new PositionInformation.ChangeListener() {
+            UserPositionInformation.ChangeListener listener = new UserPositionInformation.ChangeListener() {
                 @Override
                 public void onChange(PositionInformation position) {
                     // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
@@ -224,15 +225,15 @@ public class UkdMainActivity extends AppCompatActivity{
                 }
             };
 
-            if(positionInformation== null){
-                positionInformation = new PositionInformation();
-                ukdMainViewModel.setPosition(positionInformation);
+            if(posInfo== null){
+                posInfo = new UserPositionInformation();
+                ukdMainViewModel.setPosition(posInfo);
             }
             // 리스너 설정
-            positionInformation.setChangeListener(listener);
+            posInfo.setChangeListener(listener);
 
             // 갱신 요청
-            positionInformation.requestGPS(view.getContext());
+            posInfo.requestGPS(view.getContext());
         }
     }
 }

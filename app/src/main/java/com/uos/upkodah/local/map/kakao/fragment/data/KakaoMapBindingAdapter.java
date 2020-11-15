@@ -1,6 +1,8 @@
-package com.uos.upkodah.local.map.fragment.data;
+package com.uos.upkodah.local.map.kakao.fragment.data;
 
 import androidx.databinding.BindingAdapter;
+
+import com.uos.upkodah.local.map.kakao.KakaoMapDrawable;
 import com.uos.upkodah.local.position.PositionInformation;
 
 import net.daum.mf.map.api.MapPoint;
@@ -15,11 +17,11 @@ public class KakaoMapBindingAdapter {
         view.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude), true);
     }
     @BindingAdapter("android:mapMarkers")
-    public static void setMarkers(MapView view, List<? extends PositionInformation> positions){
+    public static void setMarkers(MapView view, List<? extends KakaoMapDrawable> positions){
         view.removeAllPOIItems();
         view.removeAllCircles();
         if(positions==null) return;
-        for(PositionInformation p : positions){
+        for(KakaoMapDrawable p : positions){
             p.drawInto(view);
         }
     }

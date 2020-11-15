@@ -1,6 +1,5 @@
 package com.uos.upkodah;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,20 +9,21 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
-import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
-import com.uos.upkodah.list.fragment.data.SelectionListData;
-import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.google.GoogleMapFragment;
+import com.uos.upkodah.local.map.kakao.UkdMapMarker;
+import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.listener.MarkerListener;
+import com.uos.upkodah.local.map.listener.ZoomListener;
 import com.uos.upkodah.local.position.CompositePositionInformation;
-import com.uos.upkodah.local.position.EstateInformation;
 import com.uos.upkodah.local.position.GridRegionInformation;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
@@ -33,7 +33,6 @@ import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
 import net.daum.mf.map.api.MapView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,6 +60,12 @@ public class SelectEstateActivity extends AppCompatActivity {
 
         // 뷰 준비
         ActivitySelectEstateBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_select_estate);
+
+
+        // 페이저 준비
+        ViewPager2 pager = findViewById(R.id.pager_estate);
+        pager.setAdapter(new PagerAdapter(this));
+        pager.setUserInputEnabled(false);
     }
 
     @Override
@@ -83,50 +88,50 @@ public class SelectEstateActivity extends AppCompatActivity {
                 viewModel.setEstates(g.getTotalRegion());
             }
         });
+
+        Button b2 = (Button) findViewById(R.id.btn_switch);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewPager2 pager = findViewById(R.id.pager_estate);
+                if(pager.getCurrentItem() == 0) pager.setCurrentItem(1);
+                else pager.setCurrentItem(0);
+            }
+        });
     }
 
     @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
         super.onAttachFragment(fragment);
 
-        if(fragment instanceof KakaoMapFragment){
-            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
-            kakaoMapFragment.setData(viewModel.mapData);
-
-            viewModel.zoomListener = new EstateZoomListener();
-            kakaoMapFragment.setZoomListener(viewModel.zoomListener);
-
-            viewModel.markerListener = new EstateMarkerListener();
-            kakaoMapFragment.setMarkerListener(viewModel.markerListener);
-        }
+//        if(fragment instanceof KakaoMapFragment){
+//            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
+//            kakaoMapFragment.setData(viewModel.mapData);
+//
+//            viewModel.mapData.setZoomListener(new EstateZoomListener());
+//
+//            viewModel.mapData.setMarkerListener(new EstateMarkerListener());
+//        }
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
             selectionListFragment.setData(viewModel.listData);
         }
+        if(fragment instanceof GoogleMapFragment){
+            GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
+            googleMapFragment.setData(viewModel.mapData);
+
+            viewModel.mapData.setZoomListener(new EstateZoomListener());
+
+            viewModel.mapData.setMarkerListener(new EstateMarkerListener());
+        }
     }
 
 
-    private class EstateZoomListener implements KakaoMapFragment.ZoomListener{
+    private class EstateZoomListener implements ZoomListener {
         @Override
-        public void onZoomChanged(MapView mapView, float zoomLevel) {
+        public void onZoomChanged(float zoomLevel) {
             // 줌이 변경되면, 줌에 따라 포함될 수 있는 Grid 크기를 구한다.
-            int depth;
-
-            if(zoomLevel > SelectEstateViewModel.LEVEL1){
-                // 구 단위로 보여준다.
-                Log.d("MAP", "REGIONMEASURE : "+RegionInformation.MEASURE+",  ZOOM : "+zoomLevel);
-                depth = 1;
-            }
-            else if(zoomLevel > SelectEstateViewModel.LEVEL2){
-                // 동 단위로 보여준다.
-                Log.d("MAP", "SUBMEASURE : "+ SubRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
-                depth = 2;
-            }
-            else{
-                // 그리드 단위로 보여준다
-                Log.d("MAP", "GRIDMEASURE : "+ GridRegionInformation.MEASURE+", ZOOM : "+zoomLevel);
-                depth = 3;
-            }
+            int depth = viewModel.mapData.getZoomDepth();
 
             // 마커를 변경한다.
             if(viewModel.currentDepth != depth){
@@ -135,26 +140,55 @@ public class SelectEstateActivity extends AppCompatActivity {
             }
         }
     }
-    private class EstateMarkerListener extends UkdMapMarker.Listener{
+    private class EstateMarkerListener implements MarkerListener {
         @Override
-        public void onMarkerSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+        public void onMarkerSelected(Object data) {
+            if(!(data instanceof CompositePositionInformation)) return;
+
             Log.d("LIST", "리스트 표출 준비");
-            CompositePositionInformation compositePositionInformation = (CompositePositionInformation) positionInformation;
-            viewModel.setListEstateData(compositePositionInformation.getAllEstates());
+            viewModel.setListEstateData(((CompositePositionInformation) data).getAllEstates());
         }
         @Override
-        public void onMarkerBalloonSelected(MapView mapView, UkdMapMarker marker, PositionInformation positionInformation) {
+        public void onMarkerBalloonSelected(Object data) {
             // 마커가 선택되면 마커의 타입을 먼저 확인한다.
-            if(positionInformation instanceof GridRegionInformation){
+            if(data instanceof GridRegionInformation){
             }
-            else{
+            else if(data instanceof PositionInformation){
                 //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
-                viewModel.mapData.setCenterLongitude(positionInformation.getLongitude());
-                viewModel.mapData.setCenterLatitude(positionInformation.getLatitude());
+                viewModel.mapData.setCenter(((PositionInformation) data).getLongitude(), ((PositionInformation) data).getLatitude());
                 viewModel.currentDepth++;
-                viewModel.mapData.setZoomLevel(viewModel.getZoomUsingDepth(viewModel.currentDepth));
-                viewModel.zoomListener.onZoomChanged(mapView, mapView.getZoomLevelFloat());
+                viewModel.mapData.setZoomLevelWithDepth(viewModel.currentDepth);
             }
+        }
+    }
+
+    private class PagerAdapter extends FragmentStateAdapter{
+        private Fragment f1;
+        private Fragment f2;
+
+        public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+            f1 = new KakaoMapFragment();
+            f1 = new GoogleMapFragment();
+            f2 = new SelectionListFragment();
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch(position){
+                case 0:
+                    return f1;
+                case 1:
+                    return f2;
+                default:
+                    return f1;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
         }
     }
 }

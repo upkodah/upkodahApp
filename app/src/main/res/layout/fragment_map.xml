@@ -5,7 +5,7 @@
     <data>
         <variable
             name="data"
-            type="com.uos.upkodah.local.map.fragment.data.KakaoMapData" />
+            type="com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,5 +27,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </net.daum.mf.map.api.MapView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

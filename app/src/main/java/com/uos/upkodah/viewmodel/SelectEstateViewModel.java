@@ -11,17 +11,15 @@ import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.EstateListViewHolder;
-import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
-import com.uos.upkodah.local.map.fragment.data.KakaoMapData;
-import com.uos.upkodah.local.position.CompositePositionInformation;
+import com.uos.upkodah.local.map.google.data.GoogleMapData;
+import com.uos.upkodah.local.map.kakao.UkdMapMarker;
+import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.EstateInformation;
 import com.uos.upkodah.local.position.GridRegionInformation;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
 import com.uos.upkodah.local.position.SubRegionInformation;
-
-import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,20 +30,16 @@ import java.util.List;
  * 2) 줌 내에 보이는 모든 positions를 저장한다.
  */
 public class SelectEstateViewModel extends ViewModel  {
-    public KakaoMapData mapData = new KakaoMapData();
+//    public KakaoMapData mapData = new KakaoMapData();
+    public GoogleMapData mapData = new GoogleMapData();
     public SelectionListData listData = new SelectionListData();
-    public KakaoMapFragment.ZoomListener zoomListener;
-    public UkdMapMarker.Listener markerListener;
 
     public int currentDepth;
-    public final static float LEVEL1 = 4.5f;
-    public final static float LEVEL2 = 3.0f;
-    public final static float LEVEL3 = 1.3f;
 
     public SelectEstateViewModel(){
         currentDepth = 1;
 
-        mapData.setZoomLevel(getZoomUsingDepth(currentDepth));
+        mapData.setZoomLevelWithDepth(currentDepth);
 
         this.manager = new EstateListManager(new ArrayList<EstateInformation>());
         listData.setAdapter(new SelectionListAdapter(this.manager));
@@ -58,25 +52,6 @@ public class SelectEstateViewModel extends ViewModel  {
             mapData.setMapMarkers(estates);
         }
 
-    }
-
-    public float getZoomUsingDepth(int depth){
-        switch(depth) {
-            case 1:
-                // 구 단위를 보여줘야할 때
-                return LEVEL1+0.3f;
-
-            case 2:
-                // 동 단위를 보여줘야할 때
-                return LEVEL2+0.3f;
-
-            case 3:
-                // Grid 단위를 보여줘야할 때
-                return LEVEL3+0.3f;
-
-            default:
-                return LEVEL1+0.3f;
-        }
     }
 
     public List<PositionInformation> getDisplayedEstateList(int depth){

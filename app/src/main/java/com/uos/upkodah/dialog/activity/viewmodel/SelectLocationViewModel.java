@@ -11,14 +11,11 @@ import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.LocationListViewHolder;
-import com.uos.upkodah.local.map.UkdMapMarker;
-import com.uos.upkodah.local.map.fragment.KakaoMapFragment;
-import com.uos.upkodah.local.map.fragment.data.KakaoMapData;
+import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
 
 import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
 
 import java.util.List;
 
@@ -37,11 +34,6 @@ public class SelectLocationViewModel extends ViewModel implements SelectionListF
     public SearchBarData searchBarData;
     public SelectionListData selectionListData;
     public KakaoMapData kakaoMapData;
-
-    @Nullable
-    public MapPoint getMapCenter(){
-        return kakaoMapData != null? kakaoMapData.getCenter() : null;
-    }
 
     // 검색 결과 리스트
     private List<PositionInformation> positions;

@@ -13,23 +13,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.uos.upkodah.local.gps.GPSPermissionManager;
-import com.uos.upkodah.local.map.MapDrawable;
-import com.uos.upkodah.local.map.UkdMapMarker;
+import com.uos.upkodah.local.map.google.GoogleMapDrawable;
+import com.uos.upkodah.local.map.kakao.KakaoMapDrawable;
+import com.uos.upkodah.local.map.kakao.UkdMapMarker;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.CoordToAddrParser;
 
 import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 
-public class PositionInformation implements Parcelable, MapDrawable {
+public class PositionInformation implements Parcelable, KakaoMapDrawable, GoogleMapDrawable, Cloneable {
     public final static int REGION_DEPTH_1 = 0;
     public final static int REGION_DEPTH_2 = 1;
     public final static int REGION_DEPTH_3 = 2;
+
+
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(value = { REGION_DEPTH_1,REGION_DEPTH_2,REGION_DEPTH_3 })
     @interface RegionDepth{}
@@ -66,53 +74,22 @@ public class PositionInformation implements Parcelable, MapDrawable {
 
     @Override
     public void drawInto(MapView mapView) {
-        MapPOIItem marker = UkdMapMarker.getBuilder(this).build();
+        MapPOIItem marker = new MapPOIItem();
+        marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+        marker.setMapPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude));
+        marker.setItemName(postalAddress);
+        marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+        marker.setDraggable(false);
+        marker.setShowCalloutBalloonOnTouch(true);
+        marker.setUserObject(this);
+
         mapView.addPOIItem(marker);
         mapView.selectPOIItem(marker, false);
     }
-
-
-    /*
-     PositionInformation은 GPS요청, API 요청에 의해 외부 쓰레드에 의해 임의의 시점에 상태가 변경된다.
-     만약 해당 객체가 변경될 때 실행되어야 할 동작이 있다면, 리스너를 설정해야 한다.
-     */
-    public interface ChangeListener{
-        public void onChange(PositionInformation position);
-    }
-    ChangeListener changeListener;
-    public void setChangeListener(ChangeListener listener){
-        this.changeListener = listener;
-    }
-
-    /**
-     * GPS로 위치 정보를 받아 수정을 요청한다.
-     * @param context
-     */
-    public void requestGPS(Context context){
-        LocationListener listener = new SetGPSInformationListener(context, this);
-        GPSPermissionManager.getInstance(context).requestCurrentPosition(context, listener);
-    }
-
-    /*
-     PositionInformation은 좌표와 주소의 일관성 유지를 위해
-     좌표를 변경하면 주소 변경을 요청하고 (SearchCoordToAddrRequest)
-     주소를 변경하면 좌표 변경을 요청한다. (SearchAddrRequest)
-
-     만약 리스너가 null이면 실행되지 않는다.
-    */
-    /**
-     * 위도와 경도를 입력하면, 주소까지 자동 완성해준다. API 요청이 들어간다.
-     * @param context
-     * @param longitude 위도
-     * @param latitude 경도
-     */
-    public void setCoord(Context context, double longitude, double latitude){
-        this.longitude = longitude;
-        this.latitude = latitude;
-
-        Response.Listener<String> listener = new SetCoordListener(this);
-        KakaoAPIRequest request = KakaoAPIRequest.getCoordToAddrRequest(longitude,latitude,listener,null);
-        request.request(context);
+    @Override
+    public void drawInto(GoogleMap map) {
+        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)))
+                .setTag(this);
     }
 
 
@@ -143,69 +120,16 @@ public class PositionInformation implements Parcelable, MapDrawable {
             return new PositionInformation[i];
         }
     };
-}
 
-class SetCoordListener implements Response.Listener<String>{
-    private PositionInformation positionInformation;
-
-    SetCoordListener(PositionInformation positionInformation){
-        this.positionInformation = positionInformation;
-    }
-
+    @NonNull
     @Override
-    public void onResponse(String response) {
-        // 이 부분에서 응답을 보고 주소를 설정한다.
-        CoordToAddrParser parser = null;
-        parser = CoordToAddrParser.getInstance(response);
+    public PositionInformation clone() {
+        PositionInformation result = new PositionInformation();
+        result.longitude = this.longitude;
+        result.latitude = this.latitude;
+        result.name = this.name;
+        result.postalAddress = this.postalAddress;
 
-        // parser가 null을 반환하면 유효하지 않은 것이므로 생략해야 함
-        if(parser != null){
-            this.positionInformation.postalAddress = parser.getPostalAddress();
-
-            // 리스너를 호출하여 변경을 알린다.
-            if(positionInformation!=null) positionInformation.changeListener.onChange(positionInformation);
-        }
-    }
-}
-
-/**
- * GPS 정보를 수신하면, 해당 정보를 이용해 주소로 변환해 출력한다.
- * 그러니까, 이 요청이 완료되면 자동으로 주소 변환 요청까지 들어간다.
- */
-class SetGPSInformationListener implements LocationListener{
-    private Context context;
-    private PositionInformation positionInformation;
-
-    SetGPSInformationListener(Context context, PositionInformation positionInformation){
-        this.context = context;
-        this.positionInformation = positionInformation;
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        // 위치를 잘 받았으니, 수신 취소
-        GPSPermissionManager.getInstance(context).removeGPSRequest(context, this);
-
-        // 이 부분에서 응답을 보고 위도 및 경도를 설정한다.
-        this.positionInformation.setCoord(context, location.getLongitude(), location.getLatitude());
-        System.out.println("lon="+this.positionInformation.longitude+", lat="+this.positionInformation.latitude);
-
-        // 리스너를 호출하여 변경을 알린다.
-        if(positionInformation!=null) positionInformation
-                .changeListener
-                .onChange(positionInformation);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
+        return result;
     }
 }

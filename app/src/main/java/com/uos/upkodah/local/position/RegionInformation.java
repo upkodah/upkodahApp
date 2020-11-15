@@ -1,13 +1,5 @@
 package com.uos.upkodah.local.position;
 
-import androidx.annotation.IntDef;
-
-import com.uos.upkodah.local.map.UkdMapMarker;
-
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class RegionInformation extends CompositePositionInformation<SubRegionInformation>{

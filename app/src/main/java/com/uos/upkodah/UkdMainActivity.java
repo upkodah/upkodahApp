@@ -19,13 +19,13 @@ import com.uos.upkodah.dialog.SelectEstateTypeDialog;
 import com.uos.upkodah.dialog.SelectLimitTimeDialog;
 import com.uos.upkodah.dialog.SelectTradeTypeDialog;
 import com.uos.upkodah.dialog.activity.SelectLocationDialogActivity;
+import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.UserPositionInformation;
 import com.uos.upkodah.server.ukd.UserDataToTransmit;
-import com.uos.upkodah.util.PermissionRequiringOnClickListener;
-import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.fragment.FacilitiesFragment;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
 import com.uos.upkodah.user.fragment.SearchOptionFragment;
+import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
 public class UkdMainActivity extends AppCompatActivity{

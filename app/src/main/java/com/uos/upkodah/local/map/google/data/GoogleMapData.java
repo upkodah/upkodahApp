@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,8 +40,9 @@ public class GoogleMapData extends BaseObservable {
         setCenterUsingPositions();
     }
 
-    public final static float[] ZOOM_DEPTH = {10f, 20f, 30f};
+    public final static float[] ZOOM_DEPTH = {12f, 15f, 18f};
     private float zoomLevel = ZOOM_DEPTH[1];
+    private int currentDepth;
     public float getZoomLevel() {
         return mapListener.googleMap.getCameraPosition().zoom;
     }
@@ -50,17 +52,13 @@ public class GoogleMapData extends BaseObservable {
         mapListener.updateCamera();
     }
     public void setZoomLevelWithDepth(int level){
-        setZoomLevel(ZOOM_DEPTH[level-1]);
+        float quarter = (ZOOM_DEPTH[2]-ZOOM_DEPTH[0])/4;
+        setZoomLevel(ZOOM_DEPTH[level-1]-quarter);
     }
     public int getZoomDepth(){
-        int result = 1;
-        float zoom = getZoomLevel();
-        for(float f : ZOOM_DEPTH){
-            if(zoom<=f) return result;
-            result++;
-        }
-        return 3;
+        return currentDepth;
     }
+
 
     private LatLng center = new LatLng(37.4, 122.1);
     public void setCenter(double centerLongitude, double centerLatitude){
@@ -90,6 +88,13 @@ public class GoogleMapData extends BaseObservable {
             setCenter(avgLongitude, avgLatitude);
         }
     }
+    public double getCenterLongitude() {
+        return center.longitude;
+    }
+    public double getCenterLatitude() {
+        return center.latitude;
+    }
+
 
 
 
@@ -119,7 +124,9 @@ public class GoogleMapData extends BaseObservable {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             this.googleMap = googleMap;
+            googleMap.setOnCameraMoveListener(this);
             googleMap.setOnMarkerClickListener(this);
+            googleMap.setOnInfoWindowClickListener(this);
 
             updateCamera();
             updateMarker();
@@ -150,6 +157,7 @@ public class GoogleMapData extends BaseObservable {
         @Override
         public boolean onMarkerClick(Marker marker) {
             System.out.println("마커누름");
+            marker.showInfoWindow();
             if(markerListener != null){
                 markerListener.onMarkerSelected(marker.getTag());
                 return true;
@@ -161,6 +169,7 @@ public class GoogleMapData extends BaseObservable {
 
         @Override
         public void onInfoWindowClick(Marker marker) {
+            System.out.println("마커윈도누름");
             if(markerListener != null){
                 markerListener.onMarkerBalloonSelected(marker.getTag());
             }
@@ -170,10 +179,21 @@ public class GoogleMapData extends BaseObservable {
 
         @Override
         public void onCameraMove() {
-            if(zoomListener != null) zoomListener.onZoomChanged(googleMap.getCameraPosition().zoom);
+
             position = googleMap.getCameraPosition();
             zoomLevel = position.zoom;
+            int result = 1;
+            float zoom = getZoomLevel();
+            for(float f : ZOOM_DEPTH){
+                if(zoom>f) {
+                    ++result;
+                }
+            }
+            currentDepth = result;
+            if(result>3) currentDepth=3;
+            Log.d("MAP", "현재 줌 : "+currentDepth);
             center = position.target;
+            if(zoomListener != null) zoomListener.onZoomChanged(googleMap.getCameraPosition().zoom);
         }
     }
 }

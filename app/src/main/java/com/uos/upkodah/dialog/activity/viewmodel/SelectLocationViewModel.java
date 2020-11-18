@@ -2,21 +2,17 @@ package com.uos.upkodah.dialog.activity.viewmodel;
 
 import android.view.View;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
 import com.uos.upkodah.list.fragment.SelectionListAdapter;
-import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.ListViewHolderManager;
 import com.uos.upkodah.list.holder.LocationListViewHolder;
-import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
+import com.uos.upkodah.local.map.google.data.GoogleMapData;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
-
-import net.daum.mf.map.api.MapPoint;
 
 import java.util.List;
 
@@ -27,14 +23,16 @@ public class SelectLocationViewModel extends ViewModel implements ListViewHolder
         // 초기화
         searchBarData = new SearchBarData();
         selectionListData = new SelectionListData();
-        kakaoMapData = new KakaoMapData();
+//        mapData = new KakaoMapData()
+        mapData = new GoogleMapData();
         selectionListData.setAdapter(new SelectionListAdapter(this));
     }
 
     // Fragment용 데이터
     public SearchBarData searchBarData;
     public SelectionListData selectionListData;
-    public KakaoMapData kakaoMapData;
+//    public KakaoMapData mapData;
+    public GoogleMapData mapData;
 
     // 검색 결과 리스트
     private List<PositionInformation> positions;
@@ -46,7 +44,7 @@ public class SelectLocationViewModel extends ViewModel implements ListViewHolder
         selectionListData.notifyUpdateListData();
 
         // 맵 초기화
-        kakaoMapData.setMapMarkers(positionList);
+        mapData.setMapMarkers(positionList);
     }
 
     @Override

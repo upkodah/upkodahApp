@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 
 public class SelectLimitTimeDialog extends DialogFragment{
     private static String[] minuteList = new String[]{"제한 없음","10분","20분","30분","40분","50분","60분"};

@@ -3,9 +3,6 @@ package com.uos.upkodah.server.extern.parser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 좌표를 주소로 변환하는 API 사용 시 넘어오는 Response를 파싱해서 저장한다.
  */

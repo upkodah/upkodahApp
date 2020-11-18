@@ -3,19 +3,16 @@ package com.uos.upkodah.viewmodel;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
 import com.uos.upkodah.list.fragment.SelectionListAdapter;
-import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.EstateListViewHolder;
 import com.uos.upkodah.list.holder.ListViewHolderManager;
 import com.uos.upkodah.local.map.google.data.GoogleMapData;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
-import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.EstateInformation;
 import com.uos.upkodah.local.position.GridRegionInformation;
 import com.uos.upkodah.local.position.PositionInformation;
@@ -35,12 +32,8 @@ public class SelectEstateViewModel extends ViewModel  {
     public GoogleMapData mapData = new GoogleMapData();
     public SelectionListData listData = new SelectionListData();
 
-    public int currentDepth;
-
     public SelectEstateViewModel(){
-        currentDepth = 1;
-
-        mapData.setZoomLevelWithDepth(currentDepth);
+        mapData.setZoomLevelWithDepth(1);
 
         this.manager = new EstateListManager(new ArrayList<EstateInformation>());
         listData.setAdapter(new SelectionListAdapter(this.manager));
@@ -52,9 +45,14 @@ public class SelectEstateViewModel extends ViewModel  {
         if(this.estates!=null){
             mapData.setMapMarkers(estates);
         }
-
     }
 
+    private int preDepth = 0;
+    public boolean isDepthChanged(int depth) {
+        return preDepth!=depth;
+    }
+
+    @Nullable
     public List<PositionInformation> getDisplayedEstateList(int depth){
         List<PositionInformation> result = new ArrayList<>();
         if(estates==null) return result;
@@ -63,12 +61,14 @@ public class SelectEstateViewModel extends ViewModel  {
             case 1:
                 // 구 단위를 보여줘야할 때
                 Log.d("MAP", "구 단위로 보여줍니다.");
+                preDepth = 1;
                 result.addAll(estates);
                 break;
 
             case 2:
                 // 동 단위를 보여줘야할 때
                 Log.d("MAP", "동 단위로 보여줍니다.");
+                preDepth = 2;
                 for(RegionInformation p : estates){
                     result.addAll(p.getSubInfoList());
                 }
@@ -77,6 +77,7 @@ public class SelectEstateViewModel extends ViewModel  {
             case 3:
                 // Grid 단위를 보여줘야할 때
                 Log.d("MAP", "Grid 단위로 보여줍니다.");
+                preDepth = 3;
                 for(RegionInformation p : estates){
                     for(SubRegionInformation p2 : p.getSubInfoList()){
                         result.addAll(p2.getSubInfoList());
@@ -87,6 +88,7 @@ public class SelectEstateViewModel extends ViewModel  {
             case 4:
                 // 매물 단위를 보여줘야할 때
                 Log.d("MAP", "매물 단위로 보여줍니다.");
+                preDepth = 4;
                 for(RegionInformation p : estates){
                     for(SubRegionInformation p2 : p.getSubInfoList()){
                         for(GridRegionInformation p3 : p2.getSubInfoList()){

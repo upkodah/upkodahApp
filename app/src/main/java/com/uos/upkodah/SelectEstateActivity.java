@@ -20,19 +20,14 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.local.map.google.GoogleMapFragment;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
 import com.uos.upkodah.local.map.listener.MarkerListener;
 import com.uos.upkodah.local.map.listener.ZoomListener;
 import com.uos.upkodah.local.position.CompositePositionInformation;
 import com.uos.upkodah.local.position.GridRegionInformation;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.RegionInformation;
-import com.uos.upkodah.local.position.SubRegionInformation;
 import com.uos.upkodah.local.position.temp.TempPositionGenerator;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
-
-import net.daum.mf.map.api.MapView;
 
 import java.util.List;
 
@@ -105,14 +100,6 @@ public class SelectEstateActivity extends AppCompatActivity {
     public void onAttachFragment(@NonNull Fragment fragment) {
         super.onAttachFragment(fragment);
 
-//        if(fragment instanceof KakaoMapFragment){
-//            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
-//            kakaoMapFragment.setData(viewModel.mapData);
-//
-//            viewModel.mapData.setZoomListener(new EstateZoomListener());
-//
-//            viewModel.mapData.setMarkerListener(new EstateMarkerListener());
-//        }
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
             selectionListFragment.setData(viewModel.listData);
@@ -123,7 +110,6 @@ public class SelectEstateActivity extends AppCompatActivity {
             googleMapFragment.setData(viewModel.mapData);
 
             viewModel.mapData.setZoomListener(new EstateZoomListener());
-
             viewModel.mapData.setMarkerListener(new EstateMarkerListener());
         }
     }
@@ -136,9 +122,8 @@ public class SelectEstateActivity extends AppCompatActivity {
             int depth = viewModel.mapData.getZoomDepth();
 
             // 마커를 변경한다.
-            if(viewModel.currentDepth != depth){
+            if(viewModel.isDepthChanged(depth)){
                 viewModel.mapData.setMapMarkers(viewModel.getDisplayedEstateList(depth));
-                viewModel.currentDepth = depth;
             }
         }
     }
@@ -154,12 +139,15 @@ public class SelectEstateActivity extends AppCompatActivity {
         public void onMarkerBalloonSelected(Object data) {
             // 마커가 선택되면 마커의 타입을 먼저 확인한다.
             if(data instanceof GridRegionInformation){
+                // 리스트 보여주기
+                ViewPager2 pager = findViewById(R.id.pager_estate);
+                pager.setCurrentItem(1);
             }
             else if(data instanceof PositionInformation){
                 //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
+                Log.d("MAP", "줌 변경"+data.getClass());
                 viewModel.mapData.setCenter(((PositionInformation) data).getLongitude(), ((PositionInformation) data).getLatitude());
-                viewModel.currentDepth++;
-                viewModel.mapData.setZoomLevelWithDepth(viewModel.currentDepth);
+                viewModel.mapData.setZoomLevelWithDepth(viewModel.mapData.getZoomDepth()+1);
             }
         }
     }
@@ -170,7 +158,6 @@ public class SelectEstateActivity extends AppCompatActivity {
 
         public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
-            f1 = new KakaoMapFragment();
             f1 = new GoogleMapFragment();
             f2 = new SelectionListFragment();
         }

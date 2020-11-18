@@ -1,7 +1,5 @@
 package com.uos.upkodah.user.input;
 
-import android.content.pm.PackageManager;
-
 import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;

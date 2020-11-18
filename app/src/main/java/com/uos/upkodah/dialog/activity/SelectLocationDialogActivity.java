@@ -12,22 +12,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.android.volley.Response;
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.DialogActivitySelectLocationBinding;
 import com.uos.upkodah.dialog.activity.viewmodel.SelectLocationViewModel;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
+import com.uos.upkodah.local.map.google.GoogleMapFragment;
 import com.uos.upkodah.local.map.listener.MarkerListener;
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.SearchKeyworkParser;
 import com.uos.upkodah.user.fragment.SearchBarFragment;
-
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
 
 public class SelectLocationDialogActivity extends AppCompatActivity {
     private PositionInformation result;
@@ -66,12 +61,31 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
 
             viewModel.searchBarData.setSearchBtnListener(new SearchLocationUsingKeywordListener());
         }
-        if(fragment instanceof KakaoMapFragment){
-            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
-            kakaoMapFragment.setData(viewModel.kakaoMapData);
+//        if(fragment instanceof KakaoMapFragment){
+//            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
+//            kakaoMapFragment.setData(viewModel.mapData);
+//
+//            // 마커 리스너 장착
+//            viewModel.mapData.setMarkerListener(new MarkerListener() {
+//                @Override
+//                public void onMarkerSelected(Object data) {
+//                }
+//                @Override
+//                public void onMarkerBalloonSelected(Object data) {
+//                    Intent result = new Intent();
+//                    result.putExtra(getString(R.string.extra_position_information), (PositionInformation) data);
+//                    setResult(getResources().getInteger(R.integer.response_location), result);
+//
+//                    finish();
+//                }
+//            });
+//        }
+        if(fragment instanceof GoogleMapFragment){
+            GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
+            googleMapFragment.setData(viewModel.mapData);
 
             // 마커 리스너 장착
-            viewModel.kakaoMapData.setMarkerListener(new MarkerListener() {
+            viewModel.mapData.setMarkerListener(new MarkerListener() {
                 @Override
                 public void onMarkerSelected(Object data) {
                 }
@@ -99,8 +113,8 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             try{
                 KakaoAPIRequest kakaoAPIRequest = KakaoAPIRequest.getSearchKeywordRequest(
                         searchText,
-                        viewModel.kakaoMapData.getCenterLongitude(),
-                        viewModel.kakaoMapData.getCenterLatitude(),
+                        viewModel.mapData.getCenterLongitude(),
+                        viewModel.mapData.getCenterLatitude(),
                         this,
                         null
                 );

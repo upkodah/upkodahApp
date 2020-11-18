@@ -1,16 +1,6 @@
 package com.uos.upkodah.local.position;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
-
-import com.uos.upkodah.R;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-
-import net.daum.mf.map.api.MapCircle;
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,21 +93,5 @@ public abstract class CompositePositionInformation<P extends PositionInformation
     @Override
     public String toString() {
         return name;
-    }
-
-    @Override
-    public void drawInto(MapView mapView) {
-        MapPOIItem marker = UkdMapMarker.getBuilder(this)
-                .setMarkerImage(R.drawable.marker)
-                .setMarkerPosition(0.5f,0.5f)
-                .build();
-        marker.setItemName(name);
-        mapView.addPOIItem(marker);
-
-        MapCircle circle = new MapCircle(MapPoint.mapPointWithGeoCoord(getLatitude(), getLongitude()), // center
-                getMarkerRadius(), // radius
-                Color.argb(0, 0, 0, 0), // strokeColor
-                Color.argb(128, 0, 0, 255)); // fillColor
-        mapView.addCircle(circle);
     }
 }

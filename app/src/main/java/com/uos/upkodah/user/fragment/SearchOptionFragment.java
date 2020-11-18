@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.RemoteInput;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 

@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.uos.upkodah.local.position.PositionInformation;
 import com.uos.upkodah.local.position.UserPositionInformation;
+import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.user.fragment.data.SearchBarData;
 import com.uos.upkodah.user.fragment.data.SearchOptionData;
 import com.uos.upkodah.user.input.InputData;
 import com.uos.upkodah.user.input.LimitTimeStringConverter;
-import com.uos.upkodah.server.ukd.UserDataToTransmit;
 
 public class UkdMainViewModel extends ViewModel implements InputData{
     public UkdMainViewModel(){

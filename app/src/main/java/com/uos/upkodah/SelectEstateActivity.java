@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -115,6 +116,7 @@ public class SelectEstateActivity extends AppCompatActivity {
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
             selectionListFragment.setData(viewModel.listData);
+            selectionListFragment.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         }
         if(fragment instanceof GoogleMapFragment){
             GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;

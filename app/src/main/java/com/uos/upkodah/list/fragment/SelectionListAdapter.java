@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SelectionListAdapter extends RecyclerView.Adapter{
-    private SelectionListFragment.ViewHolderManager manager;
+import com.uos.upkodah.list.holder.ListViewHolderManager;
 
-    public SelectionListAdapter(SelectionListFragment.ViewHolderManager manager){
+public class SelectionListAdapter extends RecyclerView.Adapter{
+    private ListViewHolderManager manager;
+
+    public SelectionListAdapter(ListViewHolderManager manager){
         this.manager = manager;
     }
 

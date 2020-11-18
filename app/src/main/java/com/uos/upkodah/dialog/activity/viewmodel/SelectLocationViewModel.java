@@ -10,6 +10,7 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
+import com.uos.upkodah.list.holder.ListViewHolderManager;
 import com.uos.upkodah.list.holder.LocationListViewHolder;
 import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
 import com.uos.upkodah.local.position.PositionInformation;
@@ -19,7 +20,7 @@ import net.daum.mf.map.api.MapPoint;
 
 import java.util.List;
 
-public class SelectLocationViewModel extends ViewModel implements SelectionListFragment.ViewHolderManager {
+public class SelectLocationViewModel extends ViewModel implements ListViewHolderManager {
     private PositionInformation position;
 
     public SelectLocationViewModel(){

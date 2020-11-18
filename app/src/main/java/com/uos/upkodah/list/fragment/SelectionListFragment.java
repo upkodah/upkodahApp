@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.FragmentListBinding;
@@ -28,6 +29,7 @@ public class SelectionListFragment extends Fragment {
     private FragmentListBinding binding;
     private RecyclerView recyclerView;
     private SelectionListData data = new SelectionListData();
+    private RecyclerView.LayoutManager layoutManager = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -36,42 +38,18 @@ public class SelectionListFragment extends Fragment {
 
         View mainView = binding.getRoot();
         recyclerView = mainView.findViewById(R.id.list_item);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if(layoutManager==null) layoutManager = new LinearLayoutManager(this.getContext());
+
+        recyclerView.setLayoutManager(layoutManager);
 
         return mainView;
     }
 
-    // 리스트 안에 들어갈 뷰를 설정하는 방법 정의의
-   public interface ViewHolderManager{
-        /**
-         * 리스트의 각 아이템이 사용할 레이아웃 ID
-         * @return
-         */
-        public int getLayoutId();
-
-        /**
-         *
-         * @param view
-         * @return
-         */
-        public RecyclerView.ViewHolder generate(View view);
-
-        /**
-         * 뷰 홀더 안의 View를 인덱스에 따라 설정하는 방법 정의
-         * @param viewHolder
-         * @param index
-         */
-        public void setViewHolder(RecyclerView.ViewHolder viewHolder, int index);
-
-        /**
-         * 총 아이템 개수
-         * @return
-         */
-        public int getItemCount();
-    }
-
     public void setData(SelectionListData data){
         this.data = data;
+    }
+    public void setLayoutManager(RecyclerView.LayoutManager manager){
+        this.layoutManager = manager;
     }
 }
 

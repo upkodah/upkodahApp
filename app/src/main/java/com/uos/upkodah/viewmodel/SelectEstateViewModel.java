@@ -11,6 +11,7 @@ import com.uos.upkodah.list.fragment.SelectionListAdapter;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
 import com.uos.upkodah.list.fragment.data.SelectionListData;
 import com.uos.upkodah.list.holder.EstateListViewHolder;
+import com.uos.upkodah.list.holder.ListViewHolderManager;
 import com.uos.upkodah.local.map.google.data.GoogleMapData;
 import com.uos.upkodah.local.map.kakao.UkdMapMarker;
 import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
@@ -106,7 +107,7 @@ public class SelectEstateViewModel extends ViewModel  {
         listData.notifyUpdateListData();
     }
 
-    class EstateListManager implements SelectionListFragment.ViewHolderManager{
+    class EstateListManager implements ListViewHolderManager {
         private List<EstateInformation> estatesInCurrentSelectedGrid;
         EstateListManager(List<EstateInformation> list){
             this.estatesInCurrentSelectedGrid = list;
@@ -114,7 +115,7 @@ public class SelectEstateViewModel extends ViewModel  {
 
         @Override
         public int getLayoutId() {
-            return R.layout.list_item_estate;
+            return R.layout.list_item_grid_estate;
         }
 
         @Override

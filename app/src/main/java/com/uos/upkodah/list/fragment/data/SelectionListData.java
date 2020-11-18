@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.BR;
 import com.uos.upkodah.list.fragment.SelectionListFragment;
+import com.uos.upkodah.list.holder.ListViewHolderManager;
 
 public class SelectionListData extends BaseObservable {
     private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = null;
-    public SelectionListFragment.ViewHolderManager manager;
+    public ListViewHolderManager manager;
 
     @Bindable
     public RecyclerView.Adapter<RecyclerView.ViewHolder> getAdapter() {

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="data"
-            type="com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData" />
+            type="com.uos.upkodah.data.local.map.kakao.fragment.data.KakaoMapData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -16,13 +16,13 @@ import com.android.volley.Response;
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.DialogActivitySelectLocationBinding;
 import com.uos.upkodah.dialog.activity.viewmodel.SelectLocationViewModel;
-import com.uos.upkodah.list.fragment.SelectionListFragment;
-import com.uos.upkodah.local.map.google.GoogleMapFragment;
-import com.uos.upkodah.local.map.listener.MarkerListener;
-import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.fragment.list.SelectionListFragment;
+import com.uos.upkodah.fragment.map.GoogleMapFragment;
+import com.uos.upkodah.fragment.map.listener.MarkerListener;
+import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.SearchKeyworkParser;
-import com.uos.upkodah.user.fragment.SearchBarFragment;
+import com.uos.upkodah.fragment.searchbar.SearchBarFragment;
 
 public class SelectLocationDialogActivity extends AppCompatActivity {
     private PositionInformation result;
@@ -113,8 +113,7 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             try{
                 KakaoAPIRequest kakaoAPIRequest = KakaoAPIRequest.getSearchKeywordRequest(
                         searchText,
-                        viewModel.mapData.getCenterLongitude(),
-                        viewModel.mapData.getCenterLatitude(),
+                        viewModel.mapData,
                         this,
                         null
                 );

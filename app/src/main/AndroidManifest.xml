@@ -35,6 +35,11 @@
             >
         </activity>
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name=".ShowEstateActivity"
+            >
+        </activity>
+        <activity
             android:theme="@style/SelectLocationDialogTheme"
             android:name=".dialog.activity.SelectLocationDialogActivity"
             >
@@ -43,7 +48,7 @@
 
 
         <!-- 지도 API를 위한 AppKey-->
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="bf08f1b56f8d605a2100093e2850379f"/>
+<!--        <meta-data android:name="com.kakao.sdk.AppKey" android:value="bf08f1b56f8d605a2100093e2850379f"/>-->
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBz6RQURhxF8kjPGCpBVkXicKJCKCwpB6M"/>
         <meta-data
             android:name="com.google.android.gms.version"

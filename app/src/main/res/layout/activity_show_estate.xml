@@ -4,7 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="locationData"
+            type="com.uos.upkodah.data.local.position.estate.data.LocationPanelDisplayable" />
+        <variable
+            name="titlePanelData"
+            type="com.uos.upkodah.data.local.position.estate.data.TitlePanelDisplayable" />
+        <variable
+            name="tableData"
+            type="com.uos.upkodah.data.local.position.estate.data.RoomInfoTableDisplayable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,195 +29,415 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="center"
-                    app:srcCompat="@android:drawable/ic_menu_report_image" />
+                android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_contact_btn"
+                    android:id="@+id/panel_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="415dp">
 
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                    <ImageView
+                        android:id="@+id/img_estate"
+                        android:layout_width="match_parent"
+                        android:layout_height="231dp"
+                        android:scaleType="centerCrop"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@android:drawable/sym_action_email" />
+                        app:srcCompat="@drawable/sample_room_img" />
 
-                    <ImageButton
-                        android:id="@+id/imageButton2"
+                    <TextView
+                        android:id="@+id/txt_trade_title"
+                        style="@style/EstateTradeTitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@android:drawable/stat_sys_phone_call_forward" />
+                        android:layout_marginTop="53dp"
+                        android:gravity="center"
+                        android:text="@{titlePanelData.tradeTitle}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/img_estate" />
+
+                    <TextView
+                        android:id="@+id/txt_estate_name_title"
+                        style="@style/EstateNameTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="@{titlePanelData.estateNameTitle}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_trade_title" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container_contact_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_estate_name_title">
+
+                        <ImageButton
+                            android:id="@+id/imageButton"
+                            android:layout_width="46dp"
+                            android:layout_height="22dp"
+                            android:backgroundTint="#00FFFFFF"
+                            android:scaleType="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/btn_call" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton2"
+                            android:layout_width="46dp"
+                            android:layout_height="22dp"
+                            android:backgroundTint="#00FFFFFF"
+                            android:scaleType="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/btn_message" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="24sp" />
+                <View
+                    android:id="@+id/divider_1"
+                    style="@style/PanelDivider" />
 
-                <TextView
-                    android:id="@+id/textView4"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/panel_info"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="18sp" />
+                    android:layout_height="match_parent"
+                    android:padding="27dp">
 
-                <TableLayout
-                    android:id="@+id/table_estate_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TableRow
-                        android:id="@+id/tableRow_time"
+                    <TableLayout
+                        android:id="@+id/table_estate_info"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center">
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:id="@+id/txt_row_category_time"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="시간"
-                            android:textSize="18sp" />
+                        <TableRow
+                            android:id="@+id/tableRow_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start">
 
-                        <TextView
-                            android:id="@+id/txt_row_content"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp" />
-                    </TableRow>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="11dp">
 
-                    <TableRow
-                        android:id="@+id/tableRow_estate_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                                <ImageView
+                                    android:id="@+id/imageView25"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/icon_category_clock" />
 
-                        <TextView
-                            android:id="@+id/txt_row_category_estate"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="유형"
-                            android:textSize="18sp" />
+                                <TextView
+                                    android:id="@+id/txt_row_category_time"
+                                    style="@style/TableRowNameText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="11dp"
+                                    android:layout_marginStart="19dp"
+                                    android:gravity="center"
+                                    android:text="시간"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/imageView25"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/txt_row_content2"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp" />
-                    </TableRow>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TableRow
-                        android:id="@+id/tableRow_size"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                            <TextView
+                                android:id="@+id/txt_row_required_time"
+                                style="@style/TableRowContentText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="11dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:singleLine="false"
+                                android:text="@{tableData.requiredTime}" />
+                        </TableRow>
 
-                        <TextView
-                            android:id="@+id/txt_row_categor_size"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="면적"
-                            android:textSize="18sp" />
+                        <TableRow
+                            android:id="@+id/row_divider_1"
+                            style="@style/TableDivider" >
+                            <View
+                                android:id="@+id/dummy1"
+                                android:layout_width="1dp"
+                                android:layout_height="1dp" />
+                        </TableRow>
 
-                        <TextView
-                            android:id="@+id/txt_row_content3"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp" />
-                    </TableRow>
+                        <TableRow
+                            android:id="@+id/tableRow_trade_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start">
 
-                    <TableRow
-                        android:id="@+id/tableRow_room_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="11dp">
 
-                        <TextView
-                            android:id="@+id/txt_row_category_numroom"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="방"
-                            android:textSize="18sp" />
+                                <ImageView
+                                    android:id="@+id/imageView24"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/icon_category_type" />
 
-                        <TextView
-                            android:id="@+id/txt_row_content4"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp" />
-                    </TableRow>
+                                <TextView
+                                    android:id="@+id/txt_row_category_estate"
+                                    style="@style/TableRowNameText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="11dp"
+                                    android:layout_marginStart="19dp"
+                                    android:gravity="center"
+                                    android:text="유형"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/imageView24"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TableRow
-                        android:id="@+id/tableRow_disc"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:id="@+id/txt_row_category_etc"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="기타"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/txt_row_trade_type"
+                                style="@style/TableRowContentText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="11dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:singleLine="false"
+                                android:text="@{tableData.tradeType}" />
+                        </TableRow>
 
-                        <TextView
-                            android:id="@+id/txt_row_content5"
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp" />
-                    </TableRow>
-                </TableLayout>
+                        <TableRow
+                            android:id="@+id/row_divider_2"
+                            style="@style/TableDivider" >
+                            <View
+                                android:id="@+id/dummy2"
+                                android:layout_width="1dp"
+                                android:layout_height="1dp" />
+                        </TableRow>
 
-                <TextView
-                    android:id="@+id/txt_estate_address_content"
+                        <TableRow
+                            android:id="@+id/tableRow_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="11dp">
+
+                                <ImageView
+                                    android:id="@+id/imageView21"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/icon_category_roomsize" />
+
+                                <TextView
+                                    android:id="@+id/txt_row_category_size"
+                                    style="@style/TableRowNameText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="11dp"
+                                    android:layout_marginStart="19dp"
+                                    android:gravity="center"
+                                    android:text="면적"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/imageView21"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <TextView
+                                android:id="@+id/txt_row_room_size"
+                                style="@style/TableRowContentText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="11dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:singleLine="false"
+                                android:text="@{tableData.roomSize}" />
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/row_divider_3"
+                            style="@style/TableDivider" >
+                            <View
+                                android:id="@+id/dummy3"
+                                android:layout_width="1dp"
+                                android:layout_height="1dp" />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tableRow_room_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="11dp">
+
+                                <ImageView
+                                    android:id="@+id/imageView22"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/icon_category_room" />
+
+                                <TextView
+                                    android:id="@+id/txt_row_category_numroom"
+                                    style="@style/TableRowNameText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="11dp"
+                                    android:layout_marginStart="19dp"
+                                    android:gravity="center"
+                                    android:text="방"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/imageView22"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <TextView
+                                android:id="@+id/txt_row_room_type"
+                                style="@style/TableRowContentText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="11dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:singleLine="false"
+                                android:text="@{tableData.roomType}" />
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/row_divider_4"
+                            style="@style/TableDivider" >
+                            <View
+                                android:id="@+id/dummy4"
+                                android:layout_width="1dp"
+                                android:layout_height="1dp" />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tableRow_etc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:padding="11dp">
+
+                                <ImageView
+                                    android:id="@+id/imageView23"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/icon_category_clock" />
+
+                                <TextView
+                                    android:id="@+id/txt_row_category_etc"
+                                    style="@style/TableRowNameText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="11dp"
+                                    android:layout_marginStart="19dp"
+                                    android:gravity="center"
+                                    android:text="기타"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/imageView23"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <TextView
+                                android:id="@+id/txt_row_etc"
+                                style="@style/TableRowContentText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="11dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:singleLine="false"
+                                android:text="@{tableData.etc}" />
+                        </TableRow>
+                    </TableLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/divider_2"
+                    style="@style/PanelDivider" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/panel_map"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="addr"
-                    android:textSize="20sp" />
+                    android:layout_height="match_parent"
+                    android:padding="27dp">
 
-                <fragment
-                    android:id="@+id/fragment"
-                    android:name="com.uos.upkodah.local.map.google.GoogleMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/txt_estate_address"
+                        style="@style/EstateAddrText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{locationData.estateAddress}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <fragment
-                    android:id="@+id/fragment4"
-                    android:name="com.uos.upkodah.user.fragment.FacilitiesFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fragment"
+                        android:name="com.uos.upkodah.fragment.map.GoogleMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="139dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_estate_address"
+                        tools:layout_editor_absoluteX="27dp" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fragment4"
+                        android:tag="@string/fragment_facilities"
+                        android:name="com.uos.upkodah.fragment.facilities.FacilitiesFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@+id/fragment"
+                        tools:layout_editor_absoluteX="27dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </LinearLayout>
         </ScrollView>
 

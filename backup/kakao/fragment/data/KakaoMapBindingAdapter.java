@@ -1,9 +1,9 @@
-package com.uos.upkodah.local.map.kakao.fragment.data;
+package com.uos.upkodah.data.local.map.kakao.fragment.data;
 
 import androidx.databinding.BindingAdapter;
 
-import com.uos.upkodah.local.map.kakao.KakaoMapDrawable;
-import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.data.local.map.kakao.KakaoMapDrawable;
+import com.uos.upkodah.data.local.position.PositionInformation;
 
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;

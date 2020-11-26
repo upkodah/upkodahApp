@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-                    <Button
+         <Button
                         android:id="@+id/btn_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -30,51 +30,15 @@
 
         </androidx.viewpager2.widget.ViewPager2>
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:background="#00FFFFFF"
+            android:src="@drawable/icon_show_list"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <com.sothree.slidinguppanel.SlidingUpPanelLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:id="@+id/layout_slide_up"-->
-<!--        android:gravity="bottom">-->
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-<!--            <androidx.fragment.app.FragmentContainerView-->
-<!--                android:id="@+id/frag_estate_map"-->
-<!--                android:name="com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
-
-<!--            </androidx.fragment.app.FragmentContainerView>-->
-
-
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--        <androidx.fragment.app.FragmentContainerView-->
-<!--            android:id="@+id/frag_estate_list"-->
-<!--            android:name="com.uos.upkodah.list.fragment.SelectionListFragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="400dp" />-->
-
-
-
-<!--    </com.sothree.slidinguppanel.SlidingUpPanelLayout>-->
-
 </layout>

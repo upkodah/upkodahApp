@@ -1,4 +1,4 @@
-package com.uos.upkodah.local.map.kakao;
+package com.uos.upkodah.data.local.map.kakao;
 
 import android.view.View;
 

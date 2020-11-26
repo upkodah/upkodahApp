@@ -11,45 +11,32 @@ import com.android.volley.Response;
  */
 public abstract class WaitAndStart extends Thread{
     private long time;
-    private Response.Listener<String> listener;
 
     public WaitAndStart(long time){
         this.time = time;
-        listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                // response가 정상인지 확인
-
-                // 정상이라면 요청 정상화
-                requestCompleted = true;
-            }
-        };
     }
     public void startTimeCheckingOnly(){
-        requestCompleted = true;
+        requestComplete();
         this.start();
     }
 
     // 여기에 액티비티 실행 코드 삽입
     public abstract void onComplete();
+    public void requestComplete(){
+        requestCompleted = true;
+    }
 
     private boolean requestCompleted = false;
     @Override
     public void run(){
         // 요청이 필요할 때(false일 때)
-        if(!requestCompleted){
-            // 지정 서버 통신 요청
-
-        }
-
-        // 대기
-        try {
+        try{
             Thread.sleep(time);
 
             // 완료 후 요청 완료 시까지 추가 대기
             while(!requestCompleted){
                 System.out.println("대기중");
-                Thread.sleep(1);
+                Thread.sleep(100);
             }
 
             // 대기가 끝나면 핸들러에서 액티비티 실행

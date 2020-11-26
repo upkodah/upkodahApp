@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.uos.upkodah.list.fragment.data.SelectionListData" />
+            type="com.uos.upkodah.fragment.list.data.SelectionListData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

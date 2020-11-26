@@ -1,4 +1,4 @@
-package com.uos.upkodah.local.map.kakao.fragment.data;
+package com.uos.upkodah.data.local.map.kakao.fragment.data;
 
 import android.util.Log;
 
@@ -8,13 +8,13 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.uos.upkodah.BR;
-import com.uos.upkodah.local.map.MapDrawable;
-import com.uos.upkodah.local.map.kakao.KakaoMapDrawable;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-import com.uos.upkodah.local.map.kakao.fragment.KakaoMapFragment;
-import com.uos.upkodah.local.map.listener.MarkerListener;
-import com.uos.upkodah.local.map.listener.ZoomListener;
-import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.data.local.map.MapDrawable;
+import com.uos.upkodah.data.local.map.kakao.KakaoMapDrawable;
+import com.uos.upkodah.data.local.map.kakao.UkdMapMarker;
+import com.uos.upkodah.data.local.map.kakao.fragment.KakaoMapFragment;
+import com.uos.upkodah.fragment.map.listener.MarkerListener;
+import com.uos.upkodah.fragment.map.listener.ZoomListener;
+import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.util.GeoToMeterConverter;
 
 import net.daum.mf.map.api.MapPOIItem;

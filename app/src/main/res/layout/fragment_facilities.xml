@@ -4,98 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="data"
-            type="com.uos.upkodah.user.fragment.data.FacilitiesData" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/facilities_filter_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/layout_divider"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/layout_facil_row_1"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_facility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:foregroundGravity="center"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac1"
-                android:tag="fac_1"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac2"
-                android:tag="fac_2"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac3"
-                android:tag="fac_3"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac4"
-                android:tag="fac_4"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_facil_row_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac5"
-                android:tag="fac_5"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac6"
-                android:tag="fac_6"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac7"
-                android:tag="fac_7"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-            <ImageButton
-                style="@style/BaseFacilitiesBtn"
-                android:id="@+id/btn_fac8"
-                android:tag="fac_8"
-                android:layout_weight="1"
-                android:onClick="@{data.onClickFacBtn}"
-                app:srcCompat="@android:drawable/btn_dialog" />
-        </LinearLayout>
-    </LinearLayout>
 </layout>

@@ -6,36 +6,39 @@
     <data>
         <variable
             name="data"
-            type="com.uos.upkodah.user.fragment.data.SearchBarData" />
+            type="com.uos.upkodah.fragment.searchbar.SearchBarData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#00FFFFFF">
 
         <EditText
             android:id="@+id/edtxt_search"
-            style="@style/SearchTextLight"
+            style="@style/SearchBarText"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@={data.searchText}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_do_search"
+            app:layout_constraintEnd_toStartOf="@+id/btn_do_search"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_do_search"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:onClick="@{data.onSearchBtnClick}"
-            android:scaleType="fitXY"
+            android:layout_marginTop="13dp"
+            android:background="#00FFFFFF"
+            android:foregroundGravity="center"
+            android:onClick="@{data::onSearchBtnClick}"
+            android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
+            app:srcCompat="@drawable/icon_search" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

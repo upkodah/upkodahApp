@@ -26,7 +26,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment3"
-                android:name="com.uos.upkodah.local.map.google.GoogleMapFragment"
+                android:name="com.uos.upkodah.fragment.map.GoogleMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:tag="location_search_map" />
@@ -34,7 +34,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment2"
-            android:name="com.uos.upkodah.user.fragment.SearchBarFragment"
+            android:name="com.uos.upkodah.fragment.searchbar.SearchBarFragment"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:tag="location_search_window"

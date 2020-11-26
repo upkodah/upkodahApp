@@ -1,4 +1,4 @@
-package com.uos.upkodah.local.map.kakao.fragment;
+package com.uos.upkodah.data.local.map.kakao.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 
 import com.uos.upkodah.R;
 import com.uos.upkodah.databinding.FragmentMapBinding;
-import com.uos.upkodah.local.map.kakao.UkdMapMarker;
-import com.uos.upkodah.local.map.kakao.fragment.data.KakaoMapData;
+import com.uos.upkodah.data.local.map.kakao.UkdMapMarker;
+import com.uos.upkodah.data.local.map.kakao.fragment.data.KakaoMapData;
 
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;

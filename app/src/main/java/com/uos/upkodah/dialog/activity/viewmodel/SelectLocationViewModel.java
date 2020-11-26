@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
-import com.uos.upkodah.list.fragment.SelectionListAdapter;
-import com.uos.upkodah.list.fragment.data.SelectionListData;
-import com.uos.upkodah.list.holder.ListViewHolderManager;
-import com.uos.upkodah.list.holder.LocationListViewHolder;
-import com.uos.upkodah.local.map.google.data.GoogleMapData;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.user.fragment.data.SearchBarData;
+import com.uos.upkodah.fragment.list.SelectionListAdapter;
+import com.uos.upkodah.fragment.list.data.SelectionListData;
+import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
+import com.uos.upkodah.fragment.list.holder.LinearListViewHolder;
+import com.uos.upkodah.fragment.map.data.GoogleMapData;
+import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.fragment.searchbar.SearchBarData;
 
 import java.util.List;
 
@@ -53,13 +53,12 @@ public class SelectLocationViewModel extends ViewModel implements ListViewHolder
     }
     @Override
     public RecyclerView.ViewHolder generate(View view) {
-        return new LocationListViewHolder(view);
+        return new LinearListViewHolder(view);
     }
     @Override
     public void setViewHolder(RecyclerView.ViewHolder viewHolder, int index) {
-        LocationListViewHolder locationListViewHolder = (LocationListViewHolder) viewHolder;
-        locationListViewHolder.setName(positions.get(index).getName());
-        locationListViewHolder.setAddress(positions.get(index).getPostalAddress());
+        LinearListViewHolder linearListViewHolder = (LinearListViewHolder) viewHolder;
+        linearListViewHolder.setInfo(positions.get(index));
     }
     @Override
     public int getItemCount() {

@@ -1,8 +1,8 @@
 package com.uos.upkodah.server.ukd;
 
 import com.google.gson.Gson;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.user.input.InputData;
+import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.InputData;
 
 public class UserDataToTransmit {
     // 각 필드는 위치, 제한시간, 매물타입, 편의시설태그를 나타낸다.

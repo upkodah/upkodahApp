@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,16 +17,17 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.uos.upkodah.data.local.position.estate.EstateInformation;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
-import com.uos.upkodah.list.fragment.SelectionListFragment;
-import com.uos.upkodah.local.map.google.GoogleMapFragment;
-import com.uos.upkodah.local.map.listener.MarkerListener;
-import com.uos.upkodah.local.map.listener.ZoomListener;
-import com.uos.upkodah.local.position.CompositePositionInformation;
-import com.uos.upkodah.local.position.GridRegionInformation;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.local.position.RegionInformation;
-import com.uos.upkodah.local.position.temp.TempPositionGenerator;
+import com.uos.upkodah.fragment.list.SelectionListFragment;
+import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
+import com.uos.upkodah.fragment.map.GoogleMapFragment;
+import com.uos.upkodah.fragment.map.listener.MarkerListener;
+import com.uos.upkodah.fragment.map.listener.ZoomListener;
+import com.uos.upkodah.data.local.position.composite.CompositePositionInformation;
+import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
+import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.local.position.composite.RegionInformation;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
 import java.util.List;
@@ -68,24 +69,27 @@ public class SelectEstateActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+//        // 테스트를 위한 임시 코드
+//        Intent positionDataIntent = getIntent();
+//        PositionInformation p = positionDataIntent.getParcelableExtra(getString(R.string.extra_position_information));
+//        final TempPositionGenerator g = new TempPositionGenerator(this.getApplicationContext(),p.getLongitude(), p.getLatitude());
+//
+//        Button b = (Button) findViewById(R.id.btn_temp);
+//        b.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                g.checkEstates();
+//                g.checkSubRegions();
+//                g.setTotalRegion();
+//                g.checkRegions();
+//                viewModel.setEstates(g.getTotalRegion());
+//            }
+//        });
         // 테스트를 위한 임시 코드
-        Intent positionDataIntent = getIntent();
-        PositionInformation p = positionDataIntent.getParcelableExtra(getString(R.string.extra_position_information));
-        final TempPositionGenerator g = new TempPositionGenerator(this.getApplicationContext(),p.getLongitude(), p.getLatitude());
 
-        Button b = (Button) findViewById(R.id.btn_temp);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                g.checkEstates();
-                g.checkSubRegions();
-                g.setTotalRegion();
-                g.checkRegions();
-                viewModel.setEstates(g.getTotalRegion());
-            }
-        });
 
-        Button b2 = (Button) findViewById(R.id.btn_switch);
+
+        ImageButton b2 = findViewById(R.id.btn_switch);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,8 +150,20 @@ public class SelectEstateActivity extends AppCompatActivity {
             else if(data instanceof PositionInformation){
                 //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
                 Log.d("MAP", "줌 변경"+data.getClass());
-                viewModel.mapData.setCenter(((PositionInformation) data).getLongitude(), ((PositionInformation) data).getLatitude());
+                viewModel.mapData.setCenter((PositionInformation) data);
                 viewModel.mapData.setZoomLevelWithDepth(viewModel.mapData.getZoomDepth()+1);
+            }
+        }
+    }
+    private class EstateClickListener implements GridListViewHolder.OnClickListener{
+        @Override
+        public void onEstateClick(View view, Object o) {
+            // 매물 정보를 표출시킨다.
+            if(o instanceof EstateInformation){
+                Intent intent = new Intent(SelectEstateActivity.this, ShowEstateActivity.class);
+                intent.putExtra(getString(R.string.extra_estate_info), (EstateInformation) o);
+
+                startActivity(intent);
             }
         }
     }

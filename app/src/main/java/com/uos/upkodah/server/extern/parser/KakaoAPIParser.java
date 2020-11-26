@@ -14,7 +14,7 @@ public abstract class KakaoAPIParser {
     protected KakaoAPIParser(String response) throws JSONException {
         // 먼저, 응답을 JSONObject로 변환, 저장한다.
         jobj = new JSONObject(response);
-        System.out.println("전체 문서 : \n"+jobj.toString());
+        System.out.println("AY"+response);
 
         /*
          먼저, 이 JSON 결과는 meta와 documents로 나뉜다.

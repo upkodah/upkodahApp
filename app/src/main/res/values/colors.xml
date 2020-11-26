@@ -3,4 +3,19 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="color_ukd_sky">#86d2e4</color>
+    <color name="color_ukd_blue">#2e97bd</color>
+
+    <color name="color_ukd_white_txt">#ffffff</color>
+    <color name="color_ukd_black_txt">#000000</color>
+    <color name="color_ukd_black_sub_txt">#4e4e4e</color>
+    <color name="color_ukd_gray_txt">#3b3b3b</color>
+    <color name="color_ukd_gray_sub_txt">#a3a3a3</color>
+    <color name="color_ukd_blue_txt">#2696bf</color>
+
+    <color name="color_ukd_blue_line">#2696bf</color>
+    <color name="color_ukd_main_divider">#c8cee2</color>
+    <color name="color_ukd_sub_divider">#a3a3a3</color>
+    <color name="color_ukd_border">#dddddd</color>
 </resources>

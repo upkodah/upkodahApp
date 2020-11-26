@@ -1,6 +1,8 @@
 package com.uos.upkodah.server.extern.parser;
 
-import com.uos.upkodah.local.position.PositionInformation;
+import android.util.Log;
+
+import com.uos.upkodah.data.local.position.PositionInformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +46,7 @@ public class SearchKeyworkParser extends KakaoAPIParser {
         } catch (JSONException e) {
             // 파싱 실패 시 null 반환
             e.printStackTrace();
+            Log.d("API ERROR", response);
             return null;
         }
     }

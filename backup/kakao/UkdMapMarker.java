@@ -1,10 +1,10 @@
-package com.uos.upkodah.local.map.kakao;
+package com.uos.upkodah.data.local.map.kakao;
 
 import android.util.Log;
 
 import androidx.annotation.DrawableRes;
 
-import com.uos.upkodah.local.position.PositionInformation;
+import com.uos.upkodah.data.local.position.PositionInformation;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;

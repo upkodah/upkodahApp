@@ -8,16 +8,16 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
-import com.uos.upkodah.list.fragment.SelectionListAdapter;
-import com.uos.upkodah.list.fragment.data.SelectionListData;
-import com.uos.upkodah.list.holder.EstateListViewHolder;
-import com.uos.upkodah.list.holder.ListViewHolderManager;
-import com.uos.upkodah.local.map.google.data.GoogleMapData;
-import com.uos.upkodah.local.position.EstateInformation;
-import com.uos.upkodah.local.position.GridRegionInformation;
-import com.uos.upkodah.local.position.PositionInformation;
-import com.uos.upkodah.local.position.RegionInformation;
-import com.uos.upkodah.local.position.SubRegionInformation;
+import com.uos.upkodah.fragment.list.SelectionListAdapter;
+import com.uos.upkodah.fragment.list.data.SelectionListData;
+import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
+import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
+import com.uos.upkodah.fragment.map.data.GoogleMapData;
+import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
+import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.local.position.composite.RegionInformation;
+import com.uos.upkodah.data.local.position.composite.SubRegionInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import java.util.List;
  * 2) 줌 내에 보이는 모든 positions를 저장한다.
  */
 public class SelectEstateViewModel extends ViewModel  {
-//    public KakaoMapData mapData = new KakaoMapData();
     public GoogleMapData mapData = new GoogleMapData();
     public SelectionListData listData = new SelectionListData();
 
@@ -104,13 +103,19 @@ public class SelectEstateViewModel extends ViewModel  {
     }
 
     private EstateListManager manager;
+    private GridListViewHolder.OnClickListener estateListener = null;
     public void setListEstateData(List<EstateInformation> data) {
         this.manager.estatesInCurrentSelectedGrid = data;
         listData.notifyUpdateListData();
     }
+    public void setEstateListener(GridListViewHolder.OnClickListener estateListener) {
+        this.estateListener = estateListener;
+    }
 
     class EstateListManager implements ListViewHolderManager {
         private List<EstateInformation> estatesInCurrentSelectedGrid;
+
+
         EstateListManager(List<EstateInformation> list){
             this.estatesInCurrentSelectedGrid = list;
         }
@@ -122,13 +127,15 @@ public class SelectEstateViewModel extends ViewModel  {
 
         @Override
         public RecyclerView.ViewHolder generate(View view) {
-            return new EstateListViewHolder(view);
+            GridListViewHolder holder = new GridListViewHolder(view);
+            holder.setListener(estateListener);
+            return holder;
         }
 
         @Override
         public void setViewHolder(RecyclerView.ViewHolder viewHolder, int index) {
             Log.d("LIST", "리스트 표출");
-            ((EstateListViewHolder) viewHolder).setEstateInfo(estatesInCurrentSelectedGrid.get(index));
+            ((GridListViewHolder) viewHolder).setInfo(estatesInCurrentSelectedGrid.get(index));
         }
 
         @Override

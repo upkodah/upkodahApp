@@ -29,28 +29,77 @@
     </style>
     <style name="SearchTextDark">
         <item name="android:textColor">#FFFFFF</item>
+
         <item name="android:backgroundTint">#EEEEEE</item>
     </style>
 
     <!-- 텍스트 스타일 -->
     <style name="TitleText">
-        <item name="android:textColor">#0B006E</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">27sp</item>
+        <item name="android:textColor">@color/color_ukd_white_txt</item>
     </style>
-    <style name="ContentText">
-        <item name="android:textColor">#DDDDDD</item>
-        <item name="android:textSize">18sp</item>
+    <style name="SearchBarText">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_gray_txt</item>
     </style>
-    <style name="DiscriptionText">
-        <item name="android:textColor">#DDDDDD</item>
-        <item name="android:textSize">14sp</item>
+    <style name="SearchOptionText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_blue_txt</item>
+    </style>
+    <style name="FacilityText">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/color_ukd_gray_sub_txt</item>
     </style>
 
     <!-- 편의시설태그 스타일 -->
     <style name="BaseFacilitiesBtn">
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
-        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:backgroundTint">#00FFFFFF</item>
+    </style>
+
+    <!-- 매물정보보기 텍스트 -->
+    <style name="EstateTradeTitleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_ukd_black_txt</item>
+    </style>
+    <style name="EstateNameTitleText">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_black_sub_txt</item>
+    </style>
+    <style name="TableRowNameText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_black_txt</item>
+    </style>
+    <style name="TableRowContentText">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_black_txt</item>
+    </style>
+    <style name="EstateAddrText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_ukd_black_txt</item>
+    </style>
+
+    <!-- 구분선 스타일 -->
+    <style name="TableDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/color_ukd_sub_divider</item>
+        <item name="backgroundTint">@color/color_ukd_sub_divider</item>
+    </style>
+    <style name="PanelDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:background">@color/color_ukd_main_divider</item>
     </style>
 </resources>

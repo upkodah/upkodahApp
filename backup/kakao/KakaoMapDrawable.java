@@ -1,6 +1,6 @@
-package com.uos.upkodah.local.map.kakao;
+package com.uos.upkodah.data.local.map.kakao;
 
-import com.uos.upkodah.local.map.MapDrawable;
+import com.uos.upkodah.data.local.map.MapDrawable;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapView;

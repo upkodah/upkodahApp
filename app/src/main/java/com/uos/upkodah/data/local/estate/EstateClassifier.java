@@ -2,6 +2,7 @@ package com.uos.upkodah.data.local.estate;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.uos.upkodah.data.local.RegionData;
 
@@ -21,7 +22,7 @@ public class EstateClassifier {
     public EstateClassifier(Context context, EstateInformation...estates){
         this(context, Arrays.asList(estates));
     }
-    public EstateClassifier(Context context, List<EstateInformation> estateList){
+    public EstateClassifier(final Context context, List<EstateInformation> estateList){
         Log.d("MYTEST", "분류기생성");
         this.context = context;
         this.estateList = estateList;
@@ -32,11 +33,11 @@ public class EstateClassifier {
                 public void onBuild(RegionData data) {
                     e.setRegion(data);
                     Log.d("MYTEST", data.toString());
+                    Toast.makeText(context, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             };
             Log.d("MYTEST", "요청 시작");
             RegionData.requestInstance(context, listener, e.getRoomInfo().getGridID());
-            break;
         }
     }
 }

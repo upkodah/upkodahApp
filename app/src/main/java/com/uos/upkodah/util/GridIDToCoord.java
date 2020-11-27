@@ -27,8 +27,8 @@ public class GridIDToCoord {
     public static GeoCoordinate convert(String gridID){
         // X_ID_LENGTH만큼의 앞자리는 Longitude, 나머지는 Latitude다.
         try{
-            String lonStr = gridID.substring(0,X_ID_LENGTH);
-            String latStr = gridID.substring(X_ID_LENGTH);
+            String lonStr = gridID.substring(0,3);
+            String latStr = gridID.substring(3);
 
             double longitude = Integer.parseInt(lonStr);
             double latitude = Integer.parseInt(latStr);

@@ -58,7 +58,7 @@ public class GoogleMapData implements GeoCoordinate {
     }
 
 
-    private LatLng center = new LatLng(37.4, 122.1);
+    private LatLng center;
     public void setCenter(GeoCoordinate coordinate){
         this.center = GeoCoordinateUtil.toLatLng(coordinate);
         mapListener.position = new CameraPosition.Builder().target(center).zoom(zoomLevel).build();
@@ -172,6 +172,7 @@ public class GoogleMapData implements GeoCoordinate {
         public void onCameraMove() {
 
             position = googleMap.getCameraPosition();
+            Log.d("MAP", "현재 위치 : "+position.target.longitude+position.target.latitude);
             zoomLevel = position.zoom;
             int result = 1;
             float zoom = getZoomLevel();

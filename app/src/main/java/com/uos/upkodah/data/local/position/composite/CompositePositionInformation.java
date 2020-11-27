@@ -2,7 +2,7 @@ package com.uos.upkodah.data.local.position.composite;
 
 import androidx.annotation.NonNull;
 
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
 
 import java.util.ArrayList;

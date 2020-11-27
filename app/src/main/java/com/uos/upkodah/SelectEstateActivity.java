@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateClassifier;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.fragment.list.SelectionListFragment;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
@@ -28,6 +30,7 @@ import com.uos.upkodah.data.local.position.composite.CompositePositionInformatio
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.local.position.composite.RegionInformation;
+import com.uos.upkodah.test.TestEstateGetter;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
 import java.util.List;
@@ -69,23 +72,17 @@ public class SelectEstateActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-//        // 테스트를 위한 임시 코드
-//        Intent positionDataIntent = getIntent();
-//        PositionInformation p = positionDataIntent.getParcelableExtra(getString(R.string.extra_position_information));
-//        final TempPositionGenerator g = new TempPositionGenerator(this.getApplicationContext(),p.getLongitude(), p.getLatitude());
-//
-//        Button b = (Button) findViewById(R.id.btn_temp);
-//        b.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                g.checkEstates();
-//                g.checkSubRegions();
-//                g.setTotalRegion();
-//                g.checkRegions();
-//                viewModel.setEstates(g.getTotalRegion());
-//            }
-//        });
         // 테스트를 위한 임시 코드
+        // 먼저, 데이터를 전부 얻어낸다.
+        final TestEstateGetter t = new TestEstateGetter(this);
+        Button b = findViewById(R.id.btn_temp);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("MYTEST", "사이즈 : "+t.getEstates().size());
+                EstateClassifier e = new EstateClassifier(SelectEstateActivity.this, t.getEstates());
+            }
+        });
 
 
 

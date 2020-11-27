@@ -1,6 +1,6 @@
 package com.uos.upkodah.data.local.position.composite;
 
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 
 import java.util.List;
 

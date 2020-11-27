@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.databinding.ActivityShowEstateBinding;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
 import com.uos.upkodah.server.ukd.parser.EstateResultParser;

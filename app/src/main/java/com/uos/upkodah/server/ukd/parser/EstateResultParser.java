@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.uos.upkodah.data.local.position.estate.Room;
+import com.uos.upkodah.data.local.estate.Room;
 
 import org.json.JSONArray;
 import org.json.JSONException;

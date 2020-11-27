@@ -13,7 +13,7 @@ import com.uos.upkodah.fragment.list.data.SelectionListData;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
 import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
 import com.uos.upkodah.fragment.map.data.GoogleMapData;
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.local.position.composite.RegionInformation;

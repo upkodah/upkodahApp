@@ -1,4 +1,4 @@
-package com.uos.upkodah.data.local.position.estate;
+package com.uos.upkodah.data.local.estate;
 
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
 

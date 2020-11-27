@@ -3,8 +3,8 @@ package com.uos.upkodah.data.local.gps;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GeoCoordinateUtil{
-    public final static double INIT_LONGITUDE = 37.4;
-    public final static double INIT_LATITUDE = 122.1;
+    public final static double INIT_LONGITUDE = 127.0317674d;
+    public final static double INIT_LATITUDE = 37.6658609d;
 
     public static LatLng toLatLng(GeoCoordinate coord){
         return new LatLng(coord.getLatitude(), coord.getLongitude());
@@ -19,8 +19,8 @@ public class GeoCoordinateUtil{
             avgLongitude += c.getLongitude();
             avgLatitude += c.getLatitude();
         }
-        final double resultLon = avgLongitude /= coordinates.length;
-        final double resultLat = avgLatitude /= coordinates.length;
+        final double resultLon = avgLongitude / coordinates.length;
+        final double resultLat = avgLatitude / coordinates.length;
 
         return getInstance(resultLon, resultLat);
     }
@@ -36,6 +36,18 @@ public class GeoCoordinateUtil{
             }
         };
     }
+    public static GeoCoordinate getInstance(final DegreeMinSec longitude, final DegreeMinSec latitude){
+        return new GeoCoordinate() {
+            @Override
+            public double getLongitude() {
+                return longitude.value;
+            }
+            @Override
+            public double getLatitude() {
+                return latitude.value;
+            }
+        };
+    }
     public static GeoCoordinate getInit(){
         return new GeoCoordinate() {
             @Override
@@ -47,5 +59,8 @@ public class GeoCoordinateUtil{
                 return INIT_LATITUDE;
             }
         };
+    }
+    public static String toString(GeoCoordinate geoCoordinate){
+        return "Longitude="+geoCoordinate.getLongitude()+", Latitude="+geoCoordinate.getLatitude();
     }
 }

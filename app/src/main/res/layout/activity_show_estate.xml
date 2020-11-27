@@ -6,13 +6,13 @@
     <data>
         <variable
             name="locationData"
-            type="com.uos.upkodah.data.local.position.estate.data.LocationPanelDisplayable" />
+            type="com.uos.upkodah.data.local.estate.data.LocationPanelDisplayable" />
         <variable
             name="titlePanelData"
-            type="com.uos.upkodah.data.local.position.estate.data.TitlePanelDisplayable" />
+            type="com.uos.upkodah.data.local.estate.data.TitlePanelDisplayable" />
         <variable
             name="tableData"
-            type="com.uos.upkodah.data.local.position.estate.data.RoomInfoTableDisplayable" />
+            type="com.uos.upkodah.data.local.estate.data.RoomInfoTableDisplayable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,10 +83,12 @@
                             android:id="@+id/imageButton"
                             android:layout_width="46dp"
                             android:layout_height="22dp"
+                            android:layout_marginStart="5dp"
                             android:backgroundTint="#00FFFFFF"
                             android:scaleType="center"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageButton2"
                             app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/btn_call" />
 
@@ -94,6 +96,7 @@
                             android:id="@+id/imageButton2"
                             android:layout_width="46dp"
                             android:layout_height="22dp"
+                            android:layout_marginEnd="5dp"
                             android:backgroundTint="#00FFFFFF"
                             android:scaleType="center"
                             app:layout_constraintBottom_toBottomOf="parent"

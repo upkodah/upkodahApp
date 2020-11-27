@@ -1,6 +1,4 @@
-package com.uos.upkodah.data.local.position.estate.data;
-
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+package com.uos.upkodah.data.local.estate.data;
 
 public interface RoomInfoTableDisplayable {
     public String getRequiredTime();

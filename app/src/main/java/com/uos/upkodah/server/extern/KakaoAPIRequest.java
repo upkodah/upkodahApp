@@ -27,7 +27,7 @@ public class KakaoAPIRequest extends StringRequest {
     protected final static String SEARCH_CATEGORY_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
 //    private final static String REST_API_KEY = "a92b21b75ce1b2ad1b8ded4dcfdc1f41";
-    private final static String REST_API_KEY = "b253f7fef0638cd0620f04fc73ac3b78";
+    private final static String REST_API_KEY = "bf08f1b56f8d605a2100093e2850379f";
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
@@ -53,10 +53,10 @@ public class KakaoAPIRequest extends StringRequest {
         return new SearchKeywordRequest(SearchKeywordRequest.getRequestURL(query,coord),listener,errorListener);
     }
     public static KakaoAPIRequest getSearchCategoryRequest(@NonNull String category, GeoCoordinate coord, int radius, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
-        return new SearchKeywordRequest(SearchKeywordRequest.getRequestURL(category,coord, radius),listener,errorListener);
+        return new SearchCategoryRequest(SearchCategoryRequest.getRequestURL(category,coord, radius),listener,errorListener);
     }
     public static KakaoAPIRequest getSearchCategoryRequest(@NonNull String category, GeoCoordinate coord,  Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
-        return new SearchKeywordRequest(SearchKeywordRequest.getRequestURL(category,coord),listener,errorListener);
+        return new SearchCategoryRequest(SearchCategoryRequest.getRequestURL(category,coord),listener,errorListener);
     }
     public static KakaoAPIRequest getCoordToAddrRequest(GeoCoordinate coord, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         return new CoordToAddrRequest(CoordToAddrRequest.getRequestURL(coord),listener,errorListener);
@@ -88,7 +88,7 @@ class SearchAddrRequest extends KakaoAPIRequest{
 /**
  * 키워드를 이용해 원하는 장소들을 찾아낼 때 사용하는 API
  */
-class SearchKeywordRequest extends KakaoAPIRequest{
+class SearchCategoryRequest extends KakaoAPIRequest{
     /*
     String:query(필수) = 검색 할 키워드
     String:category_group_code = 카테고리 그룹 코드. 결과를 카테고리로 필터링을 원하는 경우 사용
@@ -117,14 +117,14 @@ class SearchKeywordRequest extends KakaoAPIRequest{
                 +"y="+coord.getLatitude();
         return requestURL;
     }
-    SearchKeywordRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+    SearchCategoryRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
     }
 }
 /**
  * 키워드를 이용해 원하는 장소들을 찾아낼 때 사용하는 API
  */
-class SearchCetegoryRequest extends KakaoAPIRequest{
+class SearchKeywordRequest extends KakaoAPIRequest{
     /*
     String:category_group_code(필수) = 카테고리 그룹 코드. 결과를 카테고리로 필터링을 원하는 경우 사용
     Double:x = 중심 좌표의 X값 혹은 longitude. 특정 지역을 중심으로 검색하려고 할 경우 radius와 함께 사용 가능
@@ -152,7 +152,7 @@ class SearchCetegoryRequest extends KakaoAPIRequest{
                 +"y="+coord.getLatitude();
         return requestURL;
     }
-    SearchCetegoryRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+    SearchKeywordRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
     }
 }

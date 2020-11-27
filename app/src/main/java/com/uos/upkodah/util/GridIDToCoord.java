@@ -2,17 +2,17 @@ package com.uos.upkodah.util;
 
 import androidx.annotation.Nullable;
 
+import com.uos.upkodah.data.local.gps.DegreeMinSec;
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
 import com.uos.upkodah.data.local.gps.GeoCoordinateUtil;
 
-import static com.uos.upkodah.util.CoordConverter.dmsToDegree;
 
 public class GridIDToCoord {
     public final static int X_ID_LENGTH = 4;
-    public final static double KOR_BND_UPP = dmsToDegree(43,0,36);
-    public final static double KOR_BND_LOW = dmsToDegree(32,7,22);
-    public final static double KOR_BND_RIGHT = dmsToDegree(131,52,22);
-    public final static double KOR_BND_LEFT = dmsToDegree(124,10,47);
+    public final static double KOR_BND_UPP = new DegreeMinSec(43,0,36).value;
+    public final static double KOR_BND_LOW = new DegreeMinSec(32,7,22).value;
+    public final static double KOR_BND_RIGHT = new DegreeMinSec(131,52,22).value;
+    public final static double KOR_BND_LEFT = new DegreeMinSec(124,10,47).value;
 
     public final static double LON_GRID_SIZE = 0.0036d;
     public final static double LAT_GRID_SIZE = 0.0036d;

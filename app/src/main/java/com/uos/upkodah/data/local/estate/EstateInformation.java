@@ -1,26 +1,14 @@
-package com.uos.upkodah.data.local.position.estate;
+package com.uos.upkodah.data.local.estate;
 
 import androidx.annotation.NonNull;
 
+import com.uos.upkodah.data.local.RegionData;
 import com.uos.upkodah.data.local.position.PositionInformation;
-import com.uos.upkodah.data.local.position.estate.data.LocationPanelDisplayable;
-import com.uos.upkodah.data.local.position.estate.data.RoomInfoTableDisplayable;
-import com.uos.upkodah.data.local.position.estate.data.TitlePanelDisplayable;
-import com.uos.upkodah.fragment.list.holder.ListDisplayable;
+import com.uos.upkodah.data.local.estate.data.LocationPanelDisplayable;
+import com.uos.upkodah.data.local.estate.data.RoomInfoTableDisplayable;
+import com.uos.upkodah.data.local.estate.data.TitlePanelDisplayable;
 
 public class EstateInformation extends PositionInformation implements LocationPanelDisplayable, TitlePanelDisplayable, RoomInfoTableDisplayable {
-    public final int monPrice = 40;  // 월세
-    public final int dpsPrice = 500; // 보증금
-    public final double rmSize = 33;   // 방 크기
-    public final int mngFee = 40;  // 관리비
-    public final String rmType= "원룸";  // 방 타입
-    public final String trdType = "월세"; // 거래 타입
-
-    private int gridId = 0;
-    private String dongId;
-    private String guId;
-
-
     // PositionInformation으로 만드는 임시
     public EstateInformation(PositionInformation positionInformation){
         this.longitude = positionInformation.getLongitude();
@@ -35,26 +23,20 @@ public class EstateInformation extends PositionInformation implements LocationPa
         return room;
     }
 
-    public void setRegion(String gu, String dong){
-        this.guId = gu;
-        this.dongId = dong;
+    private RegionData regionData;
+    public void setRegion(RegionData regionData){
+        this.regionData = regionData;
     }
     public String getRegion(){
-        return guId+" "+dongId;
+        return regionData.getGu()+" "+regionData.getDong();
     }
     public String getGu(){
-        return guId;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return guId+" "+dongId+" "+postalAddress;
+        return regionData.getGu();
     }
 
     @Override
     public String getListDisplayedName(){
-        String result = "["+rmType+"] "+rmSize+"㎡\n"+name;
+        String result = "["+room.getTradeType()+"] "+room.getRealSize()+"㎡\n"+room.getTitle();
 
         return result;
     }
@@ -64,7 +46,7 @@ public class EstateInformation extends PositionInformation implements LocationPa
     }
     @Override
     public String getListDisplayedDesc(){
-        return trdType+" "+dpsPrice+"/"+monPrice;
+        return room.getTradeType()+" "+room.getDeposit()+"/"+room.getPrice();
     }
 
     @Override

@@ -13,6 +13,7 @@ public class FacilitiesFilterRequest extends StringRequest {
     public FacilitiesFilterRequest(Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(URL, listener, errorListener);
     }
+
     protected final static String URL = "http://34.64.166.133/v1/setting";
 
     public static RequestQueue requestQueue = null;

@@ -16,10 +16,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.uos.upkodah.R;
+import com.uos.upkodah.data.local.gps.GeoCoordinateUtil;
 import com.uos.upkodah.databinding.FragmentGoogleMapBinding;
 import com.uos.upkodah.fragment.map.data.GoogleMapData;
 
-public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
+public class GoogleMapFragment extends Fragment {
     private MapView mapView;
     private GoogleMapData data = new GoogleMapData();
 
@@ -31,7 +32,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         mapView = binding.getRoot().findViewById(R.id.map_google);
         mapView.onCreate(savedInstanceState);
         data.setListenerAndSyncInto(mapView);
-
 
         return binding.getRoot();
     }
@@ -51,12 +51,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(37.33, 127.01)));
     }
 
     public void setData(GoogleMapData data){

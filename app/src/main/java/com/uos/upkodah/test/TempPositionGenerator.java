@@ -1,11 +1,11 @@
-package com.uos.upkodah.data.local.position.temp;
+package com.uos.upkodah.test;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Response;
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.local.position.composite.RegionInformation;
@@ -89,7 +89,7 @@ public class TempPositionGenerator implements GeoCoordinate {
                     public void onResponse(String response) {
                         // 지역분류 설정
                         CoordToRegionParser parser = CoordToRegionParser.getInstance(response);
-                        estate.setRegion(parser.getRegion(1), parser.getRegion(2));
+//                        estate.setRegion(parser.getRegion(1), parser.getRegion(2));
 
                         // 이걸 SubRegion에 넣는다.
                         setSubRegionMap(estate);

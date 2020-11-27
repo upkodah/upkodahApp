@@ -2,10 +2,10 @@ package com.uos.upkodah.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
-import com.uos.upkodah.data.local.position.estate.EstateInformation;
-import com.uos.upkodah.data.local.position.estate.data.LocationPanelDisplayable;
-import com.uos.upkodah.data.local.position.estate.data.RoomInfoTableDisplayable;
-import com.uos.upkodah.data.local.position.estate.data.TitlePanelDisplayable;
+import com.uos.upkodah.data.local.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.data.LocationPanelDisplayable;
+import com.uos.upkodah.data.local.estate.data.RoomInfoTableDisplayable;
+import com.uos.upkodah.data.local.estate.data.TitlePanelDisplayable;
 
 public class ShowEstateViewModel extends ViewModel {
     private EstateInformation estateInformation;

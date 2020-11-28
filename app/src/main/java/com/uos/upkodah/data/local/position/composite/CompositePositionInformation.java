@@ -3,27 +3,26 @@ package com.uos.upkodah.data.local.position.composite;
 import androidx.annotation.NonNull;
 
 import com.uos.upkodah.data.local.estate.EstateInformation;
+import com.uos.upkodah.data.local.position.LocationInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CompositePositionInformation<P extends PositionInformation> extends PositionInformation{
+public abstract class CompositePositionInformation<L extends LocationInformation> extends LocationInformation {
     public final static double SCALE = 4;
-    protected List<P> subInfo;
+    protected List<L> subInfo;
 
     private String parentId;
 
-    public CompositePositionInformation(String name, List<P> subInfo){
-        super(0,0,"");
-        this.subInfo = subInfo;
-        super.setName(name);
+    public CompositePositionInformation(Region region){
+        super(region);
+        this.subInfo = new ArrayList<>();
         calculateCoord();
     }
-    public CompositePositionInformation(String name){
-        this(name, new ArrayList<P>());
-    }
-    public void addSubInformation(P sub){
+
+
+    public void addSubInformation(L sub){
         subInfo.add(sub);
         calculateCoord();
     }
@@ -49,7 +48,7 @@ public abstract class CompositePositionInformation<P extends PositionInformation
             int result = 0;
 
             if(subInfo.get(0) instanceof CompositePositionInformation){
-                for(P c : subInfo){
+                for(L c : subInfo){
                     result += ((CompositePositionInformation) c).getMarkerRadius() * 3;
                 }
             }
@@ -73,7 +72,7 @@ public abstract class CompositePositionInformation<P extends PositionInformation
         else{
             List<EstateInformation> resultList = new ArrayList<>();
 
-            for(P p : subInfo){
+            for(L p : subInfo){
                 resultList.addAll(((CompositePositionInformation) p).getAllEstates());
             }
 
@@ -81,7 +80,7 @@ public abstract class CompositePositionInformation<P extends PositionInformation
         }
     }
 
-    public List<P> getSubInfoList(){
+    public List<L> getSubInfoList(){
         return subInfo;
     }
 

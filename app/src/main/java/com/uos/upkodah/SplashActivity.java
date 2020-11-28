@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Response;
+import com.uos.upkodah.data.Facility;
 import com.uos.upkodah.server.ukd.FacilitiesFilterRequest;
 import com.uos.upkodah.server.ukd.parser.FacilitiesFilterParser;
 import com.uos.upkodah.util.WaitAndStart;
@@ -57,7 +58,8 @@ public class SplashActivity extends AppCompatActivity {
 
             if(parser!=null){
                 Log.d("FACILITY_REQUEST", "편의시설 정보 "+parser.getFilters().size()+"개");
-                nextActivityIntent.putParcelableArrayListExtra(getString(R.string.extra_facilities_arr), new ArrayList<>(parser.getFilters()));
+                Facility.setGlobalList(parser.getFilters());
+//                nextActivityIntent.putParcelableArrayListExtra(getString(R.string.extra_facilities_arr), new ArrayList<>(parser.getFilters()));
                 waitAndStart.requestComplete();
             }
         }

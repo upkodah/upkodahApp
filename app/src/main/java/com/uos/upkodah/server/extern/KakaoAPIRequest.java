@@ -76,9 +76,8 @@ class SearchAddrRequest extends KakaoAPIRequest{
     Integer:AddressSize : 한 페이지에 보여질 문서의 개수, 1~30 사이, 기본 값 10
      */
     protected static String getRequestURL(String query){
-        String requestURL = SEARCH_ADDR_URL+"?"
+        return SEARCH_ADDR_URL+"?"
                 +"query="+query;
-        return requestURL;
     }
     SearchAddrRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
@@ -103,19 +102,17 @@ class SearchCategoryRequest extends KakaoAPIRequest{
     String:sort = 결과 정렬 순서, distance 정렬을 원할 때는 기준 좌표로 쓰일 x, y와 함께 사용. distance 또는 accuracy, 기본 accuracy
      */
     protected static String getRequestURL(String category, GeoCoordinate coord, int radius){
-        String requestURL = SEARCH_CATEGORY_URL+"?"
+        return SEARCH_CATEGORY_URL+"?"
                 +"category_group_code="+category+"&"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude()+"&"
                 +"radius="+radius;
-        return requestURL;
     }
     protected static String getRequestURL(String category, GeoCoordinate coord){
-        String requestURL = SEARCH_CATEGORY_URL+"?"
+        return SEARCH_CATEGORY_URL+"?"
                 +"category_group_code="+category+"&"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude();
-        return requestURL;
     }
     SearchCategoryRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
@@ -138,19 +135,17 @@ class SearchKeywordRequest extends KakaoAPIRequest{
     String:sort = 결과 정렬 순서, distance 정렬을 원할 때는 기준 좌표로 쓰일 x, y와 함께 사용. distance 또는 accuracy, 기본 accuracy
      */
     protected static String getRequestURL(String query, GeoCoordinate coord, int radius){
-        String requestURL = SEARCH_KEYWORD_URL+"?"
+        return SEARCH_KEYWORD_URL+"?"
                 +"query="+query+"&"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude()+"&"
                 +"radius="+radius;
-        return requestURL;
     }
     protected static String getRequestURL(String query, GeoCoordinate coord){
-        String requestURL = SEARCH_KEYWORD_URL+"?"
+        return SEARCH_KEYWORD_URL+"?"
                 +"query="+query+"&"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude();
-        return requestURL;
     }
     SearchKeywordRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
@@ -167,10 +162,9 @@ class CoordToAddrRequest extends KakaoAPIRequest{
     String:input_coord = x, y 로 입력되는 값에 대한 좌표 체계, 기본 값은 WGS84. 지원 좌표계: WGS84, WCONGNAMUL, CONGNAMUL, WTM, TM
      */
     protected static String getRequestURL(GeoCoordinate coord){
-        String requestURL = COORD_TO_ADDRCODE_URL+"?"
+        return COORD_TO_ADDRCODE_URL+"?"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude();
-        return requestURL;
     }
     CoordToAddrRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
@@ -187,10 +181,9 @@ class CoordToRegionRequest extends KakaoAPIRequest{
     String:input_coord = x, y 로 입력되는 값에 대한 좌표 체계, 기본 값은 WGS84. 지원 좌표계: WGS84, WCONGNAMUL, CONGNAMUL, WTM, TM
      */
     protected static String getRequestURL(GeoCoordinate coord){
-        String requestURL = COORD_TO_REGIONCODE_URL+"?"
+        return COORD_TO_REGIONCODE_URL+"?"
                 +"x="+coord.getLongitude()+"&"
                 +"y="+coord.getLatitude();
-        return requestURL;
     }
     CoordToRegionRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);

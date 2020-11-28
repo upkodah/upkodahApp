@@ -9,14 +9,9 @@ public class UserDataToTransmit {
     public final double longitude;
     public final double latitude;
     public final int limit_time;
-    public final String estate_type;
-    public final String trade_type;
-
-    /*
-    편의시설 목록 : 편의점0, 마트1, 공원2, 병원3, 약국4, 경찰서5, 피트니스6, 세탁소7
-    총 8개로, 상세 위치는
-     */
-    public final int[] facilities;
+    public final int estate_type;
+    public final int trade_type;
+    public final String[] facilities;
 
     public UserDataToTransmit(InputData inputData){
         PositionInformation p = inputData.getPosition();

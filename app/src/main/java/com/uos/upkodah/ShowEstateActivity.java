@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.uos.upkodah.data.Facility;
 import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.databinding.ActivityShowEstateBinding;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
@@ -51,9 +52,9 @@ public class ShowEstateActivity extends AppCompatActivity {
         String tag = fragment.getTag();
 
         if(fragment instanceof FacilitiesFragment){
-            FacilitiesFragment facilitiesFragment = (FacilitiesFragment) fragment;
             if(tag.equals(getString(R.string.fragment_facilities))){
-
+                FacilitiesFragment facilitiesFragment = (FacilitiesFragment) fragment;
+                facilitiesFragment.setFacilitiesData(Facility.getGlobalList(viewModel.getLocationPanelDisplayable().getSelectedFacilities()));
             }
         }
     }

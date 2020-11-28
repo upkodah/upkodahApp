@@ -7,14 +7,19 @@ import java.util.List;
 public class GridRegionInformation extends CompositePositionInformation<EstateInformation>{
     public static final double MEASURE = 400;
 
-    private int gridId;
-
-
-    public GridRegionInformation(int gridId, List<EstateInformation> subInfo) {
-        super(""+gridId, subInfo);
-        this.gridId = gridId;
+    public GridRegionInformation(Region region) {
+        super(region);
+        this.name = "+"+subInfo.size();
+        this.postalAddress = regionData.city+" "+regionData.gu+" "+regionData.dong;
     }
-    public GridRegionInformation(String name) {
-        super(name);
+    @Override
+    public String getClassifyingKey() {
+        return regionData.city+regionData.gu+regionData.dong;
+    }
+
+    @Override
+    public void addSubInformation(EstateInformation sub) {
+        super.addSubInformation(sub);
+        this.name = "+"+subInfo.size();
     }
 }

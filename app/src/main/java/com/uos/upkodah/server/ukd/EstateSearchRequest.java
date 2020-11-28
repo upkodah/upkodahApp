@@ -18,9 +18,14 @@ public class EstateSearchRequest extends StringRequest {
         super(url, listener, errorListener);
     }
     protected final static String URL = "http://34.64.166.133/v1/room/info/";
+    protected static String getRequestURL(String json){
+        return URL+"?query="+json;
+    }
 
     private InputData input;
     public static RequestQueue requestQueue = null;
+
+
 
     public synchronized void request(Context context){
         if(requestQueue==null) requestQueue = Volley.newRequestQueue(context);

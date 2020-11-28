@@ -6,27 +6,38 @@ import androidx.lifecycle.ViewModel;
 
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.local.position.UserPositionInformation;
+import com.uos.upkodah.data.mapping.InnerMapping;
+import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
 import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.fragment.searchbar.SearchBarData;
 import com.uos.upkodah.fragment.optionbar.SearchOptionData;
 import com.uos.upkodah.data.InputData;
 import com.uos.upkodah.util.LimitTimeStringConverter;
 
-public class UkdMainViewModel extends ViewModel implements InputData{
+public class UkdMainViewModel extends ViewModel implements InputData, UserPositionInformation.ChangeListener {
     public UkdMainViewModel(){
         // 초기화
         this.setLimitTimeMin(10);
-        this.setEstateType("원룸");
-        this.setTradeType("월세");
+        this.setEstateType(0);
+        this.setTradeType(0);
     }
     public SearchBarData searchBarData = new SearchBarData();
 
     private UserPositionInformation positionInformation;
     public PositionInformation getPosition() {
+        if(positionInformation==null){
+            setPosition(new UserPositionInformation());
+        }
         return positionInformation;
     }
     public void setPosition(PositionInformation position) {
         this.positionInformation = new UserPositionInformation(position);
+        this.positionInformation.setChangeListener(this);
+        alertPositionChange();
+    }
+    @Override
+    public void onChange(PositionInformation position) {
+        // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
         alertPositionChange();
     }
     public void alertPositionChange(){
@@ -34,34 +45,41 @@ public class UkdMainViewModel extends ViewModel implements InputData{
     }
 
     public SearchOptionData limitTimeData = new SearchOptionData();
+    private int limitTime = 0;
     public int getLimitTimeMin() {
-        return LimitTimeStringConverter.toMinute(limitTimeData.getOptionText());
+        return this.limitTime;
     }
     public void setLimitTimeMin(int minute) {
-        limitTimeData.setOptionText(new LimitTimeStringConverter(minute).toString());
+        this.limitTime = minute;
+        limitTimeData.setOptionText(InnerMapping.LIMIT_TIME.getString(minute));
     }
 
-    public SearchOptionData estateData = new SearchOptionData();;
-    public String getEstateType() {
-        return estateData.getOptionText();
+    public SearchOptionData estateData = new SearchOptionData();
+    private int estateType = 0;
+    public int getEstateType() {
+        return estateType;
     }
-    public void setEstateType(String estateType) {
-        estateData.setOptionText(estateType);
+    public void setEstateType(int estateType) {
+        this.estateType = estateType;
+        estateData.setOptionText(InnerMapping.ESTATE.getString(estateType));
     }
 
     public SearchOptionData tradeTypeData = new SearchOptionData();
-    public String getTradeType() {
-        return tradeTypeData.getOptionText();
+    private int tradeType = 0;
+    public int getTradeType() {
+        return tradeType;
     }
-    public void setTradeType(String tradeType) {
-        tradeTypeData.setOptionText(tradeType);
+    public void setTradeType(int tradeType) {
+        this.tradeType = tradeType;
+        tradeTypeData.setOptionText(InnerMapping.TRADE.getString(tradeType));
     }
 
-    public int[] getFacilities() {
-        return new int[0];
+    private FacilitiesFragment facilitiesFragment;
+    public void setFacilitiesFragment(FacilitiesFragment facilitiesFragment) {
+        this.facilitiesFragment = facilitiesFragment;
     }
-    public void setFacilities(int index, int data) {
-
+    public String[] getFacilities() {
+        return facilitiesFragment.getSelectedFacilities();
     }
 
 
@@ -81,4 +99,7 @@ public class UkdMainViewModel extends ViewModel implements InputData{
     public void onClickGetLocatoinBtn(View view){
         getLocationBtnListener.onClick(view);
     }
+
+
+
 }

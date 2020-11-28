@@ -1,44 +1,38 @@
 package com.uos.upkodah.data.local.estate;
 
-import androidx.annotation.NonNull;
+import android.os.Parcel;
 
-import com.uos.upkodah.data.local.RegionData;
-import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.Facility;
+import com.uos.upkodah.data.local.position.LocationInformation;
 import com.uos.upkodah.data.local.estate.data.LocationPanelDisplayable;
 import com.uos.upkodah.data.local.estate.data.RoomInfoTableDisplayable;
 import com.uos.upkodah.data.local.estate.data.TitlePanelDisplayable;
+import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.local.position.composite.CompositePositionInformation;
+import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
+import com.uos.upkodah.data.mapping.InnerMapping;
 
-public class EstateInformation extends PositionInformation implements LocationPanelDisplayable, TitlePanelDisplayable, RoomInfoTableDisplayable {
-    // PositionInformation으로 만드는 임시
-    public EstateInformation(PositionInformation positionInformation){
-        this.longitude = positionInformation.getLongitude();
-        this.latitude = positionInformation.getLatitude();
-        this.postalAddress = positionInformation.getPostalAddress();
-    }
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class EstateInformation extends LocationInformation implements LocationPanelDisplayable, TitlePanelDisplayable, RoomInfoTableDisplayable {
     public EstateInformation(Room room){
+        super(Integer.toString(room.getGridID()));
         this.room = room;
+        this.longitude = room.getLongitude();
+        this.latitude = room.getLatitude();
+        this.name = room.getTitle();
+        this.postalAddress = room.getRoadAddr().isEmpty() ? room.getAddr() : room.getRoadAddr();
     }
-    private Room room;
+    private final Room room;
     public Room getRoomInfo(){
         return room;
     }
 
-    private RegionData regionData;
-    public void setRegion(RegionData regionData){
-        this.regionData = regionData;
-    }
-    public String getRegion(){
-        return regionData.getGu()+" "+regionData.getDong();
-    }
-    public String getGu(){
-        return regionData.getGu();
-    }
-
     @Override
     public String getListDisplayedName(){
-        String result = "["+room.getTradeType()+"] "+room.getRealSize()+"㎡\n"+room.getTitle();
-
-        return result;
+        return "["+InnerMapping.TRADE.getString(room.getTradeType())+"] "+room.getRealSize()+"㎡\n"+this.name;
     }
     @Override
     public String getListDisplayedAddr(){
@@ -76,7 +70,12 @@ public class EstateInformation extends PositionInformation implements LocationPa
     }
     @Override
     public String getTradeType() {
-        return "전세"+room.getPrice()+"만 / "+room.getDeposit()+"만";
+        if(room.getTradeType()== InnerMapping.CHARTER_RENTAL){
+            return "전세 "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
+        }
+        else{
+            return "월세 "+room.getPrice()+"만 / "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
+        }
     }
     @Override
     public String getRoomType() {
@@ -100,5 +99,13 @@ public class EstateInformation extends PositionInformation implements LocationPa
     public String getEstateAddress() {
         return room.getAddr();
     }
+    @Override
+    public String[] getSelectedFacilities() {
+        return room.getFacilities();
+    }
 
+    @Override
+    public String getClassifyingKey() {
+        return regionData.grid;
+    }
 }

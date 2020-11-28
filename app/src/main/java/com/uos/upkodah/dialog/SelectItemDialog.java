@@ -9,14 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.uos.upkodah.data.mapping.InnerMapping;
+
 public class SelectItemDialog extends DialogFragment {
-    private String[] itemList = new String[]{"원룸","투룸","오피스텔"};
+    private InnerMapping mapping;
     private String title;
     private DialogInterface.OnClickListener listener;
 
-    private SelectItemDialog(@NonNull String title, @NonNull String...itemList){
+    private SelectItemDialog(@NonNull String title, @NonNull InnerMapping mapping){
         this.title = title;
-        this.itemList = itemList;
+        this.mapping = mapping;
     }
     public SelectItemDialog setListener(DialogInterface.OnClickListener listener){
         this.listener = listener;
@@ -28,15 +30,12 @@ public class SelectItemDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        String[] itemList = mapping.getStringList();
+
         builder.setTitle(this.title)
-                .setItems(this.itemList, this.listener);
+                .setItems(itemList, this.listener);
 
         return builder.create();
-    }
-
-
-    public String indexToResult(int i){
-        return itemList[i];
     }
 
     public final static int LIMIT_TIME = 0;
@@ -51,14 +50,14 @@ public class SelectItemDialog extends DialogFragment {
 
         switch(id){
             case LIMIT_TIME:
-                result = new SelectItemDialog("몇 분 안에 도착해야 하나요?", "제한 없음","10분","20분","30분","40분","50분","60분");
+                result = new SelectItemDialog("몇 분 안에 도착해야 하나요?", InnerMapping.LIMIT_TIME);
                 return result;
             case ESTATE_TYPE:
-                result = new SelectItemDialog("매물 타입 선택", "원룸","투룸","오피스텔");
+                result = new SelectItemDialog("매물 타입 선택", InnerMapping.ESTATE);
                 return result;
             case TRADE_TYPE:
             default:
-                result = new SelectItemDialog("전세/월세 선택", "전세","월세");
+                result = new SelectItemDialog("전세/월세 선택", InnerMapping.TRADE);
                 return result;
         }
     }

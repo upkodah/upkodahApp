@@ -16,8 +16,8 @@ import com.uos.upkodah.fragment.map.data.GoogleMapData;
 import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
-import com.uos.upkodah.data.local.position.composite.RegionInformation;
-import com.uos.upkodah.data.local.position.composite.SubRegionInformation;
+import com.uos.upkodah.data.local.position.composite.GuRegionInformation;
+import com.uos.upkodah.data.local.position.composite.DongRegionInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +38,8 @@ public class SelectEstateViewModel extends ViewModel  {
         listData.setAdapter(new SelectionListAdapter(this.manager));
     }
 
-    private List<RegionInformation> estates;
-    public void setEstates(List<RegionInformation> estates) {
+    private List<GuRegionInformation> estates;
+    public void setEstates(List<GuRegionInformation> estates) {
         this.estates = estates;
         if(this.estates!=null){
             mapData.setMapMarkers(estates);
@@ -68,7 +68,7 @@ public class SelectEstateViewModel extends ViewModel  {
                 // 동 단위를 보여줘야할 때
                 Log.d("MAP", "동 단위로 보여줍니다.");
                 preDepth = 2;
-                for(RegionInformation p : estates){
+                for(GuRegionInformation p : estates){
                     result.addAll(p.getSubInfoList());
                 }
                 break;
@@ -77,8 +77,8 @@ public class SelectEstateViewModel extends ViewModel  {
                 // Grid 단위를 보여줘야할 때
                 Log.d("MAP", "Grid 단위로 보여줍니다.");
                 preDepth = 3;
-                for(RegionInformation p : estates){
-                    for(SubRegionInformation p2 : p.getSubInfoList()){
+                for(GuRegionInformation p : estates){
+                    for(DongRegionInformation p2 : p.getSubInfoList()){
                         result.addAll(p2.getSubInfoList());
                     }
                 }
@@ -88,8 +88,8 @@ public class SelectEstateViewModel extends ViewModel  {
                 // 매물 단위를 보여줘야할 때
                 Log.d("MAP", "매물 단위로 보여줍니다.");
                 preDepth = 4;
-                for(RegionInformation p : estates){
-                    for(SubRegionInformation p2 : p.getSubInfoList()){
+                for(GuRegionInformation p : estates){
+                    for(DongRegionInformation p2 : p.getSubInfoList()){
                         for(GridRegionInformation p3 : p2.getSubInfoList()){
                             result.addAll(p3.getSubInfoList());
                         }

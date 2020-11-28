@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.uos.upkodah.data.Facility;
+import com.uos.upkodah.data.mapping.InnerMapping;
 import com.uos.upkodah.databinding.ActivityUkdMainBinding;
 import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.SelectItemDialog;
@@ -29,18 +30,17 @@ import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UkdMainActivity extends AppCompatActivity{
-    private UkdMainViewModel ukdMainViewModel;
+    private UkdMainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // 뷰모델 설정
-        ukdMainViewModel = new ViewModelProvider(this).get(UkdMainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(UkdMainViewModel.class);
 
 
         // 액티비티 준비
@@ -52,18 +52,18 @@ public class UkdMainActivity extends AppCompatActivity{
 
 
         // 리스너 설정
-        ukdMainViewModel.setGetMyLocationBtnListener(new PermissionRequiringOnClickListener(
+        viewModel.setGetMyLocationBtnListener(new PermissionRequiringOnClickListener(
                 new GetMyLocationBtnListener(),
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION));
 
-        ukdMainViewModel.setGetLocationBtnListener(new PermissionRequiringOnClickListener(
+        viewModel.setGetLocationBtnListener(new PermissionRequiringOnClickListener(
                 new SearchLocationBtnListener(),
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION));
 
 
-        binding.setModel(ukdMainViewModel);
+        binding.setModel(viewModel);
     }
     @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
@@ -90,11 +90,13 @@ public class UkdMainActivity extends AppCompatActivity{
             }
         }
         if(fragment instanceof FacilitiesFragment){
-            FacilitiesFragment facilitiesFragment = (FacilitiesFragment) fragment;
             if(tag.equals(getString(R.string.fragment_facilities))){
-                Intent intent = getIntent();
-                List<Facility> facilityList = intent.getParcelableArrayListExtra(getString(R.string.extra_facilities_arr));
-                facilitiesFragment.setFacilitiesData(facilityList);
+                FacilitiesFragment facilitiesFragment = (FacilitiesFragment) fragment;
+                facilitiesFragment.setEditable(true);
+
+                // 인텐트에서 편의시설 목록 가져옴
+                facilitiesFragment.setFacilitiesData(Facility.getGlobalList());
+                viewModel.setFacilitiesFragment(facilitiesFragment);
             }
         }
     }
@@ -113,50 +115,50 @@ public class UkdMainActivity extends AppCompatActivity{
 
                 PositionInformation resultPosition = data.getParcelableExtra(getString(R.string.extra_position_information));
                 System.out.println(resultPosition.getPostalAddress());
-                ukdMainViewModel.setPosition(resultPosition);
+                viewModel.setPosition(resultPosition);
             }
         }
     }
 
     // 장착될 Fragment 초기화 메소드
     private void initFragmentLimitTime(SearchOptionFragment searchOptionFragment){
-        ukdMainViewModel.limitTimeData.setOptionEditListener(new View.OnClickListener() {
+        viewModel.limitTimeData.setOptionEditListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialogMap.get(getString(R.string.dialog_select_limit_time_tag)).show(getSupportFragmentManager(),getString(R.string.dialog_select_limit_time_tag));
             }
         });
-        searchOptionFragment.setData(ukdMainViewModel.limitTimeData);
+        searchOptionFragment.setData(viewModel.limitTimeData);
         searchOptionFragment.setImage(R.drawable.icon_clock);
     }
     private void initFragmentEstateType(SearchOptionFragment searchOptionFragment){
-        ukdMainViewModel.estateData.setOptionEditListener(new View.OnClickListener() {
+        viewModel.estateData.setOptionEditListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialogMap.get(getString(R.string.dialog_select_estate_type_tag)).show(getSupportFragmentManager(),getString(R.string.dialog_select_estate_type_tag));
             }
         });
-        searchOptionFragment.setData(ukdMainViewModel.estateData);
+        searchOptionFragment.setData(viewModel.estateData);
         searchOptionFragment.setImage(R.drawable.icon_building);
     }
     private void initFragmentTradeType(SearchOptionFragment searchOptionFragment){
-        ukdMainViewModel.tradeTypeData.setOptionEditListener(new View.OnClickListener() {
+        viewModel.tradeTypeData.setOptionEditListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialogMap.get(getString(R.string.dialog_select_trade_type_tag))
                         .show(getSupportFragmentManager(),getString(R.string.dialog_select_trade_type_tag));
             }
         });
-        searchOptionFragment.setData(ukdMainViewModel.tradeTypeData);
+        searchOptionFragment.setData(viewModel.tradeTypeData);
         searchOptionFragment.setImage(R.drawable.icon_type);
     }
     private void initFragmentSearchDestination(SearchBarFragment searchBarFragment){
         searchBarFragment.setEditDisable();
 
-        ukdMainViewModel
+        viewModel
                 .searchBarData
                 .setSearchBtnListener(new EstateSearchBtnListener());
-        searchBarFragment.setData(ukdMainViewModel.searchBarData);
+        searchBarFragment.setData(viewModel.searchBarData);
     }
 
 
@@ -171,8 +173,8 @@ public class UkdMainActivity extends AppCompatActivity{
         timeDialog.setListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                int result = i*10;
-                ukdMainViewModel.setLimitTimeMin(result);
+                int result = InnerMapping.LIMIT_TIME.getIndexList()[i];
+                viewModel.setLimitTimeMin(result);
 
                 dialogInterface.dismiss();
             }
@@ -184,7 +186,8 @@ public class UkdMainActivity extends AppCompatActivity{
         estateDialog.setListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ukdMainViewModel.setEstateType(estateDialog.indexToResult(i));
+                int result = InnerMapping.ESTATE.getIndexList()[i];
+                viewModel.setEstateType(result);
 
                 dialogInterface.dismiss();
             }
@@ -196,7 +199,8 @@ public class UkdMainActivity extends AppCompatActivity{
         tradeDialog.setListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ukdMainViewModel.setTradeType(tradeDialog.indexToResult(i));
+                int result = InnerMapping.TRADE.getIndexList()[i];
+                viewModel.setTradeType(result);
 
                 dialogInterface.dismiss();
             }
@@ -209,7 +213,7 @@ public class UkdMainActivity extends AppCompatActivity{
         @Override
         public void onClickSearchBtn(View view, String searchText) {
             // 입력값을 받아 JSON으로 변환한다.
-            final UserDataToTransmit data = new UserDataToTransmit(ukdMainViewModel);
+            final UserDataToTransmit data = new UserDataToTransmit(viewModel);
             System.out.println(data.toJSON());
 
             // 입력값으로 계산 요청하고, 로딩 다이얼로그 출력
@@ -219,7 +223,7 @@ public class UkdMainActivity extends AppCompatActivity{
 
             loadingDialog.cancel();
             Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-            intent.putExtra(getString(R.string.extra_position_information), ukdMainViewModel.getPosition());
+            intent.putExtra(getString(R.string.extra_position_information), viewModel.getPosition());
             startActivity(intent);
         }
     }
@@ -229,7 +233,7 @@ public class UkdMainActivity extends AppCompatActivity{
         public void onClick(View view) {
             // 검색 다이얼로그를 띄운다.
             Intent intent = new Intent(getApplicationContext(), SelectLocationDialogActivity.class);
-            intent.putExtra(getString(R.string.extra_position_information), ukdMainViewModel.getPosition());
+            intent.putExtra(getString(R.string.extra_position_information), viewModel.getPosition());
             startActivityForResult(intent, getResources().getInteger(R.integer.request_location));
         }
     }
@@ -237,22 +241,7 @@ public class UkdMainActivity extends AppCompatActivity{
         @Override
         public void onClick(View view) {
             // GPS 요청으로 positionInformation을 새로 설정한다.
-            UserPositionInformation posInfo = (UserPositionInformation) ukdMainViewModel.getPosition();
-            // PositionInformation이 null이면 새로 만든다.
-            UserPositionInformation.ChangeListener listener = new UserPositionInformation.ChangeListener() {
-                @Override
-                public void onChange(PositionInformation position) {
-                    // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
-                    ukdMainViewModel.alertPositionChange();
-                }
-            };
-
-            if(posInfo== null){
-                posInfo = new UserPositionInformation();
-                ukdMainViewModel.setPosition(posInfo);
-            }
-            // 리스너 설정
-            posInfo.setChangeListener(listener);
+            UserPositionInformation posInfo = (UserPositionInformation) viewModel.getPosition();
 
             // 갱신 요청
             posInfo.requestGPS(view.getContext());

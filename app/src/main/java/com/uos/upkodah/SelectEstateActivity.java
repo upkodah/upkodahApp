@@ -29,7 +29,7 @@ import com.uos.upkodah.fragment.map.listener.ZoomListener;
 import com.uos.upkodah.data.local.position.composite.CompositePositionInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
-import com.uos.upkodah.data.local.position.composite.RegionInformation;
+import com.uos.upkodah.data.local.position.composite.GuRegionInformation;
 import com.uos.upkodah.test.TestEstateGetter;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
@@ -54,7 +54,7 @@ public class SelectEstateActivity extends AppCompatActivity {
 
         // 데이터 준비
         Intent positionDataIntent = getIntent();
-        List<RegionInformation> estates = positionDataIntent.getParcelableArrayListExtra(getString(R.string.extra_region_information));
+        List<GuRegionInformation> estates = positionDataIntent.getParcelableArrayListExtra(getString(R.string.extra_region_information));
         if(estates!=null) viewModel.setEstates(estates);
 
 
@@ -79,8 +79,17 @@ public class SelectEstateActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("MYTEST", "사이즈 : "+t.getEstates().size());
-                EstateClassifier e = new EstateClassifier(SelectEstateActivity.this, t.getEstates());
+                EstateClassifier e = new EstateClassifier(
+                        SelectEstateActivity.this,
+                        new EstateClassifier.Listener() {
+                            @Override
+                            public void onEstateClassified(EstateClassifier classifier) {
+                                viewModel.setEstates(classifier.getResult());
+                                Log.d("MYTEST", classifier.toString());
+                            }
+                        },
+                        t.getEstates());
+                Log.d("MYTEST", "사이즈 : "+e.getResult().size());
             }
         });
 
@@ -104,6 +113,7 @@ public class SelectEstateActivity extends AppCompatActivity {
         if(fragment instanceof SelectionListFragment){
             SelectionListFragment selectionListFragment = (SelectionListFragment) fragment;
             selectionListFragment.setData(viewModel.listData);
+            viewModel.setEstateListener(new EstateClickListener());
             selectionListFragment.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         }
         if(fragment instanceof GoogleMapFragment){

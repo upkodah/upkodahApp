@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.uos.upkodah.R;
 import com.uos.upkodah.data.Facility;
 import com.uos.upkodah.databinding.FragmentFacilitiesBinding;
+import com.uos.upkodah.databinding.ListItemFacilityBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,16 +27,27 @@ import java.util.List;
  * 해당 클래스는 편의시설 아이콘 목록을 표출시키는 Fragment
  */
 public class FacilitiesFragment extends Fragment {
-    private boolean selectable = false;
+    private boolean editable = false;
+    public void setEditable(boolean editable){
+        this.editable = editable;
+    }
 
     private RecyclerView recyclerView;
     private List<Facility> facilities;
 
     public void setFacilitiesData(List<Facility> facilities){
-        this.facilities = new ArrayList<>(facilities);
+        if(editable){
+            this.facilities = new ArrayList<>();
+            for(Facility f : facilities){
+                this.facilities.add(f.toEditable());
+            }
+        }
+        else{
+            this.facilities = new ArrayList<>(facilities);
+        }
     }
     public void setFacilitiesData(Facility...facilities){
-        this.facilities = new ArrayList<>(Arrays.asList(facilities));
+        this.setFacilitiesData(Arrays.asList(facilities));
     }
 
     @Override
@@ -55,17 +67,26 @@ public class FacilitiesFragment extends Fragment {
 //        String url = "https://icons-for-free.com/iconfiles/png/512/mario+mario+bros+mario+world+mushroom+toad+videogame+icon-1320196400529338074.png";
 //        Glide.with(this).load(url).into(i);
     }
-    public void setSelectable(boolean selectable){
-        this.selectable = selectable;
+
+    public String[] getSelectedFacilities(){
+        ArrayList<String> list = new ArrayList<>();
+
+        for(Facility f : facilities){
+            if(f.isSelected()) list.add(f.code);
+        }
+        String[] result = new String[list.size()];
+        list.toArray(result);
+        return result;
     }
 
     private class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesViewHolder>{
         @NonNull
         @Override
         public FacilitiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_facility, parent,false);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            ListItemFacilityBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_facility, parent,false);
 
-            return new FacilitiesViewHolder(v);
+            return new FacilitiesViewHolder(binding);
         }
 
         @Override
@@ -79,17 +100,14 @@ public class FacilitiesFragment extends Fragment {
         }
     }
     private class FacilitiesViewHolder extends RecyclerView.ViewHolder{
-        private final ImageButton btn;
-        private final TextView txt;
+        private final ListItemFacilityBinding binding;
 
-        public FacilitiesViewHolder(@NonNull View itemView) {
-            super(itemView);
-            btn = itemView.findViewById(R.id.btn_facility);
-            txt = itemView.findViewById(R.id.txt_facility_name);
+        public FacilitiesViewHolder(ListItemFacilityBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
         public void setFacilityData(Facility facility){
-            Glide.with(FacilitiesFragment.this).load(facility.imgUrl).into(btn);
-            txt.setText(facility.name);
+            binding.setData(facility);
         }
     }
 }

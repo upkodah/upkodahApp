@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +16,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.uos.upkodah.data.Facility;
+import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.data.mapping.InnerMapping;
 import com.uos.upkodah.databinding.ActivityUkdMainBinding;
 import com.uos.upkodah.dialog.LoadingDialog;
@@ -22,13 +27,16 @@ import com.uos.upkodah.dialog.SelectItemDialog;
 import com.uos.upkodah.dialog.activity.SelectLocationDialogActivity;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.local.position.UserPositionInformation;
+import com.uos.upkodah.server.ukd.EstateSearchRequest;
 import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
 import com.uos.upkodah.fragment.searchbar.SearchBarFragment;
 import com.uos.upkodah.fragment.optionbar.SearchOptionFragment;
+import com.uos.upkodah.server.ukd.parser.EstateResultParser;
 import com.uos.upkodah.util.PermissionRequiringOnClickListener;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,7 +171,7 @@ public class UkdMainActivity extends AppCompatActivity{
 
 
     // 표시될 다이얼로그 초기화 메소드
-    private Map<String, DialogFragment> dialogMap = new HashMap<>();
+    private final Map<String, DialogFragment> dialogMap = new HashMap<>();
     public void initDialog(){
         final SelectItemDialog timeDialog = SelectItemDialog.getInstance(SelectItemDialog.LIMIT_TIME);
         final SelectItemDialog estateDialog = SelectItemDialog.getInstance(SelectItemDialog.ESTATE_TYPE);;
@@ -221,14 +229,39 @@ public class UkdMainActivity extends AppCompatActivity{
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
-            loadingDialog.cancel();
-            Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-            intent.putExtra(getString(R.string.extra_position_information), viewModel.getPosition());
-            startActivity(intent);
+            new EstateSearchRequest(
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("HTTP", "매물 요청 결과"+response);
+                            EstateResultParser parser = EstateResultParser.getInstance(response);
+                            Log.d("HTTP", "매물 파싱 완료 (성공여부 : "+(parser!=null)+")");
+
+                            if (parser != null) {
+                                Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
+                                System.out.println("응답"+parser.getResultRooms().size());
+                                intent.putParcelableArrayListExtra(getString(R.string.extra_room_info), (ArrayList<Room>) parser.getResultRooms());
+
+                                loadingDialog.cancel();
+
+                                startActivity(intent);
+                            } else {
+                                loadingDialog.cancel();
+                                Toast.makeText(getApplicationContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loadingDialog.cancel();
+                            Toast.makeText(getApplicationContext(), "인터넷 연결을 확인하세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            ).request(getApplicationContext());
         }
     }
     private class SearchLocationBtnListener implements View.OnClickListener{
-
         @Override
         public void onClick(View view) {
             // 검색 다이얼로그를 띄운다.

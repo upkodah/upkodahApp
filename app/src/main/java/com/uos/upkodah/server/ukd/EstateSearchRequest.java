@@ -11,15 +11,16 @@ import com.android.volley.toolbox.Volley;
 import com.uos.upkodah.data.InputData;
 
 public class EstateSearchRequest extends StringRequest {
-    protected EstateSearchRequest(Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
-        super(URL, listener, errorListener);
+    public EstateSearchRequest(Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+        super(getRequestURL(null), listener, errorListener);
     }
     public EstateSearchRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         super(url, listener, errorListener);
     }
-    protected final static String URL = "http://34.64.166.133/v1/room/info/";
+    protected final static String URL = "http://34.64.166.133/v1/rooms";
     protected static String getRequestURL(String json){
-        return URL+"?query="+json;
+//        return URL+"?query="+json;
+        return URL;
     }
 
     private InputData input;

@@ -70,11 +70,11 @@ public class EstateInformation extends LocationInformation implements LocationPa
     }
     @Override
     public String getTradeType() {
-        if(room.getTradeType()== InnerMapping.CHARTER_RENTAL){
-            return "전세 "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
+        if(room.getTradeType()== InnerMapping.MONTHLY_RENTAL){
+            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getPrice()+"만 / "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
         }
         else{
-            return "월세 "+room.getPrice()+"만 / "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
+            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
         }
     }
     @Override
@@ -103,7 +103,6 @@ public class EstateInformation extends LocationInformation implements LocationPa
     public String[] getSelectedFacilities() {
         return room.getFacilities();
     }
-
     @Override
     public String getClassifyingKey() {
         return regionData.grid;

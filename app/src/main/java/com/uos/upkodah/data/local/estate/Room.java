@@ -1,8 +1,10 @@
 package com.uos.upkodah.data.local.estate;
 
+import android.os.Parcelable;
+
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
 
-public interface Room extends GeoCoordinate {
+public interface Room extends GeoCoordinate, Parcelable {
     public int getRoomID();
     public int getGridID();
     public int getEstateType();

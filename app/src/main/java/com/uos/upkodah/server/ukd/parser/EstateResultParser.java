@@ -1,5 +1,7 @@
 package com.uos.upkodah.server.ukd.parser;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -24,16 +26,22 @@ public class EstateResultParser extends UkdServerParser {
         data = jobj.get("data");
 
         if(data instanceof JSONObject){
+            Log.d("HTTP", "단일 오브젝트 처리");
             JSONObject dataObj = (JSONObject) data;
+            Log.d("HTTP", "매물 생성");
             resultRooms.add(new RoomInformation(dataObj));
         }
         else if(data instanceof JSONArray){
+            Log.d("HTTP", "다수의 오브젝트 처리");
             JSONArray dataArr = (JSONArray) data;
-            for(int i=0;i>dataArr.length();i++){
+            Log.d("HTTP", dataArr.toString());
+            for(int i=0;i<dataArr.length();i++){
+                Log.d("HTTP", "매물 생성("+i+")");
                 resultRooms.add(new RoomInformation(dataArr.getJSONObject(i)));
             }
         }
         else{
+            Log.d("HTTP", "ERROR : 매물 파싱 오류 발생");
             throw(new JSONException("파싱 오류 발생"));
         }
     }
@@ -43,11 +51,11 @@ public class EstateResultParser extends UkdServerParser {
         try {
             return new EstateResultParser(response);
         } catch (JSONException e) {
-            Log.d("UKDSERVER", "파싱 오류 발생");
+            Log.d("HTTP", "파싱 오류 발생");
             e.printStackTrace();
             return null;
         } catch (UkdResponseException e) {
-            Log.d("UKDSERVER", "서버 응답 오류 발생");
+            Log.d("HTTP", "서버 응답 오류 발생");
             return null;
         }
     }
@@ -60,51 +68,88 @@ public class EstateResultParser extends UkdServerParser {
 
 
 
-    private class RoomInformation implements Room {
+    private static class RoomInformation implements Room {
         private RoomInformation(JSONObject estateJson) throws JSONException{
-            this.roomID = estateJson.getInt("roomId");
-            this.gridID = estateJson.getInt("gridId");
-            this.latitude = estateJson.getDouble("latitude");
-            this.longitude = estateJson.getDouble("longitude");
-            this.estateType = estateJson.getInt("estateType");
-            this.tradeType = estateJson.getInt("tradeType");
+            // 복구용
+            this.jsonString = estateJson.toString();
+            Log.d("HTTP", "매물 생성 시작"+jsonString);
 
-            this.title = estateJson.getString("title");
-            this.price = estateJson.getInt("price");
-            this.deposit = estateJson.getInt("deposit");
+            this.roomID = estateJson.getInt("id");   //
+            Log.d("HTTP", "roomId 응답"+this.roomID);
+            this.gridID = estateJson.getInt("gridId");   //
+            Log.d("HTTP", "gridId 응답"+this.gridID);
+            this.latitude = estateJson.getDouble("latitude");   //
+            Log.d("HTTP", "latitude 응답"+this.latitude);
+            this.longitude = estateJson.getDouble("longitude");   //
+            Log.d("HTTP", "longitude 응답"+this.longitude);
+            this.estateType = estateJson.getInt("estateType");   //
+            Log.d("HTTP", "estateType 응답"+this.estateType);
+            this.tradeType = estateJson.getInt("tradeType");   //
+            Log.d("HTTP", "tradeType 응답"+this.tradeType);
 
-            this.floorStr = estateJson.getString("floorStr");
-            this.realSize = estateJson.getDouble("realSize");
-            this.roughSize = estateJson.getDouble("roughSize");
+            this.title = estateJson.getString("title");   //
+            Log.d("HTTP", "title 응답"+this.roomID);
+            this.price = estateJson.getInt("price");   //
+            Log.d("HTTP", "price 응답"+this.roomID);
+            this.deposit = estateJson.getInt("deposit");   //
+            Log.d("HTTP", "deposit 응답"+this.roomID);
 
-            StringTokenizer facilityTokenizer = new StringTokenizer(estateJson.getString("facilities"),", ");
+            this.floorStr = estateJson.getString("floorStr");   //
+            this.realSize = estateJson.getDouble("realSize");   //
+            this.roughSize = estateJson.getDouble("roughSize");   //
+
+            StringTokenizer facilityTokenizer = new StringTokenizer(estateJson.getString("facilities"),", ");   //
             facilities = new String[facilityTokenizer.countTokens()];
             for(int i=0;i<facilities.length;i++){
                 facilities[i] = facilityTokenizer.nextToken();
             }
 
-            StringTokenizer imgsTokenizer = new StringTokenizer(estateJson.getString("imgUrls"),", ");
+            StringTokenizer imgsTokenizer = new StringTokenizer(estateJson.getString("imgUrls"),", ");  //
             imgUrls = new String[imgsTokenizer.countTokens()];
             for(int i=0;i<imgUrls.length;i++){
                 imgUrls[i] = imgsTokenizer.nextToken();
             }
 
-            this.address = estateJson.getString("address");
-            this.roadAddress = estateJson.getString("roadAddress");
 
-            this.describe = estateJson.getString("describe");
+            // 아래부분은 shortcut이 아닌 경우우
+           try{
+                this.address = estateJson.getString("address");
+                this.roadAddress = estateJson.getString("roadAddress");
 
-            this.isAnimal = estateJson.getBoolean("isAnimal");
-            this.isBalcony = estateJson.getBoolean("isBalcony");
-            this.isElevator = estateJson.getBoolean("isElevator");
-            this.bathNum = estateJson.getInt("bathNum");
-            this.bedNum = estateJson.getInt("bedNum");
-            this.direct = estateJson.getString("direct");
-            this.heatType = estateJson.getString("heatType");
-            this.tolalCost = estateJson.getString("totalCost");
+                this.describe = estateJson.getString("describe");
 
-            this.phoneNum = estateJson.getString("phoneNum");
+                this.isAnimal = estateJson.getBoolean("isAnimal");
+                this.isBalcony = estateJson.getBoolean("isBalcony");
+                this.isElevator = estateJson.getBoolean("isElevator");
+                this.bathNum = estateJson.getInt("bathNum");
+                this.bedNum = estateJson.getInt("bedNum");
+                this.direct = estateJson.getString("direct");
+                this.heatType = estateJson.getString("heatType");
+                this.tolalCost = estateJson.getString("totalCost");
+
+                this.phoneNum = estateJson.getString("phoneNum");
+            }
+            catch (JSONException e){
+                this.address = "";
+                this.roadAddress = "";
+
+                this.describe = "";
+
+                this.isAnimal = false;
+                this.isBalcony = false;
+                this.isElevator = false;
+                this.bathNum = 0;
+                this.bedNum = 0;
+                this.direct = "";
+                this.heatType = "";
+                this.tolalCost = "";
+
+                this.phoneNum = "";
+            }
+
         }
+        private final String jsonString;
+
         private final int roomID;
         private final int gridID;
         private final double latitude;
@@ -124,21 +169,21 @@ public class EstateResultParser extends UkdServerParser {
 
         private final String[] imgUrls;
 
-        private final String address;
-        private final String roadAddress;
+        private String address;
+        private String roadAddress;
 
-        private final String describe;
+        private String describe;
 
-        private final boolean isAnimal;
-        private final boolean isBalcony;
-        private final boolean isElevator;
-        private final int bathNum;
-        private final int bedNum;
-        private final String direct;
-        private final String heatType;
-        private final String tolalCost;
+        private boolean isAnimal;
+        private boolean isBalcony;
+        private boolean isElevator;
+        private int bathNum;
+        private int bedNum;
+        private String direct;
+        private String heatType;
+        private String tolalCost;
 
-        private final String phoneNum;
+        private String phoneNum;
 
         @Override
         public int getRoomID() {
@@ -269,6 +314,33 @@ public class EstateResultParser extends UkdServerParser {
         public String getPhoneNum() {
             return this.phoneNum;
         }
-    }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(jsonString);
+        }
+        public final static Creator<Room> CREATOR = new RoomParcelableCreator();
+    }
+    private static class RoomParcelableCreator implements Parcelable.Creator<Room>{
+
+        @Override
+        public Room createFromParcel(Parcel parcel) {
+            try {
+                RoomInformation room = new RoomInformation(new JSONObject(parcel.readString()));
+                return room;
+            } catch (JSONException e) {
+                return null;
+            }
+
+        }
+
+        @Override
+        public Room[] newArray(int i) {
+            return new RoomInformation[i];
+        }
+    }
 }

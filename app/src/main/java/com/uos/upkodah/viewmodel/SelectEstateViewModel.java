@@ -1,13 +1,19 @@
 package com.uos.upkodah.viewmodel;
 
+import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
+import com.uos.upkodah.data.local.estate.EstateClassifier;
+import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.fragment.list.SelectionListAdapter;
 import com.uos.upkodah.fragment.list.data.SelectionListData;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
@@ -27,11 +33,12 @@ import java.util.List;
  * 1) 줌 수준에 따라 mapData의 Positions를 적절히 결정한다.
  * 2) 줌 내에 보이는 모든 positions를 저장한다.
  */
-public class SelectEstateViewModel extends ViewModel  {
+public class SelectEstateViewModel extends AndroidViewModel  {
     public GoogleMapData mapData = new GoogleMapData();
     public SelectionListData listData = new SelectionListData();
 
-    public SelectEstateViewModel(){
+    public SelectEstateViewModel(@NonNull Application application){
+        super(application);
         mapData.setZoomLevelWithDepth(1);
 
         this.manager = new EstateListManager(new ArrayList<EstateInformation>());
@@ -39,10 +46,25 @@ public class SelectEstateViewModel extends ViewModel  {
     }
 
     private List<GuRegionInformation> estates;
+
     public void setEstates(List<GuRegionInformation> estates) {
         this.estates = estates;
         if(this.estates!=null){
             mapData.setMapMarkers(estates);
+        }
+    }
+    public void setRooms(List<Room> rooms){
+        final EstateClassifier classifier = new EstateClassifier(
+                this.getApplication().getApplicationContext(),
+                new EstateClassifier.Listener() {
+                    @Override
+                    public void onEstateClassified(EstateClassifier classifier, EstateInformation estateInformation) {
+                        setEstates(classifier.getResult());
+                        Log.d("MYTEST", classifier.toString());
+                    }
+                });
+        for(Room r : rooms){
+            classifier.requestClassify(new EstateInformation(r));
         }
     }
 
@@ -102,7 +124,7 @@ public class SelectEstateViewModel extends ViewModel  {
         return result;
     }
 
-    private EstateListManager manager;
+    private final EstateListManager manager;
     private GridListViewHolder.OnClickListener estateListener = null;
     public void setListEstateData(List<EstateInformation> data) {
         this.manager.estatesInCurrentSelectedGrid = data;

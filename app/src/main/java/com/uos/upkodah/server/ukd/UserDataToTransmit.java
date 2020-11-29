@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.InputData;
 
+import java.util.StringTokenizer;
+
 public class UserDataToTransmit {
     // 각 필드는 위치, 제한시간, 매물타입, 편의시설태그를 나타낸다.
     public final double longitude;
@@ -11,7 +13,7 @@ public class UserDataToTransmit {
     public final int limit_time;
     public final int estate_type;
     public final int trade_type;
-    public final String[] facilities;
+    public final String facilities;
 
     public UserDataToTransmit(InputData inputData){
         PositionInformation p = inputData.getPosition();
@@ -20,7 +22,14 @@ public class UserDataToTransmit {
         limit_time = inputData.getLimitTimeMin();
         estate_type = inputData.getEstateType();
         trade_type = inputData.getTradeType();
-        facilities = inputData.getFacilities();
+
+        StringBuilder tmp = new StringBuilder();
+
+        for(int i=0;i<inputData.getFacilities().length;i++){
+            tmp.append(inputData.getFacilities()[i]);
+            if(i+1<inputData.getFacilities().length) tmp.append(",");
+        }
+        facilities = tmp.toString();
     }
 
     public String toJSON(){

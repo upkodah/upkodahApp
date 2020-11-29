@@ -3,6 +3,7 @@ package com.uos.upkodah;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +14,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.uos.upkodah.data.Facility;
 import com.uos.upkodah.data.local.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.FacilityInformation;
+import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.databinding.ActivityShowEstateBinding;
+import com.uos.upkodah.dialog.activity.ShowLocationDialogActivity;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
+import com.uos.upkodah.fragment.map.GoogleMapDrawable;
+import com.uos.upkodah.fragment.map.GoogleMapFragment;
+import com.uos.upkodah.fragment.map.data.GoogleMapDrawableObject;
 import com.uos.upkodah.server.ukd.parser.EstateResultParser;
 import com.uos.upkodah.viewmodel.ShowEstateViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowEstateActivity extends AppCompatActivity {
     private ShowEstateViewModel viewModel;
@@ -31,14 +41,18 @@ public class ShowEstateActivity extends AppCompatActivity {
 
         // 인텐트 읽기
         Intent intent = getIntent();
-//        EstateInformation estateInformation = intent.getParcelableExtra(getString(R.string.extra_estate_info));
-        EstateResultParser parser = EstateResultParser.getInstance("{\"data\":{\"id\":1,\"createdAt\":\"2020-11-25T11:26:21Z\",\"updatedAt\":\"2020-11-25T11:26:21Z\",\"deletedAt\":null,\"roomId\":1,\"gridId\":7931516,\"latitude\":37.58332550064732,\"longitude\":127.03453527024723,\"estateType\":0,\"tradeType\":0,\"title\":\"제기동역 도보 10분 원룸\",\"price\":0,\"deposit\":6000,\"floorStr\":\"2층\",\"realSize\":13.22,\"roughSize\":13.22,\"facilities\":\"PS3, BK9, CE7, PM9, 세탁소\",\"imgUrls\":\"['http://d1774jszgerdmk.cloudfront.net/512/308CAF9A-4CCC-4F5D-9904-190AECC5FA99', 'http://d1774jszgerdmk.cloudfront.net/512/90857896-8FF7-4E32-9DC7-ED6B6F838CD6', 'http://d1774jszgerdmk.cloudfront.net/512/7FF90974-6F47-4946-A846-464DA181AA38', 'http://d1774jszgerdmk.cloudfront.net/512/D2036015-AEFB-44E8-9737-457C295EBED7']\",\"address\":\"서울특별시 동대문구 제기동\",\"roadAddress\":\"\",\"describe\":\"제기동역, 안암역에서 도보 10분 거리의 원룸입니다.\\n풀옵션입니다. 월세 500/40 가능\\n\",\"isAnimal\":false,\"isBalcony\":false,\"isElevator\":false,\"bathNum\":1,\"bedNum\":1,\"direct\":\"동\",\"heatType\":\"개별난방\",\"totalCost\":\"5만 원\",\"phoneNum\":\"01037874947\"},\"status\":\"success\"}");
-        viewModel.setEstate(new EstateInformation(parser.getResultRooms().get(0)));
+        EstateInformation estateInformation = new EstateInformation((Room) intent.getParcelableExtra(getString(R.string.extra_room_info)));
+        viewModel.setEstate(estateInformation);
 
         ActivityShowEstateBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_show_estate);
         binding.setLocationData(viewModel.getLocationPanelDisplayable());
         binding.setTableData(viewModel.getRoomInfoTableDisplayable());
         binding.setTitlePanelData(viewModel.getTitlePanelDisplayable());
+
+
+        // 지도 클릭 시, 지도 상세보기
+        View view = findViewById(R.id.map_wrap);
+        view.setOnClickListener(new MapClickListener());
     }
 
     @Override
@@ -56,6 +70,27 @@ public class ShowEstateActivity extends AppCompatActivity {
                 FacilitiesFragment facilitiesFragment = (FacilitiesFragment) fragment;
                 facilitiesFragment.setFacilitiesData(Facility.getGlobalList(viewModel.getLocationPanelDisplayable().getSelectedFacilities()));
             }
+        }
+        if(fragment instanceof GoogleMapFragment){
+            // 이곳에서 마커 준비를 해야합니다.
+            GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
+            googleMapFragment.setData(viewModel.mapData);
+            viewModel.mapData.setControllable(false);
+        }
+    }
+
+    private class MapClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            List<? extends GoogleMapDrawable> markers = viewModel.mapData.getMapMarkers();
+            ArrayList<GoogleMapDrawableObject> sendMarkers = new ArrayList<>();
+
+            for(GoogleMapDrawable g : markers){
+                sendMarkers.add(new GoogleMapDrawableObject(g));
+            }
+            Intent intent = new Intent(getApplicationContext(), ShowLocationDialogActivity.class);
+            intent.putParcelableArrayListExtra(getString(R.string.extra_markers), sendMarkers);
+            startActivity(intent);
         }
     }
 }

@@ -30,8 +30,8 @@ public class UserPositionInformation extends PositionInformation{
     public interface ChangeListener{
         public void onChange(PositionInformation position);
     }
-    ChangeListener changeListener;
-    public void setChangeListener(ChangeListener listener){
+    PositionPreparedListener<PositionInformation> changeListener;
+    public void setChangeListener(PositionPreparedListener<PositionInformation> listener){
         this.changeListener = listener;
     }
 
@@ -68,7 +68,7 @@ public class UserPositionInformation extends PositionInformation{
 }
 
 class SetCoordListener implements Response.Listener<String>{
-    private UserPositionInformation info;
+    private final UserPositionInformation info;
 
     SetCoordListener(UserPositionInformation info){
         this.info = info;
@@ -85,7 +85,7 @@ class SetCoordListener implements Response.Listener<String>{
             this.info.postalAddress = parser.getPostalAddress();
 
             // 리스너를 호출하여 변경을 알린다.
-            if(info !=null) info.changeListener.onChange(info);
+            info.changeListener.onPrepared(info);
         }
     }
 }
@@ -95,8 +95,8 @@ class SetCoordListener implements Response.Listener<String>{
  * 그러니까, 이 요청이 완료되면 자동으로 주소 변환 요청까지 들어간다.
  */
 class SetGPSInformationListener implements LocationListener{
-    private Context context;
-    private UserPositionInformation info;
+    private final Context context;
+    private final UserPositionInformation info;
 
     SetGPSInformationListener(Context context, UserPositionInformation info){
         this.context = context;
@@ -113,9 +113,7 @@ class SetGPSInformationListener implements LocationListener{
         System.out.println("lon="+this.info.longitude+", lat="+this.info.latitude);
 
         // 리스너를 호출하여 변경을 알린다.
-        if(info !=null) info
-                .changeListener
-                .onChange(info);
+        info.changeListener.onPrepared(info);
     }
 
     @Override

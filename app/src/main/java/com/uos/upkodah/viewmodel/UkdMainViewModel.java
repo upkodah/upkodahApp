@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 
 import com.uos.upkodah.data.local.position.PositionInformation;
+import com.uos.upkodah.data.local.position.PositionPreparedListener;
 import com.uos.upkodah.data.local.position.UserPositionInformation;
 import com.uos.upkodah.data.mapping.InnerMapping;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
@@ -14,7 +15,7 @@ import com.uos.upkodah.fragment.optionbar.SearchOptionData;
 import com.uos.upkodah.data.InputData;
 import com.uos.upkodah.util.LimitTimeStringConverter;
 
-public class UkdMainViewModel extends ViewModel implements InputData, UserPositionInformation.ChangeListener {
+public class UkdMainViewModel extends ViewModel implements InputData, PositionPreparedListener<PositionInformation> {
     public UkdMainViewModel(){
         // 초기화
         this.setLimitTimeMin(10);
@@ -36,7 +37,7 @@ public class UkdMainViewModel extends ViewModel implements InputData, UserPositi
         alertPositionChange();
     }
     @Override
-    public void onChange(PositionInformation position) {
+    public void onPrepared(PositionInformation positionInformation) {
         // GPS 수신에 성공하면, 그냥 해당 객체가 가진 데이터바인딩에 신호를 보낸다.
         alertPositionChange();
     }
@@ -99,7 +100,4 @@ public class UkdMainViewModel extends ViewModel implements InputData, UserPositi
     public void onClickGetLocatoinBtn(View view){
         getLocationBtnListener.onClick(view);
     }
-
-
-
 }

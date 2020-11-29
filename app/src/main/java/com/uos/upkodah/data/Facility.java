@@ -1,22 +1,30 @@
 package com.uos.upkodah.data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.uos.upkodah.BR;
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
-import com.uos.upkodah.data.local.position.PositionInformation;
-import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 
 import java.util.ArrayList;
@@ -26,7 +34,7 @@ import java.util.List;
 
 public class Facility extends BaseObservable implements Parcelable {
     // 이 정적 필드는 앱 내에서 공통적으로 사용하는 편의시설 목록
-    private static HashMap<String, Facility> globalList = new HashMap<>();
+    private final static HashMap<String, Facility> globalList = new HashMap<>();
     public static void setGlobalList(Facility...facilities){
         setGlobalList(Arrays.asList(facilities));
     }public static void setGlobalList(List<Facility> facilities){
@@ -36,8 +44,9 @@ public class Facility extends BaseObservable implements Parcelable {
     }
     public static List<Facility> getGlobalList(String...selectedCodes){
         HashMap<String, Facility> resultMap = new HashMap<>(globalList);
+
         for(String code : selectedCodes){
-            resultMap.put(code, new Facility(resultMap.get(code), true));
+            resultMap.put(code, new Facility(globalList.get(code), true));
         }
         return new ArrayList<>(resultMap.values());
     }
@@ -47,18 +56,24 @@ public class Facility extends BaseObservable implements Parcelable {
     public final int type;
     public final String name;
     public final String imgUrl;
-    private boolean isSelected = false;
+    private boolean selected = false;
     public boolean isSelected() {
-        return isSelected;
+        return selected;
     }
     protected void setSelected(boolean selected){
-        this.isSelected = selected;
+        this.selected = selected;
     }
 
     @Bindable
     public float getBtnAlpha(){
-        if(isSelected) return 1.0f;
+        if(selected) return 1.0f;
         else return 0.35f;
+    }
+
+    @Bindable
+    public String getTint(){
+        if(selected) return "#86d2e4";
+        else return "#000000";
     }
 
     // type이 1이면 code로, type이 0이면 name으로 필터링
@@ -72,7 +87,8 @@ public class Facility extends BaseObservable implements Parcelable {
         this.type = f.type;
         this.name = f.name;
         this.imgUrl = f.imgUrl;
-        this.isSelected = isSelected;
+        this.selected = isSelected;
+        this.iconBitmap = f.iconBitmap;
     }
     public Facility(Parcel parcel){
         this.code = parcel.readString();
@@ -85,11 +101,11 @@ public class Facility extends BaseObservable implements Parcelable {
         switch(type){
             case 0:
                 // name으로 검색한다.
-                KakaoAPIRequest.getSearchKeywordRequest(code, coordinate, listener, null)
+                KakaoAPIRequest.getSearchKeywordRequest(code, coordinate, 300, listener, null)
                         .request(context);
             case 1:
                 // code로 검색한다.
-                KakaoAPIRequest.getSearchCategoryRequest(code, coordinate, listener, null)
+                KakaoAPIRequest.getSearchCategoryRequest(code, coordinate, 300, listener, null)
                         .request(context);
         }
     }
@@ -133,8 +149,31 @@ public class Facility extends BaseObservable implements Parcelable {
     }
 
     @BindingAdapter("android:ukdImgUrl")
-    public static void setImage(ImageButton imageButton, String url){
-        Glide.with(imageButton).load(url).into(imageButton);
+    public static void setImage(final ImageButton imageButton, final String code){
+        final Facility self = globalList.get(code);
+        String url = self.imgUrl;
+        Glide.with(imageButton).asBitmap().load(url).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                imageButton.setImageBitmap(resource);
+
+                Log.d("MAP", self.code+code+"의 비트맵 설정됨"+resource);
+                self.iconBitmap = resource;
+            }
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+            }
+        });
+    }
+    @BindingAdapter("android:ukdBtnTint")
+    public static void setTint(final ImageButton imageButton, final String tint){
+        imageButton.setColorFilter(Color.parseColor(tint));
+    }
+
+    private Bitmap iconBitmap = null;
+    @Nullable
+    public Bitmap getIconBitmap() {
+        return iconBitmap;
     }
 
     private class Editable extends Facility {
@@ -145,6 +184,7 @@ public class Facility extends BaseObservable implements Parcelable {
         protected void setSelected(boolean selected){
             super.setSelected(selected);
             notifyPropertyChanged(BR.btnAlpha);
+            notifyPropertyChanged(BR.tint);
         }
 
         @Override

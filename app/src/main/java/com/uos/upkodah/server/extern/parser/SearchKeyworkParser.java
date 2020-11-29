@@ -32,8 +32,12 @@ public class SearchKeyworkParser extends KakaoAPIParser {
             // 주소 획득
             String postalAddress = document.getString("road_address_name");
 
+            // 이름 획득
+            String name = document.getString("place_name");
+
             // PositionInformation 생성 후 저장
             PositionInformation position = new PositionInformation(longitude, latitude, postalAddress);
+            position.setName(name);
             positionList.add(position);
         }
     }

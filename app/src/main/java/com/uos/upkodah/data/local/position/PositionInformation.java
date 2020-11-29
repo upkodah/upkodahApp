@@ -1,6 +1,7 @@
 package com.uos.upkodah.data.local.position;
 
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -56,6 +57,10 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
     @Override
     public String getMarkerWindowSnippet() {
         return this.postalAddress;
+    }
+    @Override
+    public Bitmap getIconBitmap() {
+        return null;
     }
 
 

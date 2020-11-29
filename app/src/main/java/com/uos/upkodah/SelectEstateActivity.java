@@ -17,9 +17,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 
 import com.uos.upkodah.data.local.estate.EstateClassifier;
 import com.uos.upkodah.data.local.estate.EstateInformation;
+import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
 import com.uos.upkodah.fragment.list.SelectionListFragment;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
@@ -33,6 +35,7 @@ import com.uos.upkodah.data.local.position.composite.GuRegionInformation;
 import com.uos.upkodah.test.TestEstateGetter;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,6 +45,8 @@ import java.util.List;
  */
 public class SelectEstateActivity extends AppCompatActivity {
     private SelectEstateViewModel viewModel;
+    private ViewPager2 pager;
+    private ImageButton pagerBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -53,9 +58,9 @@ public class SelectEstateActivity extends AppCompatActivity {
 
 
         // 데이터 준비
-        Intent positionDataIntent = getIntent();
-        List<GuRegionInformation> estates = positionDataIntent.getParcelableArrayListExtra(getString(R.string.extra_region_information));
-        if(estates!=null) viewModel.setEstates(estates);
+        Intent intent = getIntent();
+        List<Room> roomInfo = intent.getParcelableArrayListExtra(getString(R.string.extra_room_info));
+        if(roomInfo!=null) viewModel.setRooms(roomInfo);
 
 
         // 뷰 준비
@@ -63,40 +68,8 @@ public class SelectEstateActivity extends AppCompatActivity {
 
 
         // 페이저 준비
-        ViewPager2 pager = findViewById(R.id.pager_estate);
-        pager.setAdapter(new PagerAdapter(this));
-        pager.setUserInputEnabled(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // 테스트를 위한 임시 코드
-        // 먼저, 데이터를 전부 얻어낸다.
-        final TestEstateGetter t = new TestEstateGetter(this);
-        Button b = findViewById(R.id.btn_temp);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EstateClassifier e = new EstateClassifier(
-                        SelectEstateActivity.this,
-                        new EstateClassifier.Listener() {
-                            @Override
-                            public void onEstateClassified(EstateClassifier classifier) {
-                                viewModel.setEstates(classifier.getResult());
-                                Log.d("MYTEST", classifier.toString());
-                            }
-                        },
-                        t.getEstates());
-                Log.d("MYTEST", "사이즈 : "+e.getResult().size());
-            }
-        });
-
-
-
-        ImageButton b2 = findViewById(R.id.btn_switch);
-        b2.setOnClickListener(new View.OnClickListener() {
+        pagerBtn = findViewById(R.id.btn_switch);
+        pagerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ViewPager2 pager = findViewById(R.id.pager_estate);
@@ -104,6 +77,51 @@ public class SelectEstateActivity extends AppCompatActivity {
                 else pager.setCurrentItem(0);
             }
         });
+
+        pager = findViewById(R.id.pager_estate);
+        pager.setAdapter(new PagerAdapter(this, pagerBtn));
+        pager.registerOnPageChangeCallback(new OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if(position==0){
+                    pagerBtn.setVisibility(View.VISIBLE);
+                    pager.setUserInputEnabled(false);
+                }
+                else{
+                    pagerBtn.setVisibility(View.GONE);
+                    pager.setUserInputEnabled(true);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(pager.getCurrentItem()==0){
+            // 지도 화면에서 뒤로키를 누르면 줌을 grid->dong->gu 순서로 당긴다.
+            switch(viewModel.mapData.getZoomDepth()){
+                case 2:
+                    viewModel.mapData.setZoomLevelWithDepth(1);
+                    break;
+                case 3:
+                    viewModel.mapData.setZoomLevelWithDepth(2);
+                    break;
+                default:
+                    super.onBackPressed();
+            }
+        }
+        else{
+            // 리스트 화면에서 뒤로키를 누르면 지도 페이지로 다시 이동한다.
+            pager.setCurrentItem(pager.getCurrentItem()-1);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     @Override
@@ -168,21 +186,23 @@ public class SelectEstateActivity extends AppCompatActivity {
             // 매물 정보를 표출시킨다.
             if(o instanceof EstateInformation){
                 Intent intent = new Intent(SelectEstateActivity.this, ShowEstateActivity.class);
-                intent.putExtra(getString(R.string.extra_estate_info), (EstateInformation) o);
+                intent.putExtra(getString(R.string.extra_room_info), ((EstateInformation) o).getRoomInfo());
 
                 startActivity(intent);
             }
         }
     }
 
-    private class PagerAdapter extends FragmentStateAdapter{
-        private Fragment f1;
-        private Fragment f2;
+    private class PagerAdapter extends FragmentStateAdapter {
+        private final Fragment f1;
+        private final Fragment f2;
+        private final ImageButton pagerBtn;
 
-        public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+        public PagerAdapter(@NonNull FragmentActivity fragmentActivity, ImageButton button) {
             super(fragmentActivity);
             f1 = new GoogleMapFragment();
             f2 = new SelectionListFragment();
+            this.pagerBtn = button;
         }
 
         @NonNull

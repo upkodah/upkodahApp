@@ -44,6 +44,11 @@
             android:name=".dialog.activity.SelectLocationDialogActivity"
             >
         </activity>
+        <activity
+            android:theme="@style/SelectLocationDialogTheme"
+            android:name=".dialog.activity.ShowLocationDialogActivity"
+            >
+        </activity>
 
 
 

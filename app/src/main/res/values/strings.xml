@@ -4,8 +4,8 @@
     <!--  Activity가 송수신할 때 필요한 Intent Extra Key  -->
     <string name="extra_position_information">EX_POSITION</string>
     <string name="extra_region_information">EX_REGION</string>
-    <string name="extra_estate_info">EX_ESTATE</string>
-    <string name="extra_facilities_arr">EX_FACILITY</string>
+    <string name="extra_room_info">EX_ROOMS</string>
+    <string name="extra_markers">EX_MARKERS</string>
 
     <!-- UkdMainActivity에 장착될 Fragment Tag -->
     <string name="fragment_search_destination">FR_SERC_DEST</string>

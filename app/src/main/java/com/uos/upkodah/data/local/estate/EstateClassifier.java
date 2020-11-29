@@ -24,33 +24,31 @@ import java.util.List;
  * 최종적으로 RegionInformation 객체를 반솬하는 클래스이다.
  */
 public class EstateClassifier {
-    public EstateClassifier(Context context, @Nullable Listener classifyListener, EstateInformation...estates){
-        this(context, classifyListener, Arrays.asList(estates));
-    }
-    public EstateClassifier(final Context context, @Nullable Listener classifyListener, final List<EstateInformation> estateList){
+    private final Context context;
+
+    public EstateClassifier(final Context context, @Nullable Listener classifyListener){
         Log.d("MYTEST", "분류기생성");
         this.classifyListener = classifyListener;
-
-        if(estateList==null) return;
-
-        for(final EstateInformation e : estateList){
-            final LocationInformation.OnRegionBuildListener listener = new LocationInformation.OnRegionBuildListener() {
-                @Override
-                public void onBuild(LocationInformation.Region data) {
-                    // 지역정보가 완성되었으면 지역 분류를 시작한다.
-                    Log.d("MYTEST", data.toString());
-
-                    putEstate(e);
-                }
-            };
-            Log.d("MYTEST", "요청 시작");
-            e.buildRegion(context, listener);
-        }
+        this.context = context;
     }
 
     private final HashMap<String, GridRegionInformation> gridMap = new HashMap<>();
     private final HashMap<String, DongRegionInformation> dongMap = new HashMap<>();
     private final HashMap<String, GuRegionInformation> guMap = new HashMap<>();
+
+    public void requestClassify(final EstateInformation e){
+        final LocationInformation.OnRegionBuildListener listener = new LocationInformation.OnRegionBuildListener() {
+            @Override
+            public void onBuild(LocationInformation.Region data) {
+                // 지역정보가 완성되었으면 지역 분류를 시작한다.
+                Log.d("MYTEST", data.toString());
+
+                putEstate(e);
+            }
+        };
+        Log.d("MYTEST", "요청 시작");
+        e.buildRegion(context, listener);
+    }
 
     public void putEstate(EstateInformation e){
         String key = e.getClassifyingKey();
@@ -66,7 +64,7 @@ public class EstateClassifier {
             gridMap.put(key, makeGrid(e));
         }
 
-        if(classifyListener!=null) classifyListener.onEstateClassified(EstateClassifier.this);
+        if(classifyListener!=null) classifyListener.onEstateClassified(EstateClassifier.this, e);
     }
     private GridRegionInformation makeGrid(EstateInformation e){
         GridRegionInformation result = new GridRegionInformation(e.getRegionData());
@@ -117,7 +115,7 @@ public class EstateClassifier {
         this.classifyListener = listener;
     }
     public interface Listener{
-        public void onEstateClassified(EstateClassifier classifier);
+        public void onEstateClassified(EstateClassifier classifier, EstateInformation estateInformation);
     }
     private Listener classifyListener = null;
 

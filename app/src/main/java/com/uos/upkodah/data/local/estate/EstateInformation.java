@@ -1,7 +1,12 @@
 package com.uos.upkodah.data.local.estate;
 
 import android.os.Parcel;
+import android.util.Log;
+import android.widget.ImageView;
 
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
 import com.uos.upkodah.data.Facility;
 import com.uos.upkodah.data.local.position.LocationInformation;
 import com.uos.upkodah.data.local.estate.data.LocationPanelDisplayable;
@@ -32,15 +37,19 @@ public class EstateInformation extends LocationInformation implements LocationPa
 
     @Override
     public String getListDisplayedName(){
-        return "["+InnerMapping.TRADE.getString(room.getTradeType())+"] "+room.getRealSize()+"㎡\n"+this.name;
+        return this.getTradeType();
     }
     @Override
     public String getListDisplayedAddr(){
-        return postalAddress;
+        return InnerMapping.ESTATE.getString(room.getEstateType())+" | "+room.getFloor()+" | "+room.getRealSize()+"㎡";
     }
     @Override
     public String getListDisplayedDesc(){
-        return room.getTradeType()+" "+room.getDeposit()+"/"+room.getPrice();
+        return this.getEtc();
+    }
+    @Override
+    public String getImgUrl() {
+        return room.getImgURLs()[0];
     }
 
     @Override
@@ -106,5 +115,12 @@ public class EstateInformation extends LocationInformation implements LocationPa
     @Override
     public String getClassifyingKey() {
         return regionData.grid;
+    }
+
+
+    @BindingAdapter("android:ukdGlideImgUrl")
+    public static void setImg(final ImageView imageView, final String url){
+        Log.d("ESTATE", "이미지 출력"+url);
+        Glide.with(imageView.getContext()).load(url).into(imageView);
     }
 }

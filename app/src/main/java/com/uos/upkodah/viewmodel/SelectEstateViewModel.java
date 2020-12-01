@@ -3,10 +3,13 @@ package com.uos.upkodah.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.uos.upkodah.R;
 import com.uos.upkodah.data.local.estate.EstateClassifier;
 import com.uos.upkodah.data.local.estate.Room;
+import com.uos.upkodah.databinding.ListItemGridEstateBinding;
+import com.uos.upkodah.fragment.list.GridListAdapter;
 import com.uos.upkodah.fragment.list.SelectionListAdapter;
 import com.uos.upkodah.fragment.list.data.SelectionListData;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
@@ -41,8 +46,7 @@ public class SelectEstateViewModel extends AndroidViewModel  {
         super(application);
         mapData.setZoomLevelWithDepth(1);
 
-        this.manager = new EstateListManager(new ArrayList<EstateInformation>());
-        listData.setAdapter(new SelectionListAdapter(this.manager));
+        listData.setAdapter(adapter);
     }
 
     private List<GuRegionInformation> estates;
@@ -51,6 +55,7 @@ public class SelectEstateViewModel extends AndroidViewModel  {
         this.estates = estates;
         if(this.estates!=null){
             mapData.setMapMarkers(estates);
+            mapData.setCenterUsingPositions();
         }
     }
     public void setRooms(List<Room> rooms){
@@ -124,45 +129,12 @@ public class SelectEstateViewModel extends AndroidViewModel  {
         return result;
     }
 
-    private final EstateListManager manager;
-    private GridListViewHolder.OnClickListener estateListener = null;
+    private final GridListAdapter adapter = new GridListAdapter();
     public void setListEstateData(List<EstateInformation> data) {
-        this.manager.estatesInCurrentSelectedGrid = data;
+        adapter.setItemList(data);
         listData.notifyUpdateListData();
     }
     public void setEstateListener(GridListViewHolder.OnClickListener estateListener) {
-        this.estateListener = estateListener;
-    }
-
-    class EstateListManager implements ListViewHolderManager {
-        private List<EstateInformation> estatesInCurrentSelectedGrid;
-
-
-        EstateListManager(List<EstateInformation> list){
-            this.estatesInCurrentSelectedGrid = list;
-        }
-
-        @Override
-        public int getLayoutId() {
-            return R.layout.list_item_grid_estate;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder generate(View view) {
-            GridListViewHolder holder = new GridListViewHolder(view);
-            holder.setListener(estateListener);
-            return holder;
-        }
-
-        @Override
-        public void setViewHolder(RecyclerView.ViewHolder viewHolder, int index) {
-            Log.d("LIST", "리스트 표출");
-            ((GridListViewHolder) viewHolder).setInfo(estatesInCurrentSelectedGrid.get(index));
-        }
-
-        @Override
-        public int getItemCount() {
-            return estatesInCurrentSelectedGrid==null ? 0 : estatesInCurrentSelectedGrid.size();
-        }
+        adapter.setListener(estateListener);
     }
 }

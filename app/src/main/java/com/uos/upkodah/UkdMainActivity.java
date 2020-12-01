@@ -230,12 +230,13 @@ public class UkdMainActivity extends AppCompatActivity{
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
             new EstateSearchRequest(
+                    data.toJSON(),
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("HTTP", "매물 요청 결과"+response);
+                            Log.d("SERVER", "매물 요청 결과"+response);
                             EstateResultParser parser = EstateResultParser.getInstance(response);
-                            Log.d("HTTP", "매물 파싱 완료 (성공여부 : "+(parser!=null)+")");
+                            Log.d("SERVER", "매물 파싱 완료 (성공여부 : "+(parser!=null)+")");
 
                             if (parser != null) {
                                 Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
@@ -255,6 +256,7 @@ public class UkdMainActivity extends AppCompatActivity{
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             loadingDialog.cancel();
+                            Log.d("SERVER", "에러 : "+error);
                             Toast.makeText(getApplicationContext(), "인터넷 연결을 확인하세요.", Toast.LENGTH_SHORT).show();
                         }
                     }

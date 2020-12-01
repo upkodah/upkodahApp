@@ -28,6 +28,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.uos.upkodah.BR;
 import com.uos.upkodah.data.local.gps.GeoCoordinate;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
+import com.uos.upkodah.util.BitmapIconManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,14 +41,19 @@ public class Facility extends BaseObservable implements Parcelable {
     public static void setGlobalList(Facility...facilities){
         setGlobalList(Arrays.asList(facilities));
     }public static void setGlobalList(List<Facility> facilities){
+        Log.d("MAP", "설정된 편의시설 정보 : "+ Arrays.toString(facilities.toArray()));
         for(Facility f : facilities){
+            Log.d("MAP", "편의시설 상세 : "+"CODE="+f.code+", NAME="+f.name+", URL="+f.imgUrl);
             globalList.put(f.code, f);
         }
     }
     public static List<Facility> getGlobalList(String...selectedCodes){
         HashMap<String, Facility> resultMap = new HashMap<>(globalList);
 
+        Log.d("MAP", "선택된 편의시설(CODE) : "+ Arrays.toString(selectedCodes));
+
         for(String code : selectedCodes){
+            Log.d("MAP", "코드="+code);
             resultMap.put(code, new Facility(globalList.get(code), true));
         }
         return new ArrayList<>(resultMap.values());
@@ -84,13 +90,14 @@ public class Facility extends BaseObservable implements Parcelable {
         this.type = type;
         this.name = name;
         this.imgUrl = imgUrl;
+        this.iconBitmapKey = code;
     }public Facility(Facility f, boolean isSelected){
         this.code = f.code;
         this.type = f.type;
         this.name = f.name;
         this.imgUrl = f.imgUrl;
         this.selected = isSelected;
-        this.iconBitmap = f.iconBitmap;
+        this.iconBitmapKey = f.iconBitmapKey;
     }
     public Facility(Parcel parcel){
         this.code = parcel.readString();
@@ -153,14 +160,13 @@ public class Facility extends BaseObservable implements Parcelable {
     @BindingAdapter("android:ukdImgUrl")
     public static void setImage(final ImageButton imageButton, final String code){
         final Facility self = globalList.get(code);
-        String url = self.imgUrl;
-        Glide.with(imageButton).asBitmap().load(url).into(new CustomTarget<Bitmap>() {
+        Glide.with(imageButton).asBitmap().load(self.imgUrl).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 imageButton.setImageBitmap(resource);
 
-                Log.d("MAP", self.code+code+"의 비트맵 설정됨"+resource);
-                self.iconBitmap = resource;
+                Log.d("MAP", self.code+"의 비트맵 설정됨"+resource);
+                BitmapIconManager.getInstance().put(self.code, resource);
             }
             @Override
             public void onLoadCleared(@Nullable Drawable placeholder) {
@@ -172,23 +178,10 @@ public class Facility extends BaseObservable implements Parcelable {
         imageButton.setColorFilter(Color.parseColor(tint));
     }
 
-    private Bitmap iconBitmap = null;
+    private String iconBitmapKey = null;
     @Nullable
-    public Bitmap getIconBitmap() {
-        int width = 150;
-        int height = 150;
-        int radius = width/2;
-
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(iconBitmap, width,height,false);
-        Bitmap background = Bitmap.createBitmap(width, height, resizedBitmap.getConfig());
-        Canvas canvas = new Canvas(background);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        canvas.drawCircle(radius,radius,radius,paint);
-        canvas.drawBitmap(resizedBitmap, 0,0,null);
-
-        return background;
+    public String getIconBitmapKey() {
+        return this.iconBitmapKey;
     }
 
     private class Editable extends Facility {

@@ -1,9 +1,11 @@
 package com.uos.upkodah.fragment.map.data;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
 
 import com.uos.upkodah.fragment.map.GoogleMapDrawable;
 
@@ -11,21 +13,21 @@ public class GoogleMapDrawableObject implements GoogleMapDrawable, Parcelable {
     public GoogleMapDrawableObject(GoogleMapDrawable googleMapDrawable){
         this.title = googleMapDrawable.getMarkerWindowTitle();
         this.snippet = googleMapDrawable.getMarkerWindowSnippet();
-        this.icon = googleMapDrawable.getIconBitmap();
+        this.iconKey = googleMapDrawable.getIconBitmapKey();
         this.longitude = googleMapDrawable.getLongitude();
         this.latitude = googleMapDrawable.getLatitude();
     }
 
     private final String title;
     private final String snippet;
-    private final Bitmap icon;
+    private final String iconKey;
     private final double longitude;
     private final double latitude;
 
     protected GoogleMapDrawableObject(Parcel in) {
         title = in.readString();
         snippet = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        iconKey = in.readString();
         longitude = in.readDouble();
         latitude = in.readDouble();
     }
@@ -41,8 +43,8 @@ public class GoogleMapDrawableObject implements GoogleMapDrawable, Parcelable {
     }
 
     @Override
-    public Bitmap getIconBitmap() {
-        return this.icon;
+    public String getIconBitmapKey() {
+        return this.iconKey;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class GoogleMapDrawableObject implements GoogleMapDrawable, Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(snippet);
-        parcel.writeParcelable(icon, i);
+        parcel.writeString(iconKey);
         parcel.writeDouble(longitude);
         parcel.writeDouble(latitude);
     }

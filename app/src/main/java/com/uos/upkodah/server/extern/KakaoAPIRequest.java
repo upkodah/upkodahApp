@@ -36,6 +36,7 @@ public class KakaoAPIRequest extends StringRequest {
 
         return headers;
     }
+
     public static RequestQueue requestQueue = null;
     public synchronized void request(Context context){
         if(requestQueue==null) requestQueue = Volley.newRequestQueue(context);

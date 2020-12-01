@@ -59,7 +59,7 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
         return this.postalAddress;
     }
     @Override
-    public Bitmap getIconBitmap() {
+    public String getIconBitmapKey() {
         return null;
     }
 
@@ -135,6 +135,11 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
 
     @Override
     public String getListDisplayedDesc() {
+        return "";
+    }
+
+    @Override
+    public String getImgUrl() {
         return "";
     }
 }

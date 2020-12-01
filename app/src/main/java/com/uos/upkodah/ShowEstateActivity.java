@@ -76,6 +76,7 @@ public class ShowEstateActivity extends AppCompatActivity {
             GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
             googleMapFragment.setData(viewModel.mapData);
             viewModel.mapData.setControllable(false);
+            viewModel.mapData.setCenterUsingPositions();
         }
     }
 

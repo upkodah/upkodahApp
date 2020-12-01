@@ -37,6 +37,7 @@ public class ShowLocationDialogActivity extends AppCompatActivity {
             Intent intent = getIntent();
             List<GoogleMapDrawableObject> markers = intent.getParcelableArrayListExtra(getString(R.string.extra_markers));
             mapData.setMapMarkers(markers);
+            mapData.setCenterUsingPositions();
             mapData.setZoomLevelWithDepth(3);
         }
     }

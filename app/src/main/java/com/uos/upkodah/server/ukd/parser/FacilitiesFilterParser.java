@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.uos.upkodah.data.Facility;
+import com.uos.upkodah.util.JSONUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,11 +19,19 @@ public class FacilitiesFilterParser extends UkdServerParser {
 
     protected FacilitiesFilterParser(String response) throws JSONException, UkdResponseException {
         super(response);
-        data = jobj.getJSONArray("data");
 
-        for(int i=0;i<data.length();i++){
-            JSONObject tmp = data.getJSONObject(i);
-            facilities.add(new Facility(tmp.getString("code"), tmp.getInt("type"), tmp.getString("name"), tmp.getString("icon")));
+        int ERROR_INDEX = 0;
+
+        for(JSONObject j : JSONUtil.getJSONObjectList(jobj, "data")){
+            facilities.add(
+                    new Facility(
+                            JSONUtil.get(j, "code", "ERR_CODE_"+ERROR_INDEX),
+                            JSONUtil.get(j, "type", ERROR_INDEX),
+                            JSONUtil.get(j, "name", "ERR_NAME_"+ERROR_INDEX),
+                            JSONUtil.get(j, "icon", "")
+                    )
+            );
+            ERROR_INDEX++;
         }
     }
     @Nullable
@@ -30,11 +39,11 @@ public class FacilitiesFilterParser extends UkdServerParser {
         try {
             return new FacilitiesFilterParser(response);
         } catch (JSONException e) {
-            Log.d("UKDSERVER", "파싱 오류 발생");
+            Log.d("SERVER", "파싱 오류 발생");
             e.printStackTrace();
             return null;
         } catch (UkdResponseException e) {
-            Log.d("UKDSERVER", "서버 응답 오류 발생");
+            Log.d("SERVER", "서버 응답 오류 발생");
             return null;
         }
     }

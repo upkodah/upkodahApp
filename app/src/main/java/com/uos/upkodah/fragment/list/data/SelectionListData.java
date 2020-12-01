@@ -9,13 +9,13 @@ import com.uos.upkodah.BR;
 import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
 
 public class SelectionListData extends BaseObservable {
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = null;
+    private RecyclerView.Adapter adapter = null;
 
     @Bindable
     public RecyclerView.Adapter<RecyclerView.ViewHolder> getAdapter() {
         return adapter;
     }
-    public void setAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+    public void setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         notifyUpdateListData();
     }

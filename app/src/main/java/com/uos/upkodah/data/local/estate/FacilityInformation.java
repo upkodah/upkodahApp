@@ -38,7 +38,7 @@ public class FacilityInformation implements GoogleMapDrawable {
 
                     if(parser!=null){
                         for(PositionInformation p : parser.getPositionList()){
-                            FacilityInformation fac = new FacilityInformation(f.name, p, f.getIconBitmap());
+                            FacilityInformation fac = new FacilityInformation(f.name, p, f.getIconBitmapKey());
                             resultList.add(fac);
                             listener.onPrepared(fac);
                         }
@@ -52,13 +52,13 @@ public class FacilityInformation implements GoogleMapDrawable {
     private final String category;
     private final double longitude;
     private final double latitude;
-    private final Bitmap icon;
-    public FacilityInformation(String category, PositionInformation p, Bitmap icon){
+    private final String iconKey;
+    public FacilityInformation(String category, PositionInformation p, String iconKey){
         this.name = p.getName();
         this.longitude = p.getLongitude();
         this.latitude = p.getLatitude();
-        this.icon = icon;
-        if(icon==null) Log.d("MAP", "오류 : 아이콘이 NULL입니다.");
+        this.iconKey = iconKey;
+        if(iconKey==null) Log.d("MAP", "오류 : 아이콘이 NULL입니다.");
         this.category = category;
     }
 
@@ -73,8 +73,8 @@ public class FacilityInformation implements GoogleMapDrawable {
     }
 
     @Override
-    public Bitmap getIconBitmap() {
-        return icon;
+    public String getIconBitmapKey() {
+        return this.iconKey;
     }
 
     @Override

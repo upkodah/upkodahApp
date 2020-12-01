@@ -18,6 +18,7 @@ import com.uos.upkodah.data.local.gps.GeoCoordinateUtil;
 import com.uos.upkodah.fragment.map.GoogleMapDrawable;
 import com.uos.upkodah.fragment.map.listener.MarkerListener;
 import com.uos.upkodah.fragment.map.listener.ZoomListener;
+import com.uos.upkodah.util.BitmapIconManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +38,11 @@ public class GoogleMapData implements GeoCoordinate {
     public void setMapMarkers(List<? extends GoogleMapDrawable> mapMarkers) {
         this.mapMarkers = new ArrayList<>(mapMarkers);
         mapListener.updateMarker();
-        setCenterUsingPositions();
     }
     public void addMapMarker(GoogleMapDrawable mapMarker){
         if(this.mapMarkers==null) this.mapMarkers = new ArrayList<>();
         this.mapMarkers.add(mapMarker);
         mapListener.updateMarker();
-        setCenterUsingPositions();
     }
 
     public final static float[] ZOOM_DEPTH = {12f, 15f, 18f};
@@ -75,7 +74,7 @@ public class GoogleMapData implements GeoCoordinate {
     /**
      * 마커 평균으로 중심 좌표를 설정합니다,
      */
-    protected void setCenterUsingPositions(){
+    public void setCenterUsingPositions(){
         // 평균 위도와 경도. 기본값 설정 : 전체 지점들의 평균값으로 결정
         if(mapMarkers != null && mapMarkers.size()>0){
             GeoCoordinate[] coords = new GeoCoordinate[mapMarkers.size()];
@@ -145,7 +144,12 @@ public class GoogleMapData implements GeoCoordinate {
                             .title(drawable.getMarkerWindowTitle())
                             .snippet(drawable.getMarkerWindowSnippet()));
                     // 비트맵 정보가 null이 아니면 기본 아이콘이 아니라 지정된 아이콘으로 설정
-                    if(drawable.getIconBitmap()!=null) marker.setIcon(BitmapDescriptorFactory.fromBitmap(drawable.getIconBitmap()));
+                    if(drawable.getIconBitmapKey()!=null && !drawable.getIconBitmapKey().isEmpty()) {
+                        Log.d("MAP", "마커 아이콘 키 : " + drawable.getIconBitmapKey());
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                BitmapIconManager.getInstance().get(drawable.getIconBitmapKey())
+                        ));
+                    }
 
                     // 마커에 들어갈 데이터 설정
                     marker.setTag(drawable);

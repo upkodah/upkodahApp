@@ -23,6 +23,7 @@ public class SelectionListAdapter extends RecyclerView.Adapter<RecyclerView.View
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = LayoutInflater.from(parent.getContext()).inflate(manager.getLayoutId(), parent,false);
 
         return manager.generate(v);

@@ -9,11 +9,9 @@ import com.uos.upkodah.data.local.position.PositionPreparedListener;
 import com.uos.upkodah.data.local.position.UserPositionInformation;
 import com.uos.upkodah.data.mapping.InnerMapping;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
-import com.uos.upkodah.server.ukd.UserDataToTransmit;
 import com.uos.upkodah.fragment.searchbar.SearchBarData;
 import com.uos.upkodah.fragment.optionbar.SearchOptionData;
 import com.uos.upkodah.data.InputData;
-import com.uos.upkodah.util.LimitTimeStringConverter;
 
 public class UkdMainViewModel extends ViewModel implements InputData, PositionPreparedListener<PositionInformation> {
     public UkdMainViewModel(){

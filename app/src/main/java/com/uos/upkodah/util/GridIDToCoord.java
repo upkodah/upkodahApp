@@ -38,7 +38,7 @@ public class GridIDToCoord {
 
             return GeoCoordinateUtil.getInstance(longitude, latitude);
         }
-        catch(NumberFormatException e){
+        catch(NumberFormatException | StringIndexOutOfBoundsException e){
             return null;
         }
     }

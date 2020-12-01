@@ -137,6 +137,7 @@ public class SelectEstateActivity extends AppCompatActivity {
         if(fragment instanceof GoogleMapFragment){
             GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
             googleMapFragment.setData(viewModel.mapData);
+            viewModel.mapData.setCenterUsingPositions();
 
             viewModel.mapData.setZoomListener(new EstateZoomListener());
             viewModel.mapData.setMarkerListener(new EstateMarkerListener());
@@ -174,9 +175,9 @@ public class SelectEstateActivity extends AppCompatActivity {
             }
             else if(data instanceof PositionInformation){
                 //만약 선택된 마커가 Grid가 아닐 경우, 줌과 중심점을 변경시킨다.
-                Log.d("MAP", "줌 변경"+data.getClass());
-                viewModel.mapData.setCenter((PositionInformation) data);
+                Log.d("MAP", "줌 변경"+data.getClass()+"중심 : "+((PositionInformation) data).getLongitude()+" "+((PositionInformation) data).getLatitude());
                 viewModel.mapData.setZoomLevelWithDepth(viewModel.mapData.getZoomDepth()+1);
+                viewModel.mapData.setCenter((PositionInformation) data);
             }
         }
     }

@@ -14,6 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONUtil {
+    public static String get(JSONObject obj, String str){
+        try{
+            return obj.getString(str);
+        }
+        catch(ClassCastException e){
+            Log.d("SERVER", "잘못된 형식 요청");
+            return "";
+        }
+        catch(JSONException e){
+            Log.d("SERVER", "잘못된 JSON 요청");
+            return "";
+        }
+    }
     public static String get(JSONObject obj, String str, String defaultValue){
         try{
             return obj.getString(str);

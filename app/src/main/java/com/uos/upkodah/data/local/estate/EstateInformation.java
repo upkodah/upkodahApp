@@ -50,7 +50,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     }
     @Override
     public String getListDisplayedDesc(){
-        return this.regionData.gu+" "+this.regionData.dong;
+        return room.getTitle();
     }
     @Override
     public String getImgUrl() {

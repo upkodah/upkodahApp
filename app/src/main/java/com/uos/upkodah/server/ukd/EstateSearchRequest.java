@@ -9,31 +9,44 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.uos.upkodah.data.InputData;
+import com.uos.upkodah.util.JSONUtil;
 
-import java.util.StringTokenizer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class EstateSearchRequest extends StringRequest {
     protected EstateSearchRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
         Log.d("SERVER", "요청 URL :"+url);
     }
-    protected final static String URL = "http://34.64.166.133/v1/rooms/1";
-    protected static String getRequestURL(String json){
-//        return URL+"?query="+json;
-//        StringTokenizer tokenizer = new StringTokenizer(json, "{,}");
-//        String result = URL+"?";
-        return URL;
-    }
+    protected static String getSearchRequestURL(String json) throws JSONException {
+        JSONObject obj = new JSONObject(json);
+        String result = ServerInfo.SERVER_ADDR +"/v1/rooms/1?"
+                +"longitude="+ JSONUtil.get(obj, "longitude", 0.0d)
+                +"latitude="+JSONUtil.get(obj, "latitude", 0.0d)
+                +"limit_time="+JSONUtil.get(obj, "limit_time", 0)
+                +"estate_type="+JSONUtil.get(obj, "estate_type", 0)
+                +"trade_type="+JSONUtil.get(obj, "trade_type", 0)
+                +"facilities="+JSONUtil.get(obj, "facilities");
 
-    private InputData input;
+        return result;
+    }
+    protected static String getIDRequestURL(int id){
+        return ServerInfo.SERVER_ADDR+"/v1/room/"+id+"/info";
+    }
     public static RequestQueue requestQueue = null;
 
     public static EstateSearchRequest getInstanceIDRequest(int id, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
-        return new EstateSearchRequest("http://34.64.236.95/v1/room/"+id+"/info",listener, errorListener);
+        return new EstateSearchRequest(getIDRequestURL(id),listener, errorListener);
     }
+
+    @Nullable
     public static EstateSearchRequest getInstanceSearchRequest(String json, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
-        return new EstateSearchRequest("http://34.64.236.95/v1/rooms/1",listener, errorListener);
+        try {
+            return new EstateSearchRequest(getSearchRequestURL(json),listener, errorListener);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
 

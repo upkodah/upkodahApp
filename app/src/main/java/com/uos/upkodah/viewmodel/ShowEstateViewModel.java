@@ -4,8 +4,11 @@ import android.app.Application;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.Bindable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.estate.FacilityInformation;
@@ -21,16 +24,19 @@ public class ShowEstateViewModel extends AndroidViewModel {
     public ShowEstateViewModel(@NonNull Application application) {
         super(application);
         mapData.setZoomLevelWithDepth(3);
+
+
     }
 
     public void setEstate(EstateInformation e){
         this.estateInformation = e;
-        mapData.addMapMarker(e);
+        mapData.setMapMarker(e);
         FacilityInformation.getFacilityInformations(
                 getApplication().getApplicationContext(),
                 estateInformation,
                 new FacilityPreparedListener(),
                 getLocationPanelDisplayable().getSelectedFacilities());
+        mapData.setCenter(e);
     }
 
     public TitlePanelDisplayable getTitlePanelDisplayable() {
@@ -40,7 +46,6 @@ public class ShowEstateViewModel extends AndroidViewModel {
     public RoomInfoTableDisplayable getRoomInfoTableDisplayable() {
         return estateInformation;
     }
-
     public LocationPanelDisplayable getLocationPanelDisplayable() {
         return estateInformation;
     }

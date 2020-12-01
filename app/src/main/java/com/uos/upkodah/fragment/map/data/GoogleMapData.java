@@ -39,6 +39,11 @@ public class GoogleMapData implements GeoCoordinate {
         this.mapMarkers = new ArrayList<>(mapMarkers);
         mapListener.updateMarker();
     }
+    public void setMapMarker(GoogleMapDrawable mapMarker){
+        this.mapMarkers = new ArrayList<>();
+        this.mapMarkers.add(mapMarker);
+        mapListener.updateMarker();
+    }
     public void addMapMarker(GoogleMapDrawable mapMarker){
         if(this.mapMarkers==null) this.mapMarkers = new ArrayList<>();
         this.mapMarkers.add(mapMarker);
@@ -79,6 +84,7 @@ public class GoogleMapData implements GeoCoordinate {
         if(mapMarkers != null && mapMarkers.size()>0){
             GeoCoordinate[] coords = new GeoCoordinate[mapMarkers.size()];
             mapMarkers.toArray(coords);
+            Log.d("MAP", "마커들로 중앙 설정합니다."+mapMarkers.size());
             this.setCenter(GeoCoordinateUtil.average(coords));
         }
     }

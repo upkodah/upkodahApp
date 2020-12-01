@@ -17,7 +17,7 @@ public class TestEstateGetter implements Response.Listener<String>{
 
     public TestEstateGetter(Context context){
         for(int i=1;i<=50;i++){
-            new EstateSearchRequest(TestURLs.getUrl(i), this, null).request(context);
+//            new /stateSearchRequest(TestURLs.getUrl(i), this, null).request(context);
         }
     }
 

@@ -12,136 +12,145 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="@color/color_ukd_main_divider">
 
-        <ScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:background="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#FFFFFF">
+                android:layout_height="0dp"
+                android:background="@color/color_ukd_sky"
+                android:backgroundTint="@color/color_ukd_sky"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="0dp"
                     android:layout_height="527dp"
-                    android:background="@color/color_ukd_sky"
-                    android:backgroundTint="@color/color_ukd_sky"
+                    android:scaleType="fitCenter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/main_background" />
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/main_background" />
+                <TextView
+                    android:id="@+id/txt_app_name"
+                    style="@style/TitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="117dp"
+                    android:layout_marginTop="46dp"
+                    android:layout_marginEnd="117dp"
+                    android:gravity="left|center_vertical"
+                    android:text="UpKoDah"
+                    android:textColor="@color/color_ukd_white_txt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/txt_app_name"
-                        style="@style/TitleText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="117dp"
-                        android:layout_marginTop="46dp"
-                        android:layout_marginEnd="117dp"
-                        android:gravity="left|center_vertical"
-                        android:text="UpKoDah"
-                        android:textColor="@color/color_ukd_white_txt"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="13dp"
+                    android:backgroundTint="@color/color_ukd_white_txt"
+                    app:cardCornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_app_name">
 
-                    <androidx.cardview.widget.CardView
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout2"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="13dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="13dp"
-                        android:backgroundTint="@color/color_ukd_white_txt"
-                        app:cardCornerRadius="100dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_app_name">
+                        android:layout_height="match_parent"
+                        android:background="#00FFFFFF">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/constraintLayout2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#00FFFFFF">
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/frag_search_destination"
+                            android:name="com.uos.upkodah.fragment.searchbar.SearchBarFragment"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:tag="@string/fragment_search_destination"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/btn_search_destination"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.fragment.app.FragmentContainerView
-                                android:id="@+id/frag_search_destination"
-                                android:name="com.uos.upkodah.fragment.searchbar.SearchBarFragment"
-                                android:layout_width="0dp"
-                                android:layout_height="50dp"
-                                android:tag="@string/fragment_search_destination"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/btn_search_destination"
-                                app:layout_constraintTop_toTopOf="parent" />
+                        <ImageButton
+                            android:id="@+id/btn_get_my_location"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="#00FFFFFF"
+                            android:onClick="@{model::onClickGetMyLocationBtn}"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_mylocation"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageButton
-                                android:id="@+id/btn_get_my_location"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_marginStart="10dp"
-                                android:background="#00FFFFFF"
-                                android:onClick="@{model::onClickGetMyLocationBtn}"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/icon_mylocation"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                        <ImageButton
+                            android:id="@+id/btn_search_destination"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="#00FFFFFF"
+                            android:onClick="@{model::onClickGetLocatoinBtn}"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_searchlocation"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/btn_get_my_location"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
 
-                            <ImageButton
-                                android:id="@+id/btn_search_destination"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:background="#00FFFFFF"
-                                android:onClick="@{model::onClickGetLocatoinBtn}"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/icon_searchlocation"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/btn_get_my_location"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginTop="170dp"
+                    android:layout_marginEnd="35dp"
+                    android:divider="@drawable/layout_divider"
+                    android:foregroundTint="#FFFFFF"
+                    android:orientation="vertical"
+                    android:overScrollMode="ifContentScrolls"
+                    android:showDividers="middle"
+                    android:verticalScrollbarPosition="defaultPosition"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="56dp"
-                        android:layout_marginEnd="56dp"
-                        android:layout_marginBottom="15dp"
-                        android:divider="@drawable/layout_divider"
-                        android:foregroundTint="#FFFFFF"
-                        android:orientation="vertical"
-                        android:overScrollMode="ifContentScrolls"
-                        android:showDividers="middle"
-                        android:verticalScrollbarPosition="defaultPosition"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/card_limit_time"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="47dp"
+                            android:layout_marginEnd="10dp"
                             android:background="@color/color_ukd_border"
                             android:backgroundTint="@color/color_ukd_border"
                             android:padding="1dp"
-                            app:cardCornerRadius="5dp">
+                            app:cardCornerRadius="5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/card_estate_type"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <androidx.fragment.app.FragmentContainerView
                                 android:id="@+id/frag_limit_time_option"
@@ -154,12 +163,17 @@
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/card_estate_type"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="47dp"
+                            android:layout_marginStart="10dp"
                             android:background="@color/color_ukd_border"
                             android:backgroundTint="@color/color_ukd_border"
                             android:padding="1dp"
-                            app:cardCornerRadius="5dp">
+                            app:cardCornerRadius="5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/card_limit_time"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <androidx.fragment.app.FragmentContainerView
                                 android:id="@+id/frag_estate_type_option"
@@ -170,37 +184,37 @@
                                 android:tag="@string/fragment_estate_type" />
                         </androidx.cardview.widget.CardView>
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/card_trade_type"
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_trade_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="47dp"
+                        android:background="@color/color_ukd_border"
+                        android:backgroundTint="@color/color_ukd_border"
+                        android:padding="1dp"
+                        app:cardCornerRadius="5dp">
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/frag_trade_type_option"
+                            android:name="com.uos.upkodah.fragment.optionbar.SearchOptionFragment"
                             android:layout_width="match_parent"
-                            android:layout_height="47dp"
-                            android:background="@color/color_ukd_border"
-                            android:backgroundTint="@color/color_ukd_border"
-                            android:padding="1dp"
-                            app:cardCornerRadius="5dp">
+                            android:layout_height="match_parent"
+                            android:background="#FFFFFF"
+                            android:tag="@string/fragment_trade_type" />
+                    </androidx.cardview.widget.CardView>
 
-                            <androidx.fragment.app.FragmentContainerView
-                                android:id="@+id/frag_trade_type_option"
-                                android:name="com.uos.upkodah.fragment.optionbar.SearchOptionFragment"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="#FFFFFF"
-                                android:tag="@string/fragment_trade_type" />
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <FrameLayout
                     android:id="@+id/frameLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
                     android:backgroundTint="#FFFFFF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/frag_select_facilities"
@@ -213,8 +227,10 @@
                         android:tag="@string/fragment_facilities"
                         tools:layout="@layout/fragment_facilities" />
                 </FrameLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

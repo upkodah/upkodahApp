@@ -6,6 +6,7 @@
     <string name="extra_region_information">EX_REGION</string>
     <string name="extra_room_info">EX_ROOMS</string>
     <string name="extra_markers">EX_MARKERS</string>
+    <string name="extra_room_id">EX_ROOM_ID</string>
 
     <!-- UkdMainActivity에 장착될 Fragment Tag -->
     <string name="fragment_search_destination">FR_SERC_DEST</string>

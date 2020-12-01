@@ -40,12 +40,12 @@
             >
         </activity>
         <activity
-            android:theme="@style/SelectLocationDialogTheme"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".dialog.activity.SelectLocationDialogActivity"
             >
         </activity>
         <activity
-            android:theme="@style/SelectLocationDialogTheme"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".dialog.activity.ShowLocationDialogActivity"
             >
         </activity>

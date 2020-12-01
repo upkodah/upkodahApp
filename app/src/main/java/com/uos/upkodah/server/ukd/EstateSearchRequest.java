@@ -14,9 +14,9 @@ import com.uos.upkodah.data.InputData;
 import java.util.StringTokenizer;
 
 public class EstateSearchRequest extends StringRequest {
-    public EstateSearchRequest(String json, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
-        super(getRequestURL(json), listener, errorListener);
-        Log.d("SERVER", "요청 URL :"+getRequestURL(json));
+    protected EstateSearchRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+        super(url, listener, errorListener);
+        Log.d("SERVER", "요청 URL :"+url);
     }
     protected final static String URL = "http://34.64.166.133/v1/rooms/1";
     protected static String getRequestURL(String json){
@@ -28,6 +28,13 @@ public class EstateSearchRequest extends StringRequest {
 
     private InputData input;
     public static RequestQueue requestQueue = null;
+
+    public static EstateSearchRequest getInstanceIDRequest(int id, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
+        return new EstateSearchRequest("http://34.64.236.95/v1/room/"+id+"/info",listener, errorListener);
+    }
+    public static EstateSearchRequest getInstanceSearchRequest(String json, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
+        return new EstateSearchRequest("http://34.64.236.95/v1/rooms/1",listener, errorListener);
+    }
 
 
     public synchronized void request(Context context){

@@ -86,7 +86,7 @@ public class SelectEstateActivity extends AppCompatActivity {
         });
 
         pager = findViewById(R.id.pager_estate);
-        pager.setAdapter(new PagerAdapter(this, pagerBtn));
+        pager.setAdapter(new PagerAdapter(this));
         pager.registerOnPageChangeCallback(new OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -195,6 +195,8 @@ public class SelectEstateActivity extends AppCompatActivity {
             if(o instanceof EstateInformation){
                 Intent intent = new Intent(SelectEstateActivity.this, ShowEstateActivity.class);
                 intent.putExtra(getString(R.string.extra_room_info), ((EstateInformation) o).getRoomInfo());
+                Log.d("ESTATE", "요청 ID : "+((EstateInformation) o).getRoomInfo().getRoomID());
+                intent.putExtra(getString(R.string.extra_room_id), ((EstateInformation) o).getRoomInfo().getRoomID());
 
                 startActivity(intent);
             }
@@ -204,13 +206,11 @@ public class SelectEstateActivity extends AppCompatActivity {
     private class PagerAdapter extends FragmentStateAdapter {
         private final Fragment f1;
         private final Fragment f2;
-        private final ImageButton pagerBtn;
 
-        public PagerAdapter(@NonNull FragmentActivity fragmentActivity, ImageButton button) {
+        public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
             f1 = new GoogleMapFragment();
             f2 = new SelectionListFragment();
-            this.pagerBtn = button;
         }
 
         @NonNull

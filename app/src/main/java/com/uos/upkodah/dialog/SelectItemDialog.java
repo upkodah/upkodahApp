@@ -2,13 +2,17 @@ package com.uos.upkodah.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.uos.upkodah.R;
 import com.uos.upkodah.data.mapping.InnerMapping;
 
 public class SelectItemDialog extends DialogFragment {
@@ -28,14 +32,20 @@ public class SelectItemDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.UKDDialog);
 
         String[] itemList = mapping.getStringList();
 
         builder.setTitle(this.title)
                 .setItems(itemList, this.listener);
 
-        return builder.create();
+        AlertDialog result = builder.create();
+        ListView listView = result.getListView();
+        listView.setDivider(new ColorDrawable(getContext().getColor(R.color.color_ukd_sky)));
+        listView.setDividerHeight(2);
+
+
+        return result;
     }
 
     public final static int LIMIT_TIME = 0;

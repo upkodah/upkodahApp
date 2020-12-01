@@ -8,6 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+import com.uos.upkodah.R;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
@@ -33,7 +37,7 @@ public class BitmapIconManager {
         Canvas canvas = new Canvas(background);
 
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.parseColor("#d6e2f4"));
         canvas.drawCircle(radius,radius,radius,paint);
         canvas.drawBitmap(resizedBitmap, 0,0,null);
 

@@ -67,8 +67,8 @@ public class EstateResultParser extends UkdServerParser {
 
 
 
-    private static class RoomInformation implements Room {
-        private RoomInformation(JSONObject estateJson) throws JSONException{
+    static class RoomInformation implements Room {
+        RoomInformation(JSONObject estateJson) throws JSONException{
             // 복구용
             this.jsonString = estateJson.toString();
 

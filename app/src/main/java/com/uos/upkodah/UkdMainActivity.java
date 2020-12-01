@@ -73,6 +73,7 @@ public class UkdMainActivity extends AppCompatActivity{
 
         binding.setModel(viewModel);
     }
+
     @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
         super.onAttachFragment(fragment);
@@ -128,6 +129,7 @@ public class UkdMainActivity extends AppCompatActivity{
         }
     }
 
+
     // 장착될 Fragment 초기화 메소드
     private void initFragmentLimitTime(SearchOptionFragment searchOptionFragment){
         viewModel.limitTimeData.setOptionEditListener(new View.OnClickListener() {
@@ -163,9 +165,13 @@ public class UkdMainActivity extends AppCompatActivity{
     private void initFragmentSearchDestination(SearchBarFragment searchBarFragment){
         searchBarFragment.setEditDisable();
 
-        viewModel
-                .searchBarData
-                .setSearchBtnListener(new EstateSearchBtnListener());
+        viewModel.searchBarData.setSearchBtnListener(new EstateSearchBtnListener());
+        viewModel.searchBarData.setEditTextClickListener(new SearchBarFragment.BtnListener() {
+            @Override
+            public void onClickSearchBtn(View view, String searchText) {
+                new SearchLocationBtnListener().onClick(view);
+            }
+        });
         searchBarFragment.setData(viewModel.searchBarData);
     }
 
@@ -229,7 +235,7 @@ public class UkdMainActivity extends AppCompatActivity{
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
-            new EstateSearchRequest(
+            EstateSearchRequest.getInstanceSearchRequest(
                     data.toJSON(),
                     new Response.Listener<String>() {
                         @Override

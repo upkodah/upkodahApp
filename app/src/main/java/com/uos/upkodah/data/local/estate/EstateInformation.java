@@ -37,7 +37,12 @@ public class EstateInformation extends LocationInformation implements LocationPa
 
     @Override
     public String getListDisplayedName(){
-        return this.getTradeType();
+        if(room.getTradeType()== InnerMapping.MONTHLY_RENTAL){
+            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getPrice()+"/"+room.getDeposit()+"만 ";
+        }
+        else{
+            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getDeposit()+"만 ";
+        }
     }
     @Override
     public String getListDisplayedAddr(){
@@ -45,7 +50,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     }
     @Override
     public String getListDisplayedDesc(){
-        return this.getEtc();
+        return this.regionData.gu+" "+this.regionData.dong;
     }
     @Override
     public String getImgUrl() {
@@ -71,6 +76,11 @@ public class EstateInformation extends LocationInformation implements LocationPa
         return room.getTitle();
     }
 
+    @Override
+    public String[] getImageUrls() {
+        return room.getImgURLs();
+    }
+
 
     // TablePanel
     @Override
@@ -80,7 +90,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     @Override
     public String getTradeType() {
         if(room.getTradeType()== InnerMapping.MONTHLY_RENTAL){
-            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getPrice()+"만 / "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
+            return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getPrice()+"/"+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());
         }
         else{
             return InnerMapping.TRADE.getString(room.getTradeType())+" "+room.getDeposit()+"만 "+InnerMapping.ESTATE.getString(room.getEstateType());

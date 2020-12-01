@@ -62,12 +62,12 @@ public class InnerMapping {
             new Data(PUBLIC_HOUSING, "공공임대주택")
     );
 
-    public final static int CHARTER_RENTAL = 0;
-    public final static int MONTHLY_RENTAL = 1;
+    public final static int MONTHLY_RENTAL = 0;
+    public final static int CHARTER_RENTAL = 1;
     public final static int SALE_HOUSE = 2;
     public final static InnerMapping TRADE = new InnerMapping(
-                new Data(CHARTER_RENTAL, "월세"),
-                new Data(MONTHLY_RENTAL, "전세"),
+                new Data(MONTHLY_RENTAL, "월세"),
+                new Data(CHARTER_RENTAL, "전세"),
                 new Data(SALE_HOUSE, "매매")
         );
     public final static InnerMapping LIMIT_TIME = new InnerMapping(

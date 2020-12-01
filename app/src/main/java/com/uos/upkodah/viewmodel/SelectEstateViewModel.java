@@ -129,7 +129,7 @@ public class SelectEstateViewModel extends AndroidViewModel  {
         return result;
     }
 
-    private final GridListAdapter adapter = new GridListAdapter();
+    public final GridListAdapter adapter = new GridListAdapter();
     public void setListEstateData(List<EstateInformation> data) {
         adapter.setItemList(data);
         listData.notifyUpdateListData();

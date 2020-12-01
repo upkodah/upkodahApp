@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,8 +74,14 @@ public class SelectEstateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ViewPager2 pager = findViewById(R.id.pager_estate);
-                if(pager.getCurrentItem() == 0) pager.setCurrentItem(1);
-                else pager.setCurrentItem(0);
+                if(pager.getCurrentItem() == 0) {
+                    // 선택된 곳이 없으면 생략
+                    if(viewModel.adapter.getItemCount()>0) pager.setCurrentItem(1);
+                    else Toast.makeText(getApplicationContext(), "지도에서 위치를 선택해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    pager.setCurrentItem(0);
+                }
             }
         });
 

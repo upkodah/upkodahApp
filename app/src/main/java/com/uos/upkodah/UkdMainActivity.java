@@ -239,16 +239,22 @@ public class UkdMainActivity extends AppCompatActivity{
                             Log.d("SERVER", "매물 파싱 완료 (성공여부 : "+(parser!=null)+")");
 
                             if (parser != null) {
-                                Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-                                System.out.println("응답"+parser.getResultRooms().size());
-                                intent.putParcelableArrayListExtra(getString(R.string.extra_room_info), (ArrayList<Room>) parser.getResultRooms());
+                                if(parser.getResultRooms().size()>0){
+                                    Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
+                                    System.out.println("응답"+parser.getResultRooms().size());
+                                    intent.putParcelableArrayListExtra(getString(R.string.extra_room_info), (ArrayList<Room>) parser.getResultRooms());
 
-                                loadingDialog.cancel();
+                                    loadingDialog.cancel();
 
-                                startActivity(intent);
+                                    startActivity(intent);
+                                }
+                                else{
+                                    loadingDialog.cancel();
+                                    Toast.makeText(getApplicationContext(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
                                 loadingDialog.cancel();
-                                Toast.makeText(getApplicationContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "서버 상태가 불안정합니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     },

@@ -86,11 +86,11 @@ public class EstateResultParser extends UkdServerParser {
             Log.d("SERVER", "tradeType 응답"+this.tradeType);
 
             this.title = JSONUtil.get(estateJson, "title", "");
-            Log.d("SERVER", "title 응답"+this.roomID);
+            Log.d("SERVER", "title 응답"+this.title);
             this.price = JSONUtil.get(estateJson, "price", 0);
-            Log.d("SERVER", "price 응답"+this.roomID);
+            Log.d("SERVER", "price 응답"+this.price);
             this.deposit = JSONUtil.get(estateJson, "deposit", 0);
-            Log.d("SERVER", "deposit 응답"+this.roomID);
+            Log.d("SERVER", "deposit 응답"+this.deposit);
 
             this.floorStr = JSONUtil.get(estateJson, "floorStr", "1층");
             this.realSize = JSONUtil.get(estateJson, "realSize", 0.1d);

@@ -14,6 +14,7 @@ import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.SearchKeyworkParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FacilityInformation implements GoogleMapDrawable {
@@ -24,6 +25,7 @@ public class FacilityInformation implements GoogleMapDrawable {
      */
     public static void getFacilityInformations(Context context, GeoCoordinate center, final PositionPreparedListener<FacilityInformation> listener, String...codes){
         // 먼저, 코드에 해당하는 편의시설 정보를 모두 가져옵니다.
+        Log.d("MAP", "선택된 편의시설 : "+ Arrays.toString(codes));
         final List<Facility> facilityList = Facility.getGlobalList(codes);
         final List<FacilityInformation> resultList = new ArrayList<>();
 

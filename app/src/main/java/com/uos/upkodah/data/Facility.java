@@ -2,8 +2,10 @@ package com.uos.upkodah.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -173,7 +175,20 @@ public class Facility extends BaseObservable implements Parcelable {
     private Bitmap iconBitmap = null;
     @Nullable
     public Bitmap getIconBitmap() {
-        return iconBitmap;
+        int width = 150;
+        int height = 150;
+        int radius = width/2;
+
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(iconBitmap, width,height,false);
+        Bitmap background = Bitmap.createBitmap(width, height, resizedBitmap.getConfig());
+        Canvas canvas = new Canvas(background);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        canvas.drawCircle(radius,radius,radius,paint);
+        canvas.drawBitmap(resizedBitmap, 0,0,null);
+
+        return background;
     }
 
     private class Editable extends Facility {

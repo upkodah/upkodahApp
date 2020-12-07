@@ -8,9 +8,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 public class PermissionRequiringOnClickListener implements View.OnClickListener{
-    private FragmentActivity activity;
-    private String[] permissions;
-    private View.OnClickListener listener;
+    private final FragmentActivity activity;
+    private final String[] permissions;
+    private final View.OnClickListener listener;
 
     public PermissionRequiringOnClickListener( View.OnClickListener listener, FragmentActivity activity, String...permissions){
         this.activity = activity;

@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
 
-public class SelectionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class LinearListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final ListViewHolderManager manager;
 
-    public SelectionListAdapter(ListViewHolderManager manager){
+    public LinearListAdapter(ListViewHolderManager manager){
         this.manager = manager;
     }
 

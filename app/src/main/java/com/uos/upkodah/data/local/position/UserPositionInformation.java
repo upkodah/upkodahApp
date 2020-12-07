@@ -12,6 +12,8 @@ import com.uos.upkodah.data.local.gps.GPSPermissionManager;
 import com.uos.upkodah.server.extern.KakaoAPIRequest;
 import com.uos.upkodah.server.extern.parser.CoordToAddrParser;
 
+import java.util.Arrays;
+
 public class UserPositionInformation extends PositionInformation{
     public UserPositionInformation(PositionInformation posInfo){
         this.latitude = posInfo.latitude;
@@ -83,6 +85,7 @@ class SetCoordListener implements Response.Listener<String>{
         // parser가 null을 반환하면 유효하지 않은 것이므로 생략해야 함
         if(parser != null){
             this.info.postalAddress = parser.getPostalAddress();
+            this.info.name = parser.getPostalAddress();
 
             // 리스너를 호출하여 변경을 알린다.
             info.changeListener.onPrepared(info);
@@ -110,7 +113,6 @@ class SetGPSInformationListener implements LocationListener{
 
         // 이 부분에서 응답을 보고 위도 및 경도를 설정한다.
         this.info.setCoord(context, location.getLongitude(), location.getLatitude());
-        System.out.println("lon="+this.info.longitude+", lat="+this.info.latitude);
 
         // 리스너를 호출하여 변경을 알린다.
         info.changeListener.onPrepared(info);

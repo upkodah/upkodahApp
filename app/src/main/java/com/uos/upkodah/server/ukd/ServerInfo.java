@@ -1,5 +1,5 @@
 package com.uos.upkodah.server.ukd;
 
 public class ServerInfo {
-    public static String SERVER_ADDR="http://34.64.236.95";
+    public static String SERVER_ADDR="http://34.64.170.233";
 }

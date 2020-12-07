@@ -1,5 +1,7 @@
 package com.uos.upkodah.server.extern.parser;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,10 +39,6 @@ public class CoordToAddrParser extends KakaoAPIParser{
 
         roadAddr = documents.getJSONObject(0).isNull("road_address") ? null : documents.getJSONObject(0).getJSONObject("road_address");
         lotNumAddr = documents.getJSONObject(0).isNull("address") ? null : documents.getJSONObject(0).getJSONObject("address");
-//        System.out.println(documents.isNull("road_address"));
-//        roadAddr = documents.getJSONObject("road_address");
-//        lotNumAddr = documents.getJSONObject("address");
-        System.out.println("COORD_TO_ARRAY : 주소지 정보 획득 성공");
 
         if(roadAddr!=null){
             /*
@@ -54,7 +52,6 @@ public class CoordToAddrParser extends KakaoAPIParser{
             building_name : 건물 이름
             zone_no : 우편번호 5자리
          */
-            System.out.println("도로명주소로 검색");
             addressName = roadAddr.getString("address_name");
             for(int i=1;i<=3;i++){
                 String valName = "region_"+i+"depth_name";
@@ -63,14 +60,10 @@ public class CoordToAddrParser extends KakaoAPIParser{
 
                 regions.add(region);
             }
-            System.out.println("COORD_TO_ARRAY : 주소명 및 지역 분류 성공");
 
             buildingName = roadAddr.getString("building_name");
-
-            System.out.println("검색된 주소 : "+addressName);
         }
         else{
-            System.out.println("지번주소로 검색");
             addressName = lotNumAddr.getString("address_name");
             for(int i=1;i<=3;i++){
                 String valName = "region_"+i+"depth_name";
@@ -79,11 +72,8 @@ public class CoordToAddrParser extends KakaoAPIParser{
 
                 regions.add(region);
             }
-            System.out.println("COORD_TO_ARRAY : 주소명 및 지역 분류 성공");
 
-//            buildingName = lotNumAddr.getString("building_name");
-
-            System.out.println("검색된 주소 : "+addressName);
+            Log.d("MAP","검색된 주소 : "+addressName);
         }
 
         // 현재 간헐적으로 도로명주소가 출력되지 않는 문제 발생
@@ -95,8 +85,6 @@ public class CoordToAddrParser extends KakaoAPIParser{
         try {
             CoordToAddrParser result = new CoordToAddrParser(reponse);
 
-            // 유효한 문서가 없으면 null 반환
-            System.out.println("문서 유효성 : "+result.isValid);
             return result.isValid ? result : null;
         } catch (JSONException e) {
             // 파싱 실패 시 null 반환

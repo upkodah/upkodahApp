@@ -35,7 +35,6 @@ public abstract class WaitAndStart extends Thread{
 
             // 완료 후 요청 완료 시까지 추가 대기
             while(!requestCompleted){
-                System.out.println("대기중");
                 Thread.sleep(100);
             }
 

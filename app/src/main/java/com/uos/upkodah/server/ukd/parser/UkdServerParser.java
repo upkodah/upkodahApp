@@ -10,7 +10,6 @@ public abstract class UkdServerParser {
 
     protected UkdServerParser(String response) throws JSONException, UkdResponseException{
         jobj = new JSONObject(response);
-        System.out.println(response);
 
         // status값이 success가 아니면 오류 출력
         if(!JSONUtil.checkValue(jobj, "status", "success")){

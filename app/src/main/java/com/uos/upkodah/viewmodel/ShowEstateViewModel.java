@@ -30,6 +30,7 @@ public class ShowEstateViewModel extends AndroidViewModel {
 
     public void setEstate(EstateInformation e){
         this.estateInformation = e;
+        e.setSelectedMarkerInit(true);
         mapData.setMapMarker(e);
         FacilityInformation.getFacilityInformations(
                 getApplication().getApplicationContext(),

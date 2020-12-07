@@ -36,18 +36,20 @@ public class EstateClassifier {
     private final HashMap<String, DongRegionInformation> dongMap = new HashMap<>();
     private final HashMap<String, GuRegionInformation> guMap = new HashMap<>();
 
-    public void requestClassify(final EstateInformation e){
-        final LocationInformation.OnRegionBuildListener listener = new LocationInformation.OnRegionBuildListener() {
-            @Override
-            public void onBuild(LocationInformation.Region data) {
-                // 지역정보가 완성되었으면 지역 분류를 시작한다.
-                Log.d("MYTEST", data.toString());
-
-                putEstate(e);
-            }
-        };
-        Log.d("MYTEST", "요청 시작");
-        e.buildRegion(context, listener);
+    private int requestCounter = 0;
+    public void requestClassify(final EstateInformation...e){
+        requestCounter += e.length;
+        for(final EstateInformation estate : e){
+            final LocationInformation.OnRegionBuildListener listener = new LocationInformation.OnRegionBuildListener() {
+                @Override
+                public void onBuild(LocationInformation.Region data) {
+                    // 지역정보가 완성되었으면 지역 분류를 시작한다.
+                    putEstate(estate);
+                }
+            };
+            Log.d("MYTEST", "요청 시작");
+            estate.buildRegion(context, listener);
+        }
     }
 
     public void putEstate(EstateInformation e){
@@ -57,14 +59,20 @@ public class EstateClassifier {
         if(gridMap.containsKey(key)){
             // 있으면 넣는다.
             gridMap.get(key).addSubInformation(e);
-            Log.d("MYTEST", "현재개수 : "+gridMap.get(key).getSubInfoList().size());
         }
         else{
             // 없으면 만들어서 넣는다.
             gridMap.put(key, makeGrid(e));
         }
 
-        if(classifyListener!=null) classifyListener.onEstateClassified(EstateClassifier.this, e);
+        requestCounter--;
+        Log.d("MAP", "남은 분류 매물 : "+requestCounter);
+        // 지정 개수를 초과할 때마다 분류 완료 요청을 보낸다.
+        if(classifyListener!=null) {
+            if(requestCounter==0){
+                classifyListener.onEstateClassified(EstateClassifier.this, e);
+            }
+        }
     }
     private GridRegionInformation makeGrid(EstateInformation e){
         GridRegionInformation result = new GridRegionInformation(e.getRegionData());

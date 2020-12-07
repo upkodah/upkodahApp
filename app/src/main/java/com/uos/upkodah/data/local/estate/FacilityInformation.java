@@ -63,6 +63,11 @@ public class FacilityInformation implements GoogleMapDrawable {
     }
 
     @Override
+    public boolean isSelectedMarkerInit() {
+        return false;
+    }
+
+    @Override
     public String getMarkerWindowTitle() {
         return name;
     }

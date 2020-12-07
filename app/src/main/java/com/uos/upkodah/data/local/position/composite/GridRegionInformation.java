@@ -9,7 +9,7 @@ public class GridRegionInformation extends CompositePositionInformation<EstateIn
 
     public GridRegionInformation(Region region) {
         super(region);
-        this.name = "+"+subInfo.size();
+        this.name = "";
         this.postalAddress = regionData.city+" "+regionData.gu+" "+regionData.dong;
     }
     @Override
@@ -20,6 +20,9 @@ public class GridRegionInformation extends CompositePositionInformation<EstateIn
     @Override
     public void addSubInformation(EstateInformation sub) {
         super.addSubInformation(sub);
-        this.name = "+"+subInfo.size();
+    }
+    @Override
+    public String getIconBitmapKey() {
+        return "";
     }
 }

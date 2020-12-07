@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.uos.upkodah.R;
-import com.uos.upkodah.fragment.list.SelectionListAdapter;
+import com.uos.upkodah.fragment.list.LinearListAdapter;
 import com.uos.upkodah.fragment.list.data.SelectionListData;
 import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
 import com.uos.upkodah.fragment.list.holder.LinearListViewHolder;
@@ -25,7 +25,7 @@ public class SelectLocationViewModel extends ViewModel implements ListViewHolder
         selectionListData = new SelectionListData();
 //        mapData = new KakaoMapData()
         mapData = new GoogleMapData();
-        selectionListData.setAdapter(new SelectionListAdapter(this));
+        selectionListData.setAdapter(new LinearListAdapter(this));
     }
 
     // Fragment용 데이터

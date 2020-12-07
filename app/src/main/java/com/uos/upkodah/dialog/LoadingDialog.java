@@ -7,19 +7,24 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.uos.upkodah.R;
 
 /**
  * 해당 다이얼로그는 어떤 작업을 하는 동안 단순히 작업중인 상태를 보여주는 다이얼로그입니다.
  */
 public class LoadingDialog extends DialogFragment implements Runnable{
-    private Dialog currentDialog;
+    private AlertDialog currentDialog;
     private boolean cancelSwitch = false;
 
     @NonNull
@@ -29,15 +34,17 @@ public class LoadingDialog extends DialogFragment implements Runnable{
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View loadingDialogLayout = inflater.inflate(R.layout.dialog_loading,null);
+        ImageView imageView = loadingDialogLayout.findViewById(R.id.img_loading);
+        Glide.with(getContext()).load(R.raw.loading1).into(imageView);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.TransparentDialog)
-                .setView(loadingDialogLayout)
                 .setCancelable(false);
 
         setCancelable(false);
 
         currentDialog = builder.create();
         currentDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        currentDialog.setView(loadingDialogLayout,0,0,0,0);
 
         // 로딩 취소를 위한 핸들러
         handler = new Handler(Looper.getMainLooper());

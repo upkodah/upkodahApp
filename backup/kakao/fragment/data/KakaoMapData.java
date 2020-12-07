@@ -105,7 +105,7 @@ public class KakaoMapData extends BaseObservable{
             avgLongitude /= mapMarkers.size();
             avgLatitude /= mapMarkers.size();
 
-            System.out.println(this.centerLongitude+" "+this.centerLatitude);;
+            (this.centerLongitude+" "+this.centerLatitude);;
 
             setCenterLongitude(avgLongitude);
             setCenterLatitude(avgLatitude);

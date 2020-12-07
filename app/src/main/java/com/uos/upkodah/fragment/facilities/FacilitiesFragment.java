@@ -45,6 +45,10 @@ public class FacilitiesFragment extends Fragment {
         else{
             this.facilities = new ArrayList<>(facilities);
         }
+        if(recyclerView!=null){
+            recyclerView.setAdapter(new FacilitiesAdapter());
+        }
+
     }
     public void setFacilitiesData(Facility...facilities){
         this.setFacilitiesData(Arrays.asList(facilities));
@@ -59,13 +63,6 @@ public class FacilitiesFragment extends Fragment {
         recyclerView.setAdapter(new FacilitiesAdapter());
 
         return mainView;
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-//        ImageButton i = getActivity().findViewById(R.id.btn_fac1);
-//        String url = "https://icons-for-free.com/iconfiles/png/512/mario+mario+bros+mario+world+mushroom+toad+videogame+icon-1320196400529338074.png";
-//        Glide.with(this).load(url).into(i);
     }
 
     public String[] getSelectedFacilities(){

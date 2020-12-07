@@ -92,25 +92,25 @@
 
                         <ImageButton
                             android:id="@+id/btn_get_my_location"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="10dp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="7dp"
                             android:background="#00FFFFFF"
                             android:onClick="@{model::onClickGetMyLocationBtn}"
                             android:scaleType="fitXY"
-                            android:src="@drawable/icon_mylocation"
+                            android:src="@drawable/location_icon"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageButton
                             android:id="@+id/btn_search_destination"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:background="#00FFFFFF"
                             android:onClick="@{model::onClickGetLocatoinBtn}"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/icon_searchlocation"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_icon1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/btn_get_my_location"
                             app:layout_constraintTop_toTopOf="parent" />

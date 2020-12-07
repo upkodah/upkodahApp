@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,6 +23,7 @@ import com.uos.upkodah.data.local.estate.EstateClassifier;
 import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.databinding.ActivitySelectEstateBinding;
+import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.fragment.list.SelectionListFragment;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
 import com.uos.upkodah.fragment.map.GoogleMapFragment;
@@ -32,11 +32,9 @@ import com.uos.upkodah.fragment.map.listener.ZoomListener;
 import com.uos.upkodah.data.local.position.composite.CompositePositionInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.local.position.PositionInformation;
-import com.uos.upkodah.data.local.position.composite.GuRegionInformation;
-import com.uos.upkodah.test.TestEstateGetter;
+import com.uos.upkodah.viewmodel.EstateSearchResult;
 import com.uos.upkodah.viewmodel.SelectEstateViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,12 +54,6 @@ public class SelectEstateActivity extends AppCompatActivity {
 
         // 뷰 모델 준비
         viewModel = new ViewModelProvider(this).get(SelectEstateViewModel.class);
-
-
-        // 데이터 준비
-        Intent intent = getIntent();
-        List<Room> roomInfo = intent.getParcelableArrayListExtra(getString(R.string.extra_room_info));
-        if(roomInfo!=null) viewModel.setRooms(roomInfo);
 
 
         // 뷰 준비
@@ -96,11 +88,37 @@ public class SelectEstateActivity extends AppCompatActivity {
                     pager.setUserInputEnabled(false);
                 }
                 else{
-                    pagerBtn.setVisibility(View.GONE);
-                    pager.setUserInputEnabled(true);
+                    pagerBtn.setVisibility(View.VISIBLE);
+                    pager.setUserInputEnabled(false);
                 }
             }
         });
+
+        // 데이터 준비
+        Object data = EstateSearchResult.getInstance().getData();
+        List<Room> roomInfo = (List<Room>) data;
+
+        // 로딩 준비
+        if(roomInfo!=null){
+            final LoadingDialog loadingDialog = new LoadingDialog();
+            loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
+
+            final EstateClassifier classifier = new EstateClassifier(
+                    this.getApplication().getApplicationContext(),
+                    new EstateClassifier.Listener() {
+                        @Override
+                        public void onEstateClassified(EstateClassifier classifier, EstateInformation estateInformation) {
+                            viewModel.setEstates(classifier.getResult());
+                            loadingDialog.cancel();
+                        }
+                    }
+            );
+            EstateInformation[] tmpEstateList = new EstateInformation[roomInfo.size()];
+            for(int i=0;i<tmpEstateList.length;i++){
+                tmpEstateList[i] = new EstateInformation(roomInfo.get(i));
+            }
+            classifier.requestClassify(tmpEstateList);
+        }
     }
 
     @Override
@@ -110,9 +128,11 @@ public class SelectEstateActivity extends AppCompatActivity {
             switch(viewModel.mapData.getZoomDepth()){
                 case 2:
                     viewModel.mapData.setZoomLevelWithDepth(1);
+                    viewModel.mapData.setMapMarkers(viewModel.getDisplayedEstateList(1));
                     break;
                 case 3:
                     viewModel.mapData.setZoomLevelWithDepth(2);
+                    viewModel.mapData.setMapMarkers(viewModel.getDisplayedEstateList(2));
                     break;
                 default:
                     super.onBackPressed();

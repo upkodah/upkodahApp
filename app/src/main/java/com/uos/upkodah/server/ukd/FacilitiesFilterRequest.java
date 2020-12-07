@@ -16,7 +16,7 @@ public class FacilitiesFilterRequest extends StringRequest {
         Log.d("SERVER", "요청 URL :"+URL);
     }
 
-    protected final static String URL = "http://34.64.236.95/v1/setting";
+    protected final static String URL = ServerInfo.SERVER_ADDR+"/v1/setting";
 
     public static RequestQueue requestQueue = null;
     public synchronized void request(Context context){

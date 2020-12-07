@@ -50,6 +50,14 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
         this.name = "";
     }
 
+    private boolean selectedMarkerInit = false;
+    public void setSelectedMarkerInit(boolean selectedMarkerInit){
+        this.selectedMarkerInit = selectedMarkerInit;
+    }
+    @Override
+    public boolean isSelectedMarkerInit() {
+        return selectedMarkerInit;
+    }
     @Override
     public String getMarkerWindowTitle() {
         return this.name;
@@ -60,7 +68,7 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
     }
     @Override
     public String getIconBitmapKey() {
-        return null;
+        return "";
     }
 
 
@@ -74,6 +82,7 @@ public class PositionInformation implements Parcelable, GoogleMapDrawable, Clone
         parcel.writeDouble(longitude);
         parcel.writeDouble(latitude);
         parcel.writeString(postalAddress);
+        parcel.writeString(name);
     }
     public static final Creator<PositionInformation> CREATOR = new Creator<PositionInformation>() {
         @Override

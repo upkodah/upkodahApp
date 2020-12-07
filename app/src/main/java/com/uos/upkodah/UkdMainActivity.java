@@ -34,8 +34,11 @@ import com.uos.upkodah.fragment.searchbar.SearchBarFragment;
 import com.uos.upkodah.fragment.optionbar.SearchOptionFragment;
 import com.uos.upkodah.server.ukd.parser.EstateResultParser;
 import com.uos.upkodah.util.PermissionRequiringOnClickListener;
+import com.uos.upkodah.viewmodel.EstateSearchResult;
 import com.uos.upkodah.viewmodel.UkdMainViewModel;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,12 +121,10 @@ public class UkdMainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == getResources().getInteger(R.integer.request_location)){
-            System.out.println("결과반환성공");
             if(resultCode == getResources().getInteger(R.integer.response_location)){
                 // 위치 검색 결과 반환
 
                 PositionInformation resultPosition = data.getParcelableExtra(getString(R.string.extra_position_information));
-                System.out.println(resultPosition.getPostalAddress());
                 viewModel.setPosition(resultPosition);
             }
         }
@@ -228,7 +229,6 @@ public class UkdMainActivity extends AppCompatActivity{
         public void onClickSearchBtn(View view, String searchText) {
             // 입력값을 받아 JSON으로 변환한다.
             final UserDataToTransmit data = new UserDataToTransmit(viewModel);
-            System.out.println(data.toJSON());
 
             // 입력값으로 계산 요청하고, 로딩 다이얼로그 출력
             // 이 다이얼로그는 계산이 끝나면 취소됨
@@ -236,19 +236,21 @@ public class UkdMainActivity extends AppCompatActivity{
             loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
 
             EstateSearchRequest.getInstanceSearchRequest(
-                    data.toJSON(),
+                    data,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("SERVER", "매물 요청 결과"+response);
                             EstateResultParser parser = EstateResultParser.getInstance(response);
+
                             Log.d("SERVER", "매물 파싱 완료 (성공여부 : "+(parser!=null)+")");
 
                             if (parser != null) {
                                 if(parser.getResultRooms().size()>0){
                                     Intent intent = new Intent(getApplicationContext(), SelectEstateActivity.class);
-                                    System.out.println("응답"+parser.getResultRooms().size());
-                                    intent.putParcelableArrayListExtra(getString(R.string.extra_room_info), (ArrayList<Room>) parser.getResultRooms());
+                                    Log.d("SERVER","응답"+parser.getResultRooms().size());
+
+                                    EstateSearchResult.getInstance().setData(parser.getResultRooms());
 
                                     loadingDialog.cancel();
 
@@ -281,6 +283,8 @@ public class UkdMainActivity extends AppCompatActivity{
             // 검색 다이얼로그를 띄운다.
             Intent intent = new Intent(getApplicationContext(), SelectLocationDialogActivity.class);
             intent.putExtra(getString(R.string.extra_position_information), viewModel.getPosition());
+
+
             startActivityForResult(intent, getResources().getInteger(R.integer.request_location));
         }
     }
@@ -289,6 +293,10 @@ public class UkdMainActivity extends AppCompatActivity{
         public void onClick(View view) {
             // GPS 요청으로 positionInformation을 새로 설정한다.
             UserPositionInformation posInfo = (UserPositionInformation) viewModel.getPosition();
+            if(posInfo==null){
+                viewModel.setPosition(new UserPositionInformation());
+                posInfo = (UserPositionInformation) viewModel.getPosition();
+            }
 
             // 갱신 요청
             posInfo.requestGPS(view.getContext());

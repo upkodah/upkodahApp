@@ -20,6 +20,7 @@ import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.estate.FacilityInformation;
 import com.uos.upkodah.data.local.estate.Room;
 import com.uos.upkodah.databinding.ActivityShowEstateBinding;
+import com.uos.upkodah.dialog.LoadingDialog;
 import com.uos.upkodah.dialog.activity.ShowLocationDialogActivity;
 import com.uos.upkodah.fragment.facilities.FacilitiesFragment;
 import com.uos.upkodah.fragment.image.ImagePagerAdapter;
@@ -33,6 +34,7 @@ import com.uos.upkodah.server.ukd.parser.EstateResultParser;
 import com.uos.upkodah.viewmodel.ShowEstateViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ShowEstateActivity extends AppCompatActivity {
@@ -47,39 +49,10 @@ public class ShowEstateActivity extends AppCompatActivity {
 
         // 데이터 준비
         viewModel = new ViewModelProvider(this).get(ShowEstateViewModel.class);
-
-
-        // 인텐트 읽기
-        Intent intent = getIntent();
-//        EstateInformation estateInformation = new EstateInformation((Room) intent.getParcelableExtra(getString(R.string.extra_room_info)));
-//        viewModel.setEstate(estateInformation);
-        int id = intent.getIntExtra(getString(R.string.extra_room_id), 0);
-        Log.d("MAP", "ID : "+id);
-
-        EstateSearchRequest.getInstanceIDRequest(
-                id,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        EstateInfoParser parser = EstateInfoParser.getInstance(response);
-
-                        if(parser != null){
-                            viewModel.setEstate(new EstateInformation(parser.getResultRoom()));
-                            binding.setLocationData(viewModel.getLocationPanelDisplayable());
-                            binding.setTableData(viewModel.getRoomInfoTableDisplayable());
-                            binding.setTitlePanelData(viewModel.getTitlePanelDisplayable());
-                            pager.setAdapter(new ImagePagerAdapter(ShowEstateActivity.this, viewModel.getTitlePanelDisplayable().getImageUrls()));
-                            facilitiesFragment.setFacilitiesData(Facility.getGlobalList(viewModel.getLocationPanelDisplayable().getSelectedFacilities()));
-                        }
-                    }
-                },
-                null).request(this);
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_show_estate);
-        binding.setLocationData(viewModel.getLocationPanelDisplayable());
-        binding.setTableData(viewModel.getRoomInfoTableDisplayable());
-        binding.setTitlePanelData(viewModel.getTitlePanelDisplayable());
+//        binding.setLocationData(viewModel.getLocationPanelDisplayable());
+//        binding.setTableData(viewModel.getRoomInfoTableDisplayable());
+//        binding.setTitlePanelData(viewModel.getTitlePanelDisplayable());
 
 
         // 지도 클릭 시, 지도 상세보기
@@ -89,6 +62,39 @@ public class ShowEstateActivity extends AppCompatActivity {
 
         // ViewPager 설정
         pager = findViewById(R.id.pager_title_image);
+
+
+        // 로딩 시작
+        final LoadingDialog loadingDialog = new LoadingDialog();
+        loadingDialog.show(getSupportFragmentManager(), getString(R.string.dialog_loading_tag));
+
+
+        // 인텐트 읽기
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(getString(R.string.extra_room_id), 0);
+        Log.d("MAP", "ID : "+id);
+
+        EstateSearchRequest.getInstanceIDRequest(
+                id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        EstateInfoParser parser = EstateInfoParser.getInstance(response);
+                        System.out.println(response);
+
+                        if(parser != null){
+                            System.out.println("확인"+Arrays.toString(parser.getResultRoom().getFacilities()));
+                            viewModel.setEstate(new EstateInformation(parser.getResultRoom()));
+                            binding.setLocationData(viewModel.getLocationPanelDisplayable());
+                            binding.setTableData(viewModel.getRoomInfoTableDisplayable());
+                            binding.setTitlePanelData(viewModel.getTitlePanelDisplayable());
+                            pager.setAdapter(new ImagePagerAdapter(ShowEstateActivity.this, viewModel.getTitlePanelDisplayable().getImageUrls()));
+                            facilitiesFragment.setFacilitiesData(Facility.getGlobalList(viewModel.getLocationPanelDisplayable().getSelectedFacilities()));
+                        }
+                        loadingDialog.cancel();
+                    }
+                },
+                null).request(this);
 
     }
 
@@ -105,7 +111,7 @@ public class ShowEstateActivity extends AppCompatActivity {
         if(fragment instanceof FacilitiesFragment){
             if(tag.equals(getString(R.string.fragment_facilities))){
                 facilitiesFragment = (FacilitiesFragment) fragment;
-                facilitiesFragment.setFacilitiesData();
+//                facilitiesFragment.setFacilitiesData(Facility.getGlobalList());
             }
         }
         if(fragment instanceof GoogleMapFragment){

@@ -3,6 +3,7 @@ package com.uos.upkodah.dialog.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,11 +36,8 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
         // 데이터 초기화
         Intent intent = getIntent();
         result = (PositionInformation) intent.getParcelableExtra(getString(R.string.extra_position_information));
+        if(result!=null) result.setSelectedMarkerInit(true);
 
-        // 만약 positionInformation이 null이 아니라면, 새로 만든다.
-        if(result == null){
-            result = new PositionInformation();
-        }
 
         // 뷰 모델 설정
         // 이 뷰 모델에서는 SearchBarFragment의 Data 클래스를 가지고 있다.
@@ -59,30 +57,24 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
             SearchBarFragment searchBarFragment = (SearchBarFragment) fragment;
             searchBarFragment.setData(viewModel.searchBarData);
 
+            if(result!=null){
+                viewModel.searchBarData.setSearchText(result.getPostalAddress());
+            }
+
+
             viewModel.searchBarData.setSearchBtnListener(new SearchLocationUsingKeywordListener());
+
+            // 포커스 초기화
+            viewModel.searchBarData.setFocused(true);
         }
-//        if(fragment instanceof KakaoMapFragment){
-//            KakaoMapFragment kakaoMapFragment = (KakaoMapFragment) fragment;
-//            kakaoMapFragment.setData(viewModel.mapData);
-//
-//            // 마커 리스너 장착
-//            viewModel.mapData.setMarkerListener(new MarkerListener() {
-//                @Override
-//                public void onMarkerSelected(Object data) {
-//                }
-//                @Override
-//                public void onMarkerBalloonSelected(Object data) {
-//                    Intent result = new Intent();
-//                    result.putExtra(getString(R.string.extra_position_information), (PositionInformation) data);
-//                    setResult(getResources().getInteger(R.integer.response_location), result);
-//
-//                    finish();
-//                }
-//            });
-//        }
         if(fragment instanceof GoogleMapFragment){
             GoogleMapFragment googleMapFragment = (GoogleMapFragment) fragment;
             googleMapFragment.setData(viewModel.mapData);
+
+            if(result!=null){
+                viewModel.mapData.setMapMarker(result);
+                viewModel.mapData.setCenterUsingPositions();
+            }
 
             // 마커 리스너 장착
             viewModel.mapData.setMarkerListener(new MarkerListener() {
@@ -91,9 +83,10 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onMarkerBalloonSelected(Object data) {
-                    Intent result = new Intent();
-                    result.putExtra(getString(R.string.extra_position_information), (PositionInformation) data);
-                    setResult(getResources().getInteger(R.integer.response_location), result);
+                    Intent resultIntent = new Intent();
+
+                    resultIntent.putExtra(getString(R.string.extra_position_information), (PositionInformation) data);
+                    setResult(getResources().getInteger(R.integer.response_location), resultIntent);
 
                     finish();
                 }
@@ -138,6 +131,7 @@ public class SelectLocationDialogActivity extends AppCompatActivity {
 
             // 분석 결과를 ViewModel에 넣어 결과를 보여준다.
             viewModel.setPositionInformation(parser.getPositionList());
+            viewModel.mapData.setCenterUsingPositions();
         }
     }
 }

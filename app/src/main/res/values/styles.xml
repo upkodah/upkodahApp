@@ -7,7 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="TransparentDialog" parent="android:Theme.Dialog">
+    <style name="TransparentDialog" parent="@android:style/Theme.Translucent">
+        <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -108,6 +109,7 @@
     <style name="UKDDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:background">#ffffff</item>
         <item name="android:textColor">@color/color_ukd_blue_txt</item>
+        <item name="android:divider">@color/color_ukd_blue_txt</item>
         <item name="textColorAlertDialogListItem">@color/color_ukd_black_sub_txt</item>
     </style>
 </resources>

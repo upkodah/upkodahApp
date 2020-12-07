@@ -43,22 +43,17 @@ public abstract class CompositePositionInformation<L extends LocationInformation
         super.latitude = resultLat / subInfo.size();
     }
 
-    public int getMarkerRadius(){
-        if(subInfo.size()>0){
-            int result = 0;
-
-            if(subInfo.get(0) instanceof CompositePositionInformation){
-                for(L c : subInfo){
-                    result += ((CompositePositionInformation) c).getMarkerRadius() * 3;
-                }
-            }
-            else{
-                result = subInfo.size() * 10;
-            }
-            return result;
+    public int getTotalSize(){
+        if(this instanceof GridRegionInformation){
+            return subInfo.size();
         }
         else{
-            return 0;
+            int result = 0;
+
+            for(L c : subInfo){
+                result += ((CompositePositionInformation)c).getTotalSize();
+            }
+            return result;
         }
     }
     public void clearPositions(){
@@ -95,5 +90,10 @@ public abstract class CompositePositionInformation<L extends LocationInformation
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public String getMarkerWindowTitle() {
+        return super.getMarkerWindowTitle()+"(+"+ getTotalSize()+")";
     }
 }

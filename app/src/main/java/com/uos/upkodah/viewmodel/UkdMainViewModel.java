@@ -24,9 +24,6 @@ public class UkdMainViewModel extends ViewModel implements InputData, PositionPr
 
     private UserPositionInformation positionInformation;
     public PositionInformation getPosition() {
-        if(positionInformation==null){
-            setPosition(new UserPositionInformation());
-        }
         return positionInformation;
     }
     public void setPosition(PositionInformation position) {

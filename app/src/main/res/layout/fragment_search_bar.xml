@@ -21,9 +21,10 @@
             android:layout_height="50dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@={data.searchText}"
             android:onClick="@{data::onEditTextClick}"
-            android:onFocusChange="@{data.onFocusChangeListener}"
+            android:onFocusChange="@{data.editTextClickListener}"
+            android:imeOptions="actionSearch"
+            android:text="@={data.searchText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_do_search"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,16 +32,16 @@
 
         <ImageButton
             android:id="@+id/btn_do_search"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="13dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
             android:background="#00FFFFFF"
             android:foregroundGravity="center"
             android:onClick="@{data::onSearchBtnClick}"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_search" />
+            app:srcCompat="@drawable/search_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

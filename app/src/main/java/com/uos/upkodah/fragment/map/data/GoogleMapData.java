@@ -1,5 +1,6 @@
 package com.uos.upkodah.fragment.map.data;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -50,7 +51,7 @@ public class GoogleMapData implements GeoCoordinate {
         mapListener.updateMarker();
     }
 
-    public final static float[] ZOOM_DEPTH = {12f, 15f, 18f};
+    public final static float[] ZOOM_DEPTH = {13f, 14.5f, 16f};
     private float zoomLevel = ZOOM_DEPTH[1];
     private int currentDepth;
     public float getZoomLevel() {
@@ -60,6 +61,7 @@ public class GoogleMapData implements GeoCoordinate {
         this.zoomLevel = zoomLevel;
         mapListener.position = new CameraPosition.Builder().target(center).zoom(zoomLevel).build();
         mapListener.updateCamera();
+        mapListener.onCameraMove();
     }
     public void setZoomLevelWithDepth(int depth){
         float quarter = (ZOOM_DEPTH[2]-ZOOM_DEPTH[0])/4;
@@ -72,7 +74,10 @@ public class GoogleMapData implements GeoCoordinate {
 
     private LatLng center;
     public void setCenter(GeoCoordinate coordinate){
-        this.center = GeoCoordinateUtil.toLatLng(coordinate);
+        this.setCenter(GeoCoordinateUtil.toLatLng(coordinate));
+    }
+    public void setCenter(LatLng coordinate){
+        this.center = coordinate;
         mapListener.position = new CameraPosition.Builder().target(center).zoom(zoomLevel).build();
         mapListener.updateCamera();
     }
@@ -149,16 +154,24 @@ public class GoogleMapData implements GeoCoordinate {
                     Marker marker =  googleMap.addMarker(new MarkerOptions().position(GeoCoordinateUtil.toLatLng(drawable))
                             .title(drawable.getMarkerWindowTitle())
                             .snippet(drawable.getMarkerWindowSnippet()));
-                    // 비트맵 정보가 null이 아니면 기본 아이콘이 아니라 지정된 아이콘으로 설정
-                    if(drawable.getIconBitmapKey()!=null && !drawable.getIconBitmapKey().isEmpty()) {
-                        Log.d("MAP", "마커 아이콘 키 : " + drawable.getIconBitmapKey());
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(
-                                BitmapIconManager.getInstance().get(drawable.getIconBitmapKey())
-                        ));
-                    }
 
                     // 마커에 들어갈 데이터 설정
                     marker.setTag(drawable);
+                    if(drawable.isSelectedMarkerInit()) marker.showInfoWindow();
+
+                    // 비트맵 정보가 null이 아니면 기본 아이콘이 아니라 지정된 아이콘으로 설정
+                    if(drawable.getIconBitmapKey()!=null && !drawable.getIconBitmapKey().isEmpty()) {
+                        Bitmap icon = BitmapIconManager.getInstance().get(drawable.getIconBitmapKey());
+                        if(icon!=null){
+                            Log.d("MAP", "마커 아이콘 키 : " + drawable.getIconBitmapKey());
+                            marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    BitmapIconManager.getInstance().get(drawable.getIconBitmapKey())
+                            ));
+                            continue;
+                        }
+                    }
+                    // 이미지가 없다면 기본 아이콘 표시
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 }
             }
             catch(NullPointerException e){
@@ -177,8 +190,8 @@ public class GoogleMapData implements GeoCoordinate {
 
         @Override
         public boolean onMarkerClick(Marker marker) {
-            System.out.println("마커누름");
             marker.showInfoWindow();
+            setCenter(marker.getPosition());
             if(markerListener != null){
                 markerListener.onMarkerSelected(marker.getTag());
                 return true;
@@ -190,7 +203,6 @@ public class GoogleMapData implements GeoCoordinate {
 
         @Override
         public void onInfoWindowClick(Marker marker) {
-            System.out.println("마커윈도누름");
             if(markerListener != null){
                 markerListener.onMarkerBalloonSelected(marker.getTag());
             }
@@ -200,22 +212,24 @@ public class GoogleMapData implements GeoCoordinate {
 
         @Override
         public void onCameraMove() {
-
-            position = googleMap.getCameraPosition();
-            Log.d("MAP", "현재 위치 : "+position.target.longitude+position.target.latitude);
-            zoomLevel = position.zoom;
-            int result = 1;
-            float zoom = getZoomLevel();
-            for(float f : ZOOM_DEPTH){
-                if(zoom>f) {
-                    ++result;
-                }
+            try{
+                position = googleMap.getCameraPosition();
+                Log.d("MAP", "현재 위치 : "+position.target.longitude+position.target.latitude);
+                zoomLevel = position.zoom;
+                if(zoomLevel < ZOOM_DEPTH[0])
+                    currentDepth = 1;
+                else if(zoomLevel < ZOOM_DEPTH[1])
+                    currentDepth = 2;
+                else
+                    currentDepth = 3;
+                Log.d("MAP", "현재 줌 : "+currentDepth+"("+zoomLevel+")");
+                center = position.target;
+                if(zoomListener != null) zoomListener.onZoomChanged(googleMap.getCameraPosition().zoom);
             }
-            currentDepth = result;
-            if(result>3) currentDepth=3;
-            Log.d("MAP", "현재 줌 : "+currentDepth);
-            center = position.target;
-            if(zoomListener != null) zoomListener.onZoomChanged(googleMap.getCameraPosition().zoom);
+            catch(NullPointerException e){
+                Log.d("MAP", "맵 준비중");
+            }
+
         }
 
         @Override

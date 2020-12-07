@@ -2,10 +2,14 @@ package com.uos.upkodah.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -34,16 +38,20 @@ public class SelectItemDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.UKDDialog);
 
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View titleView = inflater.inflate(R.layout.dialog_title_select_list, null);
+        TextView titleTextView = titleView.findViewById(R.id.txt_dialog_title);
+        titleTextView.setText(this.title);
+
         String[] itemList = mapping.getStringList();
 
-        builder.setTitle(this.title)
+        builder.setCustomTitle(titleView)
                 .setItems(itemList, this.listener);
 
         AlertDialog result = builder.create();
         ListView listView = result.getListView();
         listView.setDivider(new ColorDrawable(getContext().getColor(R.color.color_ukd_sky)));
         listView.setDividerHeight(2);
-
 
         return result;
     }

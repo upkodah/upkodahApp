@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -30,6 +31,16 @@ public class GoogleMapDrawableObject implements GoogleMapDrawable, Parcelable {
         iconKey = in.readString();
         longitude = in.readDouble();
         latitude = in.readDouble();
+    }
+
+    @Override
+    public boolean isSelectedMarkerInit() {
+        try{
+            return iconKey==null || iconKey.isEmpty();
+        }
+        catch (NullPointerException e){
+            return true;
+        }
     }
 
     @Override

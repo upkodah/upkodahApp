@@ -13,7 +13,7 @@ public class UserDataToTransmit {
     public final int limit_time;
     public final int estate_type;
     public final int trade_type;
-    public final String facilities;
+    public final String[] facilities;
 
     public UserDataToTransmit(InputData inputData){
         PositionInformation p = inputData.getPosition();
@@ -22,14 +22,7 @@ public class UserDataToTransmit {
         limit_time = inputData.getLimitTimeMin();
         estate_type = inputData.getEstateType();
         trade_type = inputData.getTradeType();
-
-        StringBuilder tmp = new StringBuilder();
-
-        for(int i=0;i<inputData.getFacilities().length;i++){
-            tmp.append(inputData.getFacilities()[i]);
-            if(i+1<inputData.getFacilities().length) tmp.append(",");
-        }
-        facilities = tmp.toString();
+        facilities = inputData.getFacilities();
     }
 
     public String toJSON(){

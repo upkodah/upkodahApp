@@ -5,30 +5,58 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.uos.upkodah.test.TestGeocoordGetter;
 import com.uos.upkodah.util.JSONUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EstateSearchRequest extends StringRequest {
     protected EstateSearchRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
         Log.d("SERVER", "요청 URL :"+url);
     }
-    protected static String getSearchRequestURL(String json) throws JSONException {
-        JSONObject obj = new JSONObject(json);
-        String result = ServerInfo.SERVER_ADDR +"/v1/rooms/1?"
-                +"longitude="+ JSONUtil.get(obj, "longitude", 0.0d)
-                +"latitude="+JSONUtil.get(obj, "latitude", 0.0d)
-                +"limit_time="+JSONUtil.get(obj, "limit_time", 0)
-                +"estate_type="+JSONUtil.get(obj, "estate_type", 0)
-                +"trade_type="+JSONUtil.get(obj, "trade_type", 0)
-                +"facilities="+JSONUtil.get(obj, "facilities");
+    protected static String getSearchRequestURL(UserDataToTransmit data) throws JSONException {
+//        String result = ServerInfo.SERVER_ADDR +"/v1/rooms/1?"
+//                +"longitude="+data.longitude+"&"
+//                +"latitude="+data.latitude+"&"
+//                +"limit_time="+data.limit_time+"&"
+//                +"estate_type="+data.estate_type+"&"
+//                +"trade_type="+data.trade_type;
+        String result = ServerInfo.SERVER_ADDR +"/v1/rooms/";
+        if(data.limit_time==20){
+            result+=7+"";
+        }else{
+            result+=8+"";
+        }
+//        String result = ServerInfo.SERVER_ADDR +":80/v1/rooms/?"
+//                +"longitude="+ TestGeocoordGetter.coordList[7].getLongitude() +"&"
+//                +"latitude="+TestGeocoordGetter.coordList[7].getLatitude()+"&"
+//                +"limit_time="+data.limit_time+"&"
+//                +"estate_type="+0+"&"
+//                +"trade_type="+0+"&"
+//                +"deposit=10000";
+//
+//        if(data.facilities.length > 0){
+//            result += "&";
+//
+//            for(int i=0;i<data.facilities.length;i++){
+//                result += "facilities["+i+"]="+data.facilities[i];
+//                if(i<data.facilities.length-1) result+="&";
+//            }
+//        }
+        Log.d("SERVER","요청 URL : "+result);
 
+//        return ServerInfo.SERVER_ADDR +"/v1/rooms/7";
         return result;
     }
     protected static String getIDRequestURL(int id){
@@ -36,14 +64,20 @@ public class EstateSearchRequest extends StringRequest {
     }
     public static RequestQueue requestQueue = null;
 
+    private HashMap<String, String> params = new HashMap<>();
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return params;
+    }
+
     public static EstateSearchRequest getInstanceIDRequest(int id, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         return new EstateSearchRequest(getIDRequestURL(id),listener, errorListener);
     }
 
     @Nullable
-    public static EstateSearchRequest getInstanceSearchRequest(String json, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
+    public static EstateSearchRequest getInstanceSearchRequest(UserDataToTransmit data, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener){
         try {
-            return new EstateSearchRequest(getSearchRequestURL(json),listener, errorListener);
+            return new EstateSearchRequest(getSearchRequestURL(data),listener, errorListener);
         } catch (JSONException e) {
             return null;
         }

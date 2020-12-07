@@ -1,5 +1,7 @@
 package com.uos.upkodah.fragment.map;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.uos.upkodah.R;
 import com.uos.upkodah.data.local.gps.GeoCoordinateUtil;
 import com.uos.upkodah.databinding.FragmentGoogleMapBinding;
 import com.uos.upkodah.fragment.map.data.GoogleMapData;
+import com.uos.upkodah.util.BitmapIconManager;
 
 public class GoogleMapFragment extends Fragment {
     private MapView mapView;
@@ -28,6 +31,13 @@ public class GoogleMapFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentGoogleMapBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_google_map, container, false);
+
+        // 지역 이미지 사전 준비
+        Bitmap regionImage = BitmapFactory.decodeResource(getResources(), R.drawable.map_circle).copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap dongImage = BitmapFactory.decodeResource(getResources(), R.drawable.map_circle_dong).copy(Bitmap.Config.ARGB_8888, true);
+
+        BitmapIconManager.getInstance().put("__region_gu", regionImage);
+        BitmapIconManager.getInstance().put("__region_dong", dongImage);
 
         mapView = binding.getRoot().findViewById(R.id.map_google);
         mapView.onCreate(savedInstanceState);

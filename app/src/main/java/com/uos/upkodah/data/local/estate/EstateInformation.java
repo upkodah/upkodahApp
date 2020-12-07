@@ -18,6 +18,7 @@ import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
 import com.uos.upkodah.data.mapping.InnerMapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     // TablePanel
     @Override
     public String getRequiredTime() {
-        return "구파발역에서 지하철로 30분";
+        return "독립문역 지하철 20분 이내";
     }
     @Override
     public String getTradeType() {
@@ -120,6 +121,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     }
     @Override
     public String[] getSelectedFacilities() {
+        System.out.println(Arrays.toString(room.getFacilities()));
         return room.getFacilities();
     }
     @Override

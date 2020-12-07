@@ -21,8 +21,18 @@ public class SearchBarData extends BaseObservable {
         return searchText;
     }
     public void setSearchText(String searchText) {
-        notifyChange();
         this.searchText = searchText;
+        notifyChange();
+    }
+
+    private boolean isFocused = false;
+    @Bindable
+    public boolean isFocused() {
+        return isFocused;
+    }
+    public void setFocused(boolean focused) {
+        isFocused = focused;
+        notifyChange();
     }
 
     private SearchBarFragment.BtnListener searchBarBtnListener = null;
@@ -36,6 +46,7 @@ public class SearchBarData extends BaseObservable {
     }
 
     private SearchBarFragment.BtnListener editTextClickListener = null;
+    private View.OnFocusChangeListener defaultListener;
     public void onEditTextClick(View view){
         if(editTextClickListener != null){
             editTextClickListener.onClickSearchBtn(view, searchText);
@@ -44,17 +55,27 @@ public class SearchBarData extends BaseObservable {
     public void setEditTextClickListener(SearchBarFragment.BtnListener editTextClickListener) {
         this.editTextClickListener = editTextClickListener;
     }
-    public View.OnFocusChangeListener getOnFocusChangeListener(){
-        return new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                onEditTextClick(view);
-            }
-        };
+    public SearchBarFragment.BtnListener getEditTextClickListener(){
+        return editTextClickListener;
     }
 
     @BindingAdapter("android:onFocusChange")
-    public static void setOnFocusChange(EditText view, View.OnFocusChangeListener listener){
-        view.setOnFocusChangeListener(listener);
+    public static void setOnFocusChange(final EditText editText, final SearchBarFragment.BtnListener listener){
+        final View.OnFocusChangeListener base = editText.getOnFocusChangeListener();
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(listener!=null)
+                    listener.onClickSearchBtn(view, editText.getText().toString());
+            }
+        });
     }
+    @BindingAdapter("android:requestFocus")
+    public static void requestFocus(EditText view, boolean focus){
+        if(focus){
+            view.requestFocus();
+        }
+    }
+
+
 }

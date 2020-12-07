@@ -1,5 +1,7 @@
 package com.uos.upkodah.server.extern.parser;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +26,6 @@ public class CoordToRegionParser extends KakaoAPIParser{
         /*
          documents 처리 부분
          */
-        System.out.println("좌표 주소 변환, "+documents.toString());
 
         JSONObject content = documents.getJSONObject(0);
         regions[0]=content.getString("region_1depth_name");
@@ -39,11 +40,10 @@ public class CoordToRegionParser extends KakaoAPIParser{
             CoordToRegionParser result = new CoordToRegionParser(reponse);
 
             // 유효한 문서가 없으면 null 반환
-            System.out.println("문서 유효성 : "+result.isValid);
             return result.isValid ? result : null;
         } catch (JSONException e) {
             // 파싱 실패 시 null 반환
-            System.out.println("문서가 유효하지 않습니다.");
+            Log.d("SERVER", "문서가 유효하지 않습니다.");
             e.printStackTrace();
             return null;
         }

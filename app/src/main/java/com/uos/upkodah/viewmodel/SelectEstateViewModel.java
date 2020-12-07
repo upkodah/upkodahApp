@@ -1,28 +1,17 @@
 package com.uos.upkodah.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.uos.upkodah.R;
 import com.uos.upkodah.data.local.estate.EstateClassifier;
 import com.uos.upkodah.data.local.estate.Room;
-import com.uos.upkodah.databinding.ListItemGridEstateBinding;
 import com.uos.upkodah.fragment.list.GridListAdapter;
-import com.uos.upkodah.fragment.list.SelectionListAdapter;
 import com.uos.upkodah.fragment.list.data.SelectionListData;
 import com.uos.upkodah.fragment.list.holder.GridListViewHolder;
-import com.uos.upkodah.fragment.list.holder.ListViewHolderManager;
 import com.uos.upkodah.fragment.map.data.GoogleMapData;
 import com.uos.upkodah.data.local.estate.EstateInformation;
 import com.uos.upkodah.data.local.position.composite.GridRegionInformation;
@@ -68,9 +57,11 @@ public class SelectEstateViewModel extends AndroidViewModel  {
                         Log.d("MYTEST", classifier.toString());
                     }
                 });
-        for(Room r : rooms){
-            classifier.requestClassify(new EstateInformation(r));
+        EstateInformation[] tmpEstateList = new EstateInformation[rooms.size()];
+        for(int i=0;i<tmpEstateList.length;i++){
+            tmpEstateList[i] = new EstateInformation(rooms.get(i));
         }
+        classifier.requestClassify(tmpEstateList);
     }
 
     private int preDepth = 0;

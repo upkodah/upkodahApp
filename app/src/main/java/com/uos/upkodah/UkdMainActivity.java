@@ -228,7 +228,15 @@ public class UkdMainActivity extends AppCompatActivity{
         @Override
         public void onClickSearchBtn(View view, String searchText) {
             // 입력값을 받아 JSON으로 변환한다.
-            final UserDataToTransmit data = new UserDataToTransmit(viewModel);
+            final UserDataToTransmit data;
+            try{
+                data = new UserDataToTransmit(viewModel);
+            }
+            catch(NullPointerException e){
+                Toast.makeText(getApplicationContext(), "목적지를 입력하세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 
             // 입력값으로 계산 요청하고, 로딩 다이얼로그 출력
             // 이 다이얼로그는 계산이 끝나면 취소됨

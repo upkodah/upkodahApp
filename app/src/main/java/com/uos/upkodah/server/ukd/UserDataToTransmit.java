@@ -1,12 +1,13 @@
 package com.uos.upkodah.server.ukd;
 
 import com.google.gson.Gson;
+import com.uos.upkodah.data.local.gps.GeoCoordinate;
 import com.uos.upkodah.data.local.position.PositionInformation;
 import com.uos.upkodah.data.InputData;
 
 import java.util.StringTokenizer;
 
-public class UserDataToTransmit {
+public class UserDataToTransmit implements GeoCoordinate {
     // 각 필드는 위치, 제한시간, 매물타입, 편의시설태그를 나타낸다.
     public final double longitude;
     public final double latitude;
@@ -28,5 +29,15 @@ public class UserDataToTransmit {
     public String toJSON(){
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    @Override
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    @Override
+    public double getLatitude() {
+        return this.latitude;
     }
 }

@@ -32,11 +32,31 @@ public class EstateSearchRequest extends StringRequest {
 //                +"limit_time="+data.limit_time+"&"
 //                +"estate_type="+data.estate_type+"&"
 //                +"trade_type="+data.trade_type;
+
+        // TEST
+        // 먼저, lonlat 목록에서 data와 가장 가까운곳의 번호를 찾는다.
+        int num = TestGeocoordGetter.findNear(data);
+
+        // 이 숫자를 짝수로 만든다.
+        num -= num%2;
+
+        // 해당 숫자에서 1을 더해야 실제 id와 매핑이 된다.
+        num++;
+
+        Log.d("SERVERT", "검색위치 : "+TestGeocoordGetter.locationList[num]);
+        Log.d("SERVERT", "위도경도 : "+data.longitude+" "+data.latitude);
+        Log.d("SERVERT", "제한시간 : "+data.limit_time);
+
+        num+=12;
+
+        // 이제 해당 숫자를 제한시간에 따라 나눠 요청한다.
         String result = ServerInfo.SERVER_ADDR +"/v1/rooms/";
         if(data.limit_time==20){
-            result+=7+"";
+            Log.d("SERVERT", "제한시간 20분으로 요청합니다."+num);
+            result+=(num)+"";
         }else{
-            result+=8+"";
+            Log.d("SERVERT", "제한시간 30분으로 요청합니다."+(num+1));
+            result+=(1+num)+"";
         }
 //        String result = ServerInfo.SERVER_ADDR +":80/v1/rooms/?"
 //                +"longitude="+ TestGeocoordGetter.coordList[7].getLongitude() +"&"

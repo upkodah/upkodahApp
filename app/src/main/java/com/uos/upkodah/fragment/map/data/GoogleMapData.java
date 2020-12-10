@@ -109,7 +109,7 @@ public class GoogleMapData implements GeoCoordinate {
     }
 
 
-    private GoogleMapListener mapListener = new GoogleMapListener();
+    private final GoogleMapListener mapListener = new GoogleMapListener();
     /**
      * 줌 리스너를 설정합니다.
      */

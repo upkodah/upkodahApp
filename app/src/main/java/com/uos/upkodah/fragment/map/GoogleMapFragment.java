@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,4 +67,5 @@ public class GoogleMapFragment extends Fragment {
     public void setData(GoogleMapData data){
         this.data = data;
     }
+    public GoogleMapData getData(){ return this.data; }
 }

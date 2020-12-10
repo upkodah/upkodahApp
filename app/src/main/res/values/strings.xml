@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UpKoDah</string>
+    <string name="app_name">엎코닿</string>
 
     <!--  Activity가 송수신할 때 필요한 Intent Extra Key  -->
     <string name="extra_position_information">EX_POSITION</string>

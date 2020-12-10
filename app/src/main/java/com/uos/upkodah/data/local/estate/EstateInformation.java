@@ -86,7 +86,7 @@ public class EstateInformation extends LocationInformation implements LocationPa
     // TablePanel
     @Override
     public String getRequiredTime() {
-        return "독립문역 지하철 20분 이내";
+        return "지하철 20분 이내";
     }
     @Override
     public String getTradeType() {
